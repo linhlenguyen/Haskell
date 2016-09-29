@@ -1,3 +1,5 @@
+--A Calculator with customisable base (up to 64)
+
 newtype Writer w a = Writer { writer :: (a, w) }
 
 instance (Monoid w) => Monad (Writer w) where
@@ -15,9 +17,9 @@ zip' f (x:xs) (y:ys) = f (Just x) (Just y) : zip' f xs ys
 
 consolidatePlus' :: Char -> [(Char, Char)] -> [Char]
 consolidatePlus' carry [] = if carry == '1' then [carry] else []
-consolidatePlus' carry ((x1,x2):xs) = let (y1,y2) = carry +++ x2 
+consolidatePlus' carry ((x1,x2):xs) = let (y1,y2) = carry +++ x2
 									in case y1 of {
-										'1' -> y2 : consolidatePlus' '1' xs; 
+										'1' -> y2 : consolidatePlus' '1' xs;
 										_ -> y2 : consolidatePlus' x1 xs;
 									}
 
@@ -39,13 +41,13 @@ plusM' b (Just x) Nothing = ('0', x)
 plusM' b (Just x) (Just y) = plus' b x y
 
 plus' :: Int -> Char -> Char -> (Char,Char)
-plus' b x y = let s = (toInt x) + (toInt y) 
-				in if s < b then ('0', toChar s) 
+plus' b x y = let s = (toInt x) + (toInt y)
+				in if s < b then ('0', toChar s)
 				else ('1', toChar $ mod s b)
 
 plusM :: Maybe Char -> Maybe Char -> (Char, Char)
 plusM = plusM' 32
-				
+
 (+++) :: Char -> Char -> (Char, Char)
 (+++) = plus' 32
 
@@ -83,8 +85,8 @@ charIntMap = [('0', 0),('1', 1),('2', 2),('3', 3),('4', 4),('5', 5),('6', 6),('7
               ('u', 56),('v', 57),('w', 58),('x', 59),('y', 60),('z', 61),('!', 62),('@', 63)]
 
 baseConversion :: Int -> Int -> [Char] -> [Char]
-baseConversion b0 b1 (x:xs) = 
- 
+baseConversion b0 b1 (x:xs) =
+
 --First and last 9 digit
 fib32 :: [Char] -> [Char] -> [[Char]]
 fib32 first second = first : fib32 second (first <+> second)
@@ -100,5 +102,4 @@ fib32' = fib32 "0" "1"
 
 -- m a -> ( a -> m b ) -> m b
 -- ([Char], Int) -> ([Char] -> ([Char], Int)) -> ([Char], Int)
--- 
-
+--

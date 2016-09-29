@@ -2,18 +2,8 @@ module Main where
 
   import Graphics.Gloss
   import Graphics.Gloss.Data.ViewPort
-  --import Pong.Data
+  import Data
   --import Pong.Init
-
-  data GameState = Game {
-    gs_ballLocation :: Point,
-    gs_ballSpeed :: Vector,
-    gs_wallObjects :: [Rec],
-    gs_paddle1 :: Rec,
-    gs_paddle2 :: Rec
-  } deriving (Show)
-
-  type Rec = (Float, Float, Float, Float) -- (x, y, width, height)
 
   wallWidth = 270::Float
   wallHeight = 190::Float
@@ -77,15 +67,18 @@ module Main where
       y' = y + vy * seconds
 
   collide :: Point -> Rec -> Bool
-  collide (x, y) (wx, wy, ww, wh) = x + ballradius >= wx - ww || x - ballradius <= wx + ww || y + ballradius >= wy - wh || y - ballradius <= wy + wh
+  collide (x, y) (wx, wy, ww, wh) = xCollision || yCollision
+    where
+      xCollision = x + ballradius >= wx - ww || x - ballradius <= wx + ww
+      yCollision = y + ballradius >= wy - wh || y - ballradius <= wy + wh
 
   wallCollision :: GameState -> (Bool, Bool)
   wallCollision gs = (xCollision, yCollision)
     where
       (x, y) = gs_ballLocation gs
       ws = gs_wallObjects gs
-      xCollision = null $ filter (collide (x, y)) ws
-      yCollision = null $ filter (collide (x, y)) ws
+      xCollision = any (collide (x, y)) ws
+      yCollision = any (collide (x, y)) ws
 
   bounce :: GameState -> GameState
   bounce gs = gs { gs_ballSpeed = (vx', vy')}
