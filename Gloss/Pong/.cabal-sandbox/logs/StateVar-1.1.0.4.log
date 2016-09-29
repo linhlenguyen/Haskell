@@ -1,0 +1,19 @@
+cabal: Entering directory '/var/folders/11/q6hsyn6n647dskm7phfysp8w0000gn/T/cabal-tmp-44315/StateVar-1.1.0.4'
+Configuring StateVar-1.1.0.4...
+Building StateVar-1.1.0.4...
+Preprocessing library StateVar-1.1.0.4...
+[1 of 1] Compiling Data.StateVar    ( src/Data/StateVar.hs, dist/dist-sandbox-9179a74c/build/Data/StateVar.o )
+[1 of 1] Compiling Data.StateVar    ( src/Data/StateVar.hs, dist/dist-sandbox-9179a74c/build/Data/StateVar.p_o )
+Running Haddock for StateVar-1.1.0.4...
+Preprocessing library StateVar-1.1.0.4...
+Haddock coverage:
+ 100% ( 15 / 15) in 'Data.StateVar'
+Warning: Data.StateVar: could not find link destinations for:
+    ~
+Documentation created: dist/dist-sandbox-9179a74c/doc/html/StateVar/index.html
+Creating package registration file:
+/var/folders/11/q6hsyn6n647dskm7phfysp8w0000gn/T/pkgConf-StateVar-1.1.01952509530130060903.4
+Installing library in
+/Users/linhln/Dev/Haskell/Gloss/Pong/.cabal-sandbox/lib/x86_64-osx-ghc-8.0.1/StateVar-1.1.0.4-CJpWsiXJdd89SnV9dZtTwc
+Registering StateVar-1.1.0.4...
+cabal: Leaving directory '/var/folders/11/q6hsyn6n647dskm7phfysp8w0000gn/T/cabal-tmp-44315/StateVar-1.1.0.4'
