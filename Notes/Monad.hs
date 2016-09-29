@@ -150,6 +150,21 @@ newtype Prob a = Prob { getProb :: [(a,Rational)] } deriving Show
 instance Functor Prob where
 fmap f p = Prob $ map (\(x,s) -> (f x, s)) getProb p
 
+class Testable a where
+test :: a -> RandSupply -> Bool
+
+class Arbitrary a where
+arby :: RandSupply -> a
+
+instance Testable Bool where
+test b r = b
+
+instance (Arbitrary a, Testable b)
+=> Testable (a->b) where
+test f r = test (f arby r1) r2 where (r1,r2) = split r
+
+(split) :: RandSupply -> (RandSupply, RandSupply)
+
 lift :: (a -> b) -> m a -> m b
 liftMaybe :: (a -> b) -> Maybe a -> Maybe be
 

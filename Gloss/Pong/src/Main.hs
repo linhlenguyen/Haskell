@@ -1,102 +1,86 @@
-module Main where
+module Main(main) where
+    import Graphics.Gloss
+    import Graphics.Gloss.Data.ViewPort
+    import Graphics.Gloss.Interface.Pure.Game
+    import Data
+    import GameSetup
+    import Renderer
 
-  import Graphics.Gloss
-  import Graphics.Gloss.Data.ViewPort
-  import Data
-  --import Pong.Init
+    moveBall :: Float -> GameState -> GameState
+    moveBall seconds gs = gs { gs_ballLocation = (x', y') }
+      where
+        (x, y) = gs_ballLocation gs
+        (vx, vy) = gs_ballSpeed gs
+        x' = x + vx * seconds
+        y' = y + vy * seconds
 
-  wallWidth = 270::Float
-  wallHeight = 190::Float
-  wallThickness = 2::Float
+    --Speed up detection by looking at ball travelling direction!
+    recContain :: Point -> Rec -> Bool
+    recContain (x, y) (wx, wy, ww, wh) = checkX && checkY
+      where
+        checkX = x <= wx + ww/2 && x >= wx - ww/2
+        checkY = y <= wy + wh/2 && y >= wy - wh/2
 
-  paddleHeight = 45::Float
-  paddleWidth = 5::Float
+    yCollision :: Point -> Rec -> Bool
+    yCollision (x, y) rec = topContain || bottomContain
+      where
+        topContain = recContain (x, y - ballradius) rec
+        bottomContain = recContain (x, y + ballradius) rec
 
-  ballradius = 8::Float
+    xCollision :: Point -> Rec -> Bool
+    xCollision (x, y) rec = leftContain || rightContain
+      where
+        leftContain = recContain (x - ballradius, y) rec
+        rightContain = recContain (x + ballradius, y) rec
 
-  walls :: [Rec]
-  walls = [(0, -wallHeight/2, wallWidth, wallThickness),
-           (0, wallHeight/2, wallWidth, wallThickness),
-           (-wallWidth/2, 0, wallThickness, wallHeight),
-           (wallWidth/2, 0, wallThickness, wallHeight)]
+    wallCollision :: GameState -> (Bool, Bool)
+    wallCollision gs = (collideX, collideY)
+      where
+        balllocation = gs_ballLocation gs
+        walls = gs_wallObjects gs ++ [gs_paddle1 gs,gs_paddle2 gs]
+        collideX = any (xCollision balllocation) walls
+        collideY = any (yCollision balllocation) walls
 
-  paddle1 :: Rec
-  paddle1 = (-100, 20, paddleWidth, paddleHeight)
+    bounce :: GameState -> GameState
+    bounce gs = gs { gs_ballSpeed = (vx', vy')}
+      where
+        (vx, vy) = gs_ballSpeed gs
+        vx' = if fst $ wallCollision gs then -vx else vx
+        vy' = if snd $ wallCollision gs then -vy else vy
 
-  paddle2 :: Rec
-  paddle2 = (100, 20, paddleWidth, paddleHeight)
+    movePaddle :: Movement -> Rec -> Rec -> Rec
+    movePaddle m p@(px,py,pw,ph) otherPaddle = let inbound pt rec = not $ any (recContain pt) [rec,otherPaddle] in
+      case m of MoveUp -> if inbound (px, py + ph/2) topWall then (px, py + paddleStep, pw, ph) else p
+                MoveDown -> if inbound (px, py - ph/2) bottomWall then (px, py - paddleStep, pw, ph) else p
+                MoveLeft -> if inbound (px - pw/2, py) leftWall then (px - paddleStep, py, pw, ph) else p
+                MoveRight -> if inbound (px + pw/2, py) rightWall then (px + paddleStep, py, pw, ph) else p
 
-  window :: Display
-  window = InWindow "a Window" (720,480) (10,10)
+    handleKeyPress :: Event -> GameState -> GameState
+    handleKeyPress (EventKey (Char 'r') _ _ _) gs = gs { gs_ballLocation = (0,0)}
+    handleKeyPress (EventKey key _ _ _) gs = newgs
+      where
+        newgs = handleKey key gs
+    handleKeyPress _ gs = gs { gs_lastKey = (SpecialKey KeyUnknown)}
 
-  background :: Color
-  background = white
+    handleKey :: Key -> GameState -> GameState
+    handleKey key gs = case key of
+                        (SpecialKey KeyDown) -> gs { gs_paddle1 = movePaddle MoveDown (gs_paddle1 gs) (gs_paddle2 gs) }
+                        (SpecialKey KeyUp) -> gs { gs_paddle1 = movePaddle MoveUp (gs_paddle1 gs) (gs_paddle2 gs)}
+                        (SpecialKey KeyLeft) -> gs { gs_paddle1 = movePaddle MoveLeft (gs_paddle1 gs) (gs_paddle2 gs)}
+                        (SpecialKey KeyRight) -> gs { gs_paddle1 = movePaddle MoveRight (gs_paddle1 gs) (gs_paddle2 gs)}
+                        (Char 'w') -> gs { gs_paddle2 = movePaddle MoveUp (gs_paddle2 gs) (gs_paddle1 gs) }
+                        (Char 's') -> gs { gs_paddle2 = movePaddle MoveDown (gs_paddle2 gs) (gs_paddle1 gs)}
+                        (Char 'a') -> gs { gs_paddle2 = movePaddle MoveLeft (gs_paddle2 gs) (gs_paddle1 gs)}
+                        (Char 'd') -> gs { gs_paddle2 = movePaddle MoveRight (gs_paddle2 gs) (gs_paddle1 gs)}
+                        _ -> gs { gs_lastKey = (SpecialKey KeyUnknown) }
 
-  renderRec :: Rec -> Picture
-  renderRec (x, y, w, h) = translate x y $ rectangleSolid w h
+    handleKey' :: GameState -> GameState
+    handleKey' gs = handleKey (gs_lastKey gs) gs
 
-  renderRecs :: [Rec] -> Picture
-  renderRecs recs = pictures $ map renderRec recs
+    fps = 60::Int
 
-  move :: Point -> Picture -> Picture
-  move (x,y) p = translate x y p
+    update :: Float -> GameState -> GameState
+    update s = handleKey' . bounce . moveBall s
 
-  render :: GameState -> Picture
-  render gs = pictures [
-      ball, walls, p1, p2]
-    where
-    ball = move (gs_ballLocation gs) $ circle ballradius
-    walls = renderRecs $ gs_wallObjects gs
-    p1 = renderRec $ gs_paddle1 gs
-    p2 = renderRec $ gs_paddle2 gs
-
-  initialState = Game {
-    gs_ballLocation = (50, 50),
-    gs_ballSpeed = (-20 , 0),
-    gs_paddle1 = paddle1,
-    gs_paddle2 = paddle2,
-    gs_wallObjects = walls
-  }
-
-  moveBall :: Float -> GameState -> GameState
-  moveBall seconds gs = gs { gs_ballLocation = (x', y') }
-    where
-      (x, y) = gs_ballLocation gs
-      (vx, vy) = gs_ballSpeed gs
-      x' = x + vx * seconds
-      y' = y + vy * seconds
-
-  collide :: Point -> Rec -> Bool
-  collide (x, y) (wx, wy, ww, wh) = xCollision || yCollision
-    where
-      xCollision = x + ballradius >= wx - ww || x - ballradius <= wx + ww
-      yCollision = y + ballradius >= wy - wh || y - ballradius <= wy + wh
-
-  wallCollision :: GameState -> (Bool, Bool)
-  wallCollision gs = (xCollision, yCollision)
-    where
-      (x, y) = gs_ballLocation gs
-      ws = gs_wallObjects gs
-      xCollision = any (collide (x, y)) ws
-      yCollision = any (collide (x, y)) ws
-
-  bounce :: GameState -> GameState
-  bounce gs = gs { gs_ballSpeed = (vx', vy')}
-    where
-      (vx, vy) = gs_ballSpeed gs
-      vx' = if fst $ wallCollision gs then -vx else vx
-      vy' = if snd $ wallCollision gs then -vy else vy
-
-  drawing :: Picture
-  drawing = render initialState
-
-  frame :: Float -> Picture
-  frame s = render $ moveBall s initialState
-
-  fps = 60::Int
-
-  update :: ViewPort -> Float -> GameState -> GameState
-  update _ s = bounce . moveBall s
-
-  main :: IO ()
-  main = simulate window background fps initialState render update
+    main :: IO ()
+    main = play window background fps initialState renderGame handleKeyPress update

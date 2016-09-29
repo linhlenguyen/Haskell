@@ -6,15 +6,14 @@ newA k x = map (\(k', ls) -> if k' == k then (k',tail ls) else (k',ls)) x
 data Tree a = Empty | Node a (Tree a) (Tree a)
 
 addElement :: (Eq a) => Tree a -> a -> Tree a
-addElement Empty c = Node a Empty Empty
+addElement Empty c = Node c Empty Empty
 addElement (Node x lhs rhs) c
-                            | x >= c -> Node x lhs (addElement rhs c)
+                            | x >= c = Node x lhs (addElement rhs c)
                             | otherwise = Node x (addElement lhs c) rhs
 
 removeElement :: (Eq a) => Tree a -> a -> Tree a
 removeElement Empty _ = Empty
-removeElement (Node x lhs rhs) c
-                           | x == c -> 
+removeElement (Node x lhs rhs) c = Node x Empty Empty
 
-toTree :: (Eq a) => [a] -> Tree a
-toTree
+--toTree :: (Eq a) => [a] -> Tree a
+--toTree
