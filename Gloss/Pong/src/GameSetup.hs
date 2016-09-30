@@ -14,8 +14,8 @@ module GameSetup(
   import Graphics.Gloss
   import Graphics.Gloss.Interface.Pure.Game
 
-  wallWidth = 270::Float
-  wallHeight = 190::Float
+  wallWidth = 470::Float
+  wallHeight = 390::Float
   wallThickness = 10::Float
 
   bottomWall = (0, -wallHeight/2, wallWidth, wallThickness)::Rec
@@ -27,7 +27,7 @@ module GameSetup(
   walls = [topWall, bottomWall, leftWall, rightWall]
 
   paddleHeight = 45::Float
-  paddleWidth = 5::Float
+  paddleWidth = 10::Float
   ballradius = 8::Float
 
   paddle1 :: Data.Rec
@@ -36,7 +36,7 @@ module GameSetup(
   paddle2 :: Data.Rec
   paddle2 = (100, 20, paddleWidth, paddleHeight)
 
-  speed = 1.5::Float
+  speed = 5::Float
 
   initialState = Data.Game {
     gs_ballLocation = (50, 50),

@@ -6,6 +6,14 @@ module Main(main) where
     import GameSetup
     import Renderer
 
+    type Angle = Float
+    type Length = Float
+
+    shiftPoint :: Point -> Length -> Angle -> Point
+    shiftPoint (x, y) ln angle = (x', y')
+      where x' = x + ln * sin angle
+            y' = y + ln * cos angle
+
     moveBall :: Float -> GameState -> GameState
     moveBall seconds gs = gs { gs_ballLocation = (x', y') }
       where
@@ -22,13 +30,13 @@ module Main(main) where
         checkY = y <= wy + wh/2 && y >= wy - wh/2
 
     yCollision :: Point -> Rec -> Bool
-    yCollision (x, y) rec = topContain || bottomContain
+    yCollision p@(x, y) rec = topContain || bottomContain
       where
         topContain = recContain (x, y - ballradius) rec
         bottomContain = recContain (x, y + ballradius) rec
 
     xCollision :: Point -> Rec -> Bool
-    xCollision (x, y) rec = leftContain || rightContain
+    xCollision p@(x, y) rec = leftContain || rightContain
       where
         leftContain = recContain (x - ballradius, y) rec
         rightContain = recContain (x + ballradius, y) rec
