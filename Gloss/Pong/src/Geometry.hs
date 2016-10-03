@@ -8,8 +8,6 @@ module Geometry(
     px :: a -> Float -> Float
     py :: a -> Float -> Float
 
-  data Circle = CCircle Float
-
   instance Shape Circle where
     render (CCircle r) = circle r
     px (CCircle r) t = r * cos t
