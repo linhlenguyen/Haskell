@@ -1,12 +1,7 @@
 module Polygons(main)
   where
+    import Setup
     import Graphics.Gloss
-
-    window :: Display
-    window = InWindow "Polygons" (720,480) (10,10)
-
-    background :: Color
-    background = white
 
     aPath :: Path
     aPath = [(2,10), (50, 60), (-20, 60), (-30, -20)]
