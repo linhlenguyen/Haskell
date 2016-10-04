@@ -5,14 +5,7 @@ module Main(main) where
     import Data
     import GameSetup
     import Renderer
-
-    type Angle = Float
-    type Length = Float
-
-    shiftPoint :: Point -> Length -> Angle -> Point
-    shiftPoint (x, y) ln angle = (x', y')
-      where x' = x + ln * sin angle
-            y' = y + ln * cos angle
+    import CollisionDetection
 
     moveBall :: Float -> GameState -> GameState
     moveBall seconds gs = gs { gs_ballLocation = (x', y') }
@@ -21,25 +14,6 @@ module Main(main) where
         (vx, vy) = gs_ballSpeed gs
         x' = x + vx * seconds
         y' = y + vy * seconds
-
-    --Speed up detection by looking at ball travelling direction!
-    recContain :: Point -> Rec -> Bool
-    recContain (x, y) (wx, wy, ww, wh) = checkX && checkY
-      where
-        checkX = x <= wx + ww/2 && x >= wx - ww/2
-        checkY = y <= wy + wh/2 && y >= wy - wh/2
-
-    yCollision :: Point -> Rec -> Bool
-    yCollision p@(x, y) rec = topContain || bottomContain
-      where
-        topContain = recContain (x, y - ballradius) rec
-        bottomContain = recContain (x, y + ballradius) rec
-
-    xCollision :: Point -> Rec -> Bool
-    xCollision p@(x, y) rec = leftContain || rightContain
-      where
-        leftContain = recContain (x - ballradius, y) rec
-        rightContain = recContain (x + ballradius, y) rec
 
     wallCollision :: GameState -> (Bool, Bool)
     wallCollision gs = (collideX, collideY)

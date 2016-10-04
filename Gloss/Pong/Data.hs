@@ -26,3 +26,11 @@ module Data (
   mtf m = case m of MoveUp -> (+)
                     MoveDown -> (-)
                     _ -> (\_ -> id)
+
+  type Angle = Float
+  type Length = Float
+
+  shiftPoint :: Point -> Length -> Angle -> Point
+  shiftPoint (x, y) ln angle = (x', y')
+    where x' = x + ln * sin angle
+          y' = y + ln * cos angle
