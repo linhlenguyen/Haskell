@@ -3,10 +3,10 @@ window,
 background
 )
   where
-    import qualified Graphics.Gloss.Data as GlossData
+    import qualified Graphics.Gloss as Gloss
 
-    window :: GlossData.Display
-    window = InWindow "Window" (720,480) (10,10)
+    window :: Gloss.Display
+    window = Gloss.InWindow "Window" (720,480) (10,10)
 
-    background :: GlossData.Color
-    background = white
+    background :: Gloss.Color
+    background = Gloss.white
