@@ -1,5 +1,4 @@
 
-
 --ADTs
 data Expr = I Int
 			| Add Expr Expr
@@ -31,7 +30,6 @@ eval' (Mul _ (B b) = Nothing
 eval' (Mul e1 e2) = eval e1 * eval e2 --Have to write + and * extention on Maybe
 
 --GADTs
-
 data Expr'' where
 	I :: Int -> Expr Int
 	B :: Bool -> Expr Bool
