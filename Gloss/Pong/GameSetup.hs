@@ -45,7 +45,7 @@ module GameSetup(
     gs_paddle2 = paddle2,
     gs_wallObjects = walls,
     gs_ballRadius = ballradius,
-    gs_lastKey = (SpecialKey KeyUnknown)
+    gs_keyPressed = []
   }
 
   paddleStep = 5::Float

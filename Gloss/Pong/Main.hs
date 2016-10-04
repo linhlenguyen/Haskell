@@ -65,10 +65,17 @@ module Main(main) where
 
     handleKeyPress :: Event -> GameState -> GameState
     handleKeyPress (EventKey (Char 'r') _ _ _) gs = gs { gs_ballLocation = (0,0)}
-    handleKeyPress (EventKey key _ _ _) gs = newgs
+    handleKeyPress (EventKey key Up _ _) gs = resetKey key gs
+    handleKeyPress (EventKey key Down _ _) gs = newgs
       where
-        newgs = handleKey key gs
-    handleKeyPress _ gs = gs { gs_lastKey = (SpecialKey KeyUnknown)}
+        keys = gs_keyPressed gs
+        newgs = handleKey key ( gs { gs_keyPressed = key:keys } )
+    handleKeyPress _ gs = gs
+
+    resetKey :: Key -> GameState -> GameState
+    resetKey key gs = gs'
+      where keys = gs_keyPressed gs
+            gs' = gs {gs_keyPressed = filter (\k -> not (k == key)) keys}
 
     handleKey :: Key -> GameState -> GameState
     handleKey key gs = case key of
@@ -80,15 +87,16 @@ module Main(main) where
                         (Char 's') -> gs { gs_paddle2 = movePaddle MoveDown (gs_paddle2 gs) (gs_paddle1 gs)}
                         (Char 'a') -> gs { gs_paddle2 = movePaddle MoveLeft (gs_paddle2 gs) (gs_paddle1 gs)}
                         (Char 'd') -> gs { gs_paddle2 = movePaddle MoveRight (gs_paddle2 gs) (gs_paddle1 gs)}
-                        _ -> gs { gs_lastKey = (SpecialKey KeyUnknown) }
 
-    handleKey' :: GameState -> GameState
-    handleKey' gs = handleKey (gs_lastKey gs) gs
+    handleKeyGS :: GameState -> GameState
+    handleKeyGS gs = gs'
+      where keys = gs_keyPressed gs
+            gs' = foldr handleKey gs keys
 
     fps = 60::Int
 
     update :: Float -> GameState -> GameState
-    update s = handleKey' . bounce . moveBall s
+    update s = handleKeyGS . bounce . moveBall s
 
     main :: IO ()
     main = play window background fps initialState renderGame handleKeyPress update

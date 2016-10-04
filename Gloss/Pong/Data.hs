@@ -15,7 +15,7 @@ module Data (
     gs_wallObjects :: [Rec],
     gs_paddle1 :: Rec,
     gs_paddle2 :: Rec,
-    gs_lastKey :: Key
+    gs_keyPressed :: [Key]
     } deriving (Show)
 
   type Rec = (Float, Float, Float, Float) -- (x, y, width, height)
