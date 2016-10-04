@@ -13,6 +13,4 @@ where
   circlePolygonCollision :: Circle -> Polygon -> Bool
   circlePolygonCollision c (p:ps) = False
 
-  
-
   --SATPolygonAndCircle :: [Line] -> (Point, Float) -> Bool

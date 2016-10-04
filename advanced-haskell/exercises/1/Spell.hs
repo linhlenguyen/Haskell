@@ -1,11 +1,13 @@
 -- Spell.hs
 -- Copyright (c) 2013 Well-Typed LLP
 
+{-# LANGUAGE DataKinds #-}
+
 import System.Environment
 import Data.Char
 
-type DictionaryFile = "en-GB.dic"
-type TextFile       = "test.txt"
+type DictionaryFile = String
+type TextFile       = String
 type Dictionary     = [String]
 
 main :: IO ()
@@ -21,6 +23,8 @@ main =
     [dictf,txtf] <- getArgs
     ws <- spellIO dictf txtf
     putStrLn $ unlines ws
+
+-- getArgs >>= (\[dictf,txtf] -> spellIO dictf txtf >>= (\ws -> putStrLn $ unlines ws))
 
 -- | The function 'spellIO' is the actual program. It takes
 -- two pathnames, one for dictionary, one for text, reads
