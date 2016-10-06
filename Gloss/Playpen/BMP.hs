@@ -34,7 +34,7 @@ module BMP(main)
     main :: IO ()
     main = do
       bmps <- loadBMPsWithTag ["test.bmp","test2.bmp","test4.bmp"]
-      processedBmps <- return $ processBMP (map (\(x,y) -> y) bmps) 0
+      let processedBmps = processBMP (map (\(x,y) -> y) bmps) 0
       display window background (pictures processedBmps)
 
     --TODO

@@ -1,12 +1,14 @@
 module CodecBMP(main)
   where
     import Codec.BMP
+    import Graphics.Gloss
+    import Setup
+    import System.Environment
 
     main :: IO ()
     main = do
-      Right bmp <- readBMP "test.bmp"
+      [bmpfile] <- getArgs
+      Right bmp <- readBMP bmpfile
       let (w,h) = bmpDimensions bmp
       let unpackedBMP = unpackBMPToRGBA32 bmp
-      print w
-      print h
-      print unpackedBMP
+      display window background (bitmapOfBMP bmp)
