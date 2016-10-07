@@ -8,17 +8,17 @@ renderGame
     import Data.Map.Strict
 
     renderCharacter :: SpriteResource -> Character -> Picture
-    renderCharacter sr c = translate x y $ bitmapOfBMP bmp
+    renderCharacter sr c = translate x y $ bmp
       where (x,y) = c_position c
             action = c_action c
             currentSprite = c_currentSprite c
             spriteName = nextSprite action currentSprite
             bmp = sr!spriteName
 
-    renderGame :: WorldState -> Picture
-    renderGame ws = pictures [
-      bitmapOfBMP $ ws_background ws,
-      renderCharacter (ws_sprites ws) (ws_player ws)]
+    renderGame :: SpriteResource -> WorldState -> Picture
+    renderGame sr ws = pictures [
+      sr!Background,
+      renderCharacter sr (ws_player ws)]
 
     nextSprite :: Action -> Sprite -> Sprite
     nextSprite MoveLeft MoveLeft1 = MoveLeft2

@@ -7,7 +7,7 @@ module Main(main)
     import Renderer
     import Data
     import Resources
-    import qualified Data.Map.Strict as Map
+    import qualified Data.Map.Lazy as Map
 
     handleKey :: Key -> WorldState -> WorldState
     handleKey key ws =
@@ -29,7 +29,7 @@ module Main(main)
     handleKeyPress (EventKey key Down _ _) ws = ws'
       where
         keys = ws_keyPressed ws
-        ws' = handleKey key $ ws { ws_keyPressed = key:keys }
+        ws' = if any (\k -> k == key) keys then handleKey key ws else handleKey key $ ws { ws_keyPressed = key:keys }
     handleKeyPress _ ws = ws
 
     resetKey :: Key -> WorldState -> WorldState
@@ -49,8 +49,6 @@ module Main(main)
 
     main :: IO ()
     main = do
-      Right bg <- Codec.readBMP "bmp/bg.bmp"
       resource <- loadResource
       let resourceMap = Map.fromList resource
-      let gameState = initialState { ws_background = bg, ws_sprites = resourceMap }
-      play window background fps gameState renderGame handleKeyPress update
+      play window background fps initialState (renderGame resourceMap) handleKeyPress update

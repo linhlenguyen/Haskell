@@ -2,7 +2,7 @@ module Resources(
 loadResource
 )
   where
-    import qualified Codec.BMP as Codec
+    import qualified Graphics.Gloss.Data.Picture as Gloss
     import Data
 
     bmpTagMap :: [(Sprite, FilePath)]
@@ -13,14 +13,15 @@ loadResource
       (MoveLeft3, "bmp/l3.bmp"),
       (MoveRight1, "bmp/r1.bmp"),
       (MoveRight2, "bmp/r2.bmp"),
-      (MoveRight3, "bmp/r3.bmp")]
+      (MoveRight3, "bmp/r3.bmp"),
+      (Background, "bmp/bg.bmp")]
 
-    loadResource :: IO [(Sprite, Codec.BMP)]
+    loadResource :: IO [(Sprite, Gloss.Picture)]
     loadResource = loadResource' bmpTagMap
 
-    loadResource' :: [(Sprite, FilePath)] -> IO [(Sprite, Codec.BMP)]
+    loadResource' :: [(Sprite, FilePath)] -> IO [(Sprite, Gloss.Picture)]
     loadResource' [] = return []
     loadResource' ((s,p):xs) = do
-      Right bmp <- Codec.readBMP p
+      bmp <- Gloss.loadBMP p
       bmps <- loadResource' xs
       return ((s,bmp):bmps)

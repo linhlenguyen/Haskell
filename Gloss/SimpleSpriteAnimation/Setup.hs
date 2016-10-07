@@ -22,9 +22,7 @@ initialState
         c_action = Stop,
         c_currentSprite = Stand
       },
-      ws_keyPressed = [],
-      ws_background = undefined,
-      ws_sprites = undefined
+      ws_keyPressed = []
     }
 
     fps = 60::Int
