@@ -7,15 +7,16 @@ module Main(main)
     import Renderer
     import Data
     import Resources
+    import qualified Data.Map.Strict as Map
 
     handleKey :: Key -> WorldState -> WorldState
     handleKey key ws =
       case key of
         (SpecialKey KeyLeft) -> ws { ws_player = player { c_action = MoveLeft,
-                                                          c_position = (x + moveSpeed,y),
+                                                          c_position = (x - moveSpeed,y),
                                                           c_currentSprite = if currentSprite == Stand then MoveLeft1 else currentSprite } }
         (SpecialKey KeyRight) -> ws { ws_player = player { c_action = MoveRight,
-                                                           c_position = (x - moveSpeed,y),
+                                                           c_position = (x + moveSpeed,y),
                                                            c_currentSprite = if currentSprite == Stand then MoveRight1 else currentSprite } }
         _ -> ws
 
@@ -50,6 +51,6 @@ module Main(main)
     main = do
       Right bg <- Codec.readBMP "bmp/bg.bmp"
       resource <- loadResource
-      let player = ws_player initialState
-      let gameState = initialState { ws_player = player { c_sprites = resource }, ws_background = bg }
+      let resourceMap = Map.fromList resource
+      let gameState = initialState { ws_background = bg, ws_sprites = resourceMap }
       play window background fps gameState renderGame handleKeyPress update

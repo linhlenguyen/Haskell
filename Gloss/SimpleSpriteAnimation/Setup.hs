@@ -20,11 +20,11 @@ initialState
       ws_player = Character {
         c_position = (-100, -50),
         c_action = Stop,
-        c_currentSprite = Stand,
-        c_sprites = []
+        c_currentSprite = Stand
       },
       ws_keyPressed = [],
-      ws_background = undefined
+      ws_background = undefined,
+      ws_sprites = undefined
     }
 
     fps = 60::Int

@@ -5,19 +5,20 @@ renderGame
   where
     import Graphics.Gloss
     import Data
+    import Data.Map.Strict
 
-    renderCharacter :: Character -> Picture
-    renderCharacter c = translate x y $ bitmapOfBMP bmp
+    renderCharacter :: SpriteResource -> Character -> Picture
+    renderCharacter sr c = translate x y $ bitmapOfBMP bmp
       where (x,y) = c_position c
             action = c_action c
             currentSprite = c_currentSprite c
-            spriteBMPMap = c_sprites c
-            bmp = snd $ head $ filter (\(s,b) -> s == nextSprite action currentSprite) spriteBMPMap
+            spriteName = nextSprite action currentSprite
+            bmp = sr!spriteName
 
     renderGame :: WorldState -> Picture
     renderGame ws = pictures [
       bitmapOfBMP $ ws_background ws,
-      renderCharacter $ ws_player ws]
+      renderCharacter (ws_sprites ws) (ws_player ws)]
 
     nextSprite :: Action -> Sprite -> Sprite
     nextSprite MoveLeft MoveLeft1 = MoveLeft2
