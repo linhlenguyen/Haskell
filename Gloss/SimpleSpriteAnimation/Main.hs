@@ -8,21 +8,21 @@ module Main(main)
     import Data
     import Resources
     import qualified Data.Map.Lazy as Map
+    import Control.Concurrent
 
     handleKey :: Key -> WorldState -> WorldState
     handleKey key ws =
       case key of
         (SpecialKey KeyLeft) -> ws { ws_player = player { c_action = MoveLeft,
                                                           c_position = (x - moveSpeed,y),
-                                                          c_currentSprite = if action == Stop then MoveLeft1 else currentSprite } }
+                                                          c_currentSprite = nextSprite MoveLeft currentSprite} }
         (SpecialKey KeyRight) -> ws { ws_player = player { c_action = MoveRight,
                                                            c_position = (x + moveSpeed,y),
-                                                           c_currentSprite = if action == Stop then MoveRight1 else currentSprite } }
+                                                           c_currentSprite = nextSprite MoveRight currentSprite} }
         _ -> ws
 
       where player = ws_player ws
             currentSprite = c_currentSprite $ ws_player ws
-            action = c_action $ ws_player ws
             (x,y) = c_position $ ws_player ws
 
     handleKeyPress :: Event -> WorldState -> WorldState

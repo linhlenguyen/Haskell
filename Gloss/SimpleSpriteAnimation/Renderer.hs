@@ -1,6 +1,7 @@
 module Renderer(
 renderCharacter,
-renderGame
+renderGame,
+nextSprite
 )
   where
     import Graphics.Gloss
@@ -12,8 +13,7 @@ renderGame
       where (x,y) = c_position c
             action = c_action c
             currentSprite = c_currentSprite c
-            spriteName = nextSprite action currentSprite
-            bmp = sr!spriteName
+            bmp = sr!currentSprite
 
     renderGame :: SpriteResource -> WorldState -> Picture
     renderGame sr ws = pictures [
@@ -25,6 +25,7 @@ renderGame
     nextSprite MoveLeft MoveLeft2 = MoveLeft3
     nextSprite MoveLeft MoveLeft3 = MoveLeft4
     nextSprite MoveLeft MoveLeft4 = MoveLeft1
+    nextSprite MoveLeft _ = MoveLeft1
     nextSprite Stop MoveLeft1 = FaceLeft
     nextSprite Stop MoveLeft2 = FaceLeft
     nextSprite Stop MoveLeft3 = FaceLeft
@@ -36,5 +37,6 @@ renderGame
     nextSprite MoveRight MoveRight1 = MoveRight2
     nextSprite MoveRight MoveRight2 = MoveRight3
     nextSprite MoveRight MoveRight3 = MoveRight4
-    nextSprite MoveRight MoveRight4 = MoveRight3
+    nextSprite MoveRight MoveRight4 = MoveRight1
+    nextSprite MoveRight _ = MoveRight1
     nextSprite _ _ = FaceLeft

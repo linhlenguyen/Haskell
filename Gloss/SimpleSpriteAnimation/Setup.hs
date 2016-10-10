@@ -26,4 +26,4 @@ initialState
     }
 
     fps = 60::Int
-    moveSpeed = 4::Float
+    moveSpeed = 3::Float
