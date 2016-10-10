@@ -13,8 +13,8 @@ SpriteResource
 
     type SpriteResource = Map.Map Sprite Gloss.Picture
 
-    data Action = Stop | MoveLeft | MoveRight | Jump | Crouch
-    data Sprite = Stand | MoveLeft1 | MoveLeft2 | MoveLeft3 | MoveRight1 | MoveRight2 | MoveRight3 | Background deriving (Eq,Ord)
+    data Action = Stop | MoveLeft | MoveRight | Jump | Crouch deriving (Eq)
+    data Sprite = FaceRight | FaceLeft | MoveLeft1 | MoveLeft2 | MoveLeft3 | MoveLeft4 | MoveRight1 | MoveRight2 | MoveRight3 | MoveRight4 | Background deriving (Eq,Ord)
 
     data Character = Character {
       c_position :: Gloss.Point,

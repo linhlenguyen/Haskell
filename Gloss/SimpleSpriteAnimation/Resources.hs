@@ -7,13 +7,16 @@ loadResource
 
     bmpTagMap :: [(Sprite, FilePath)]
     bmpTagMap = [
-      (Stand, "bmp/fr.bmp"),
+      (FaceRight, "bmp/fr.bmp"),
+      (FaceLeft, "bmp/fl.bmp"),
       (MoveLeft1, "bmp/l1.bmp"),
       (MoveLeft2, "bmp/l2.bmp"),
       (MoveLeft3, "bmp/l3.bmp"),
+      (MoveLeft4, "bmp/l4.bmp"),
       (MoveRight1, "bmp/r1.bmp"),
       (MoveRight2, "bmp/r2.bmp"),
       (MoveRight3, "bmp/r3.bmp"),
+      (MoveRight4, "bmp/r4.bmp"),
       (Background, "bmp/bg.bmp")]
 
     loadResource :: IO [(Sprite, Gloss.Picture)]

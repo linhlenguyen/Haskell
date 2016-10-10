@@ -14,18 +14,21 @@ module Main(main)
       case key of
         (SpecialKey KeyLeft) -> ws { ws_player = player { c_action = MoveLeft,
                                                           c_position = (x - moveSpeed,y),
-                                                          c_currentSprite = if currentSprite == Stand then MoveLeft1 else currentSprite } }
+                                                          c_currentSprite = if action == Stop then MoveLeft1 else currentSprite } }
         (SpecialKey KeyRight) -> ws { ws_player = player { c_action = MoveRight,
                                                            c_position = (x + moveSpeed,y),
-                                                           c_currentSprite = if currentSprite == Stand then MoveRight1 else currentSprite } }
+                                                           c_currentSprite = if action == Stop then MoveRight1 else currentSprite } }
         _ -> ws
 
       where player = ws_player ws
             currentSprite = c_currentSprite $ ws_player ws
+            action = c_action $ ws_player ws
             (x,y) = c_position $ ws_player ws
 
     handleKeyPress :: Event -> WorldState -> WorldState
-    handleKeyPress (EventKey key Up _ _) ws = resetKey key ws
+    handleKeyPress (EventKey key Up _ _) ws = ws'
+      where
+        ws' = resetKey key ws
     handleKeyPress (EventKey key Down _ _) ws = ws'
       where
         keys = ws_keyPressed ws
@@ -37,7 +40,7 @@ module Main(main)
       where keys = ws_keyPressed ws
             player = ws_player ws
             ws' = ws { ws_keyPressed = filter (\k -> not (k == key)) keys,
-                       ws_player = player {c_currentSprite = Stand} }
+                       ws_player = player {c_action = Stop} }
 
     keyHold :: WorldState -> WorldState
     keyHold ws = ws'

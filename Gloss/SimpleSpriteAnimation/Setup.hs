@@ -13,14 +13,14 @@ initialState
     window = Gloss.InWindow "Window" (720,480) (10,10)
 
     background :: Gloss.Color
-    background = Gloss.black
+    background = Gloss.white
 
     initialState :: WorldState
     initialState = WorldState {
       ws_player = Character {
         c_position = (-100, -50),
         c_action = Stop,
-        c_currentSprite = Stand
+        c_currentSprite = FaceRight
       },
       ws_keyPressed = []
     }
