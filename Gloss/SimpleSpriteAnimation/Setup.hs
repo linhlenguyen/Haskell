@@ -25,5 +25,5 @@ initialState
       ws_keyPressed = []
     }
 
-    fps = 60::Int
+    fps = 30::Int
     moveSpeed = 3::Float
