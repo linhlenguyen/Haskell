@@ -37,7 +37,7 @@ instance Shape_ Rectangle where
 instance Shape_ Square where
 	area (Square s) = s * s
 	perimeter (Square s) = 4 * s
-	
+
 instance Shape_ Shape where
 	area (Shape s) = area s
 	perimeter (Shape s) = perimeter s
@@ -54,4 +54,4 @@ rectangle w h = Shape $ Rectangle w h
 shapeList :: [Shape]
 shapeList = [circle 10.0, square 2.0, rectangle 2.0 4.0]
 
-
+data AB = forall a b. (Show a, Eq a, Eq b) => AB (b, a)

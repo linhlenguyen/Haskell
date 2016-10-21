@@ -9,4 +9,3 @@ Learning Haskell notes and test codes
   * [GADTs](https://en.wikibooks.org/wiki/Haskell/GADT)
   * [Existential types](https://wiki.haskell.org/Existential_type)
   * [ST Monad](https://en.wikibooks.org/wiki/Haskell/Existentially_quantified_types)
----

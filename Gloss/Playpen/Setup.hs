@@ -9,4 +9,4 @@ background
     window = Gloss.InWindow "Window" (720,480) (10,10)
 
     background :: Gloss.Color
-    background = Gloss.black
+    background = Gloss.white
