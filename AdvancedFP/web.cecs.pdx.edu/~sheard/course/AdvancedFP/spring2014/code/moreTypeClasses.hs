@@ -1,0 +1,453 @@
+{-# Language ExistentialQuantification,
+             MultiParamTypeClasses,
+             FlexibleInstances,
+             TypeSynonymInstances #-}
+
+-- <PRE>
+
+import Data.Array
+import Data.IORef
+import Control.Monad.ST
+import Data.STRef
+import Data.List(findIndices)
+
+-- Higher order types are type constructors
+
+data Tuple x y = Tuple (x,y)
+
+-- Even Higher Order Types
+-- type constructors that take type constructors as arguments
+
+data Tree t a = Tip a | Node (t (Tree t a))
+
+t1 = Node [Tip 3, Tip 0]
+
+data Bin x = Two x x
+
+t2 = Node (Two(Tip 5) (Tip 21))
+
+-- Built in higher order types and their notation
+
+type Arrow = (->) Int Int
+type List = [] Int
+type Pair = (,) Int Int
+type Triple = (,,) Int Int Int
+
+-- Type classes over type constructors
+
+{- Defined in Prelude, so must be commented out here
+
+class Functor f where
+    fmap :: (a -> b) -> (f a -> f b)
+
+-- Functor Laws
+-- map id = id
+-- map (f.g) = map f . map g
+-}
+
+-- Examples
+
+data BinTree a = Leaf a | Branch (BinTree a) (BinTree a)
+
+instance Functor BinTree where
+   fmap f (Leaf x) = Leaf (f x)
+   fmap f (Branch x y) = Branch (fmap f x) (fmap f y)
+
+-- defined in the library Control.Monad
+-- instance Functor ((,) a) where
+--   fmap f (x,y) = (x, f y)
+
+data Count x = C(x,Int)
+instance Functor Count where
+  fmap f (C(x,y)) = C(f x, y)
+
+{- Prelude defined instances
+
+instance Functor [] where
+    fmap f []     = []
+    fmap f (x:xs) = f x : fmap f xs
+
+instance Functor Maybe where
+    fmap f Nothing  = Nothing
+    fmap f (Just x) = Just (f x)
+
+-}
+
+--------------------------------------------------
+-- Another higher order Class -- Monad
+{- Class Monad - predefined in prelude
+
+class Monad m where
+    (>>=)  :: m a -> (a -> m b) -> m b
+    (>>)   :: m a -> m b -> m b
+    return :: a -> m a
+    fail   :: String -> m a
+
+    p >> q  = p >>= \ _ -> q
+    fail s  = error s
+-}
+
+{- Predefined instances
+
+instance Monad [ ] where
+    (x:xs) >>= f  =  f x ++ (xs >>= f)
+    []     >>= f  =  []
+    return x      =  [x]
+
+instance Monad Maybe where
+    Just x  >>= k  =  k x
+    Nothing >>= k  =  Nothing
+    return         =  Just
+
+-}
+
+-- Example of use in the Maybe Monad
+
+find :: Eq a => a -> [(a,b)] -> Maybe b
+find x [] = Nothing
+find x ((y,a):ys) = if x == y then Just a else find x ys
+
+test a c x =
+  do { b <- find a x; return (c+b) }
+--------------------------------------------
+-- Multiparameter type classes
+
+class Same ref where
+  same :: ref a -> ref a -> Bool
+
+class (Monad m,Same ref) => Mutable ref m where
+  put :: ref a -> a -> m ()
+  get :: ref a -> m a
+  new :: a -> m (ref a)
+
+
+-- A couple of instances
+
+instance Mutable (STRef a) (ST a) where
+  put = writeSTRef
+  get = readSTRef
+  new = newSTRef
+
+instance Same (STRef a) where
+  same x y = x==y
+
+instance Mutable IORef IO where
+  new = newIORef
+  get = readIORef
+  put = writeIORef
+
+instance Same IORef where
+  same x y = x==y
+
+--------------------------------------------------
+-- Example use Unification
+
+data (Mutable ref m ) =>
+     Type ref m =
+        Tvar (ref (Maybe (Type ref m)))
+      | Tgen Int
+      | Tarrow (Type ref m) (Type ref m)
+      | Ttuple [Type ref m]
+      | Tcon String [Type ref m]
+
+-- run down a chain of Type TVar references making them all point
+-- to the last item in the chain
+
+prune :: (Monad a, Mutable b a) => Type b a -> a (Type b a)
+prune (typ @ (Tvar ref)) =
+   do { m <- get ref
+      ; case m of
+          Just t -> do { newt <- prune t
+                       ; put ref (Just newt)
+                       ; return newt
+                       }
+          Nothing -> return typ}
+prune x = return x
+
+
+
+occursIn :: Mutable ref m => ref (Maybe (Type ref m)) -> Type ref m -> m Bool
+occursIn ref1 t =
+ do { t2 <- prune t
+    ; case t2 of
+        Tvar ref2 -> return (same ref1 ref2)
+        Tgen n -> return False
+        Tarrow a b ->
+           do { x <- occursIn ref1 a
+              ; if x then return True
+                     else occursIn ref1 b
+              }
+        Ttuple xs ->
+           do { bs <- sequence(map (occursIn ref1) xs)
+              ; return(any id bs)
+              }
+        Tcon c xs ->
+           do { bs <- sequence(map (occursIn ref1) xs)
+              ; return(any id bs)
+              }
+    }
+
+unify :: Mutable ref m =>
+          (Type ref m -> Type ref m -> m [String]) ->
+          Type ref m -> Type ref m -> m [String]
+unify occursAction x y =
+  do { t1 <- prune x
+     ; t2 <- prune y
+     ; case (t1,t2) of
+        (Tvar r1,Tvar r2) ->
+           if same r1 r2
+              then return []
+              else do { put r1 (Just t2); return []}
+        (Tvar r1,_) ->
+           do { b <- occursIn r1 t2
+              ; if b then occursAction t1 t2
+                     else do { put r1 (Just t2); return [] }
+              }
+        (_,Tvar r2) -> unify occursAction t2 t1
+        (Tgen n,Tgen m) -> if n==m then return [] else return ["generic error"]
+        (Tarrow a b,Tarrow x y) ->
+          do { e1 <- unify occursAction a x
+             ; e2 <- unify occursAction b y
+             ; return (e1 ++ e2)
+             }
+        (_,_) -> return ["shape match error"]
+    }
+
+--------------------------------------------
+
+class Name term name where
+  isName :: term -> Maybe name
+  fromName :: name -> term
+
+type Var = String
+data Term0 =
+   Add0 Term0 Term0
+ | Const0 Int
+ | Lambda0 Var Term0
+ | App0 Term0 Term0
+ | Var0 Var
+
+instance Name Term0 Var where
+  isName (Var0 s) = Just s
+  isName _ = Nothing
+  fromName s = Var0 s
+
+-----------------------------------------------
+-- Another multi parameter type Class
+
+class Gensym monad name where
+  newGensym :: monad (String -> monad name)
+  gensym :: String -> monad name
+
+
+--------------------------------------------
+-- Yet another
+
+class Mult a b c where
+  times :: a -> b -> c
+
+instance Mult Int Int Int where
+  times x y  = x * y
+
+instance Ix a => Mult Int (Array a Int) (Array a Int) where
+  times x y = fmap (*x) y
+
+
+----------------------------------------------------------
+-- Generic Monad operations from prelude
+{-
+sequence       :: Monad m => [m a] -> m [a]
+sequence       =  foldr mcons (return [])
+                    where mcons p q = do x  <- p
+                                         xs <- q
+                                         return (x:xs)
+
+sequence_      :: Monad m => [m a] -> m ()
+sequence_      =  foldr (>>) (return ())
+
+mapM             :: Monad m => (a -> m b) -> [a] -> m [b]
+mapM f as        =  sequence (map f as)
+
+mapM_            :: Monad m => (a -> m b) -> [a] -> m ()
+mapM_ f as       =  sequence_ (map f as)
+
+(=<<)            :: Monad m => (a -> m b) -> m a -> m b
+f =<< x          =  x >>= f
+-}
+
+
+{- Other topics
+
+functional dependencies
+implicit parameters
+
+
+-}
+-----------------------------------------------------------
+-- The meaning of Overloaded functions
+
+class Equal a where
+  equal :: a -> a -> Bool
+
+class Nat a where
+  inc :: a -> a
+  dec :: a -> a
+  zero :: a -> Bool
+
+
+f0 :: (Equal a, Nat a) => a -> a
+f0 x =
+  if zero x && equal x x
+     then inc x
+     else dec x
+
+
+
+instance Equal Int where
+  equal x y = x==y
+
+instance Nat Int where
+  inc x = x+1
+  dec x = x+1
+  zero 0 = True
+  zero n = False
+
+data N = Z | S N
+
+instance Equal N where
+  equal Z Z = True
+  equal (S x) (S y) = equal x y
+  equal _ _ = False
+
+instance Nat N where
+  inc x = S x
+  dec (S x) = x
+  zero Z = True
+  zero (S _) = False
+
+instance Equal a => Equal [a] where
+  equal [] [] = True
+  equal (x:xs) (y:ys) = equal x y && equal xs ys
+  equal _ _ = False
+
+instance Nat a => Nat [a] where
+  inc xs = map inc xs
+  dec xs = map dec xs
+  zero xs = all zero xs
+
+
+---------------------------------------
+
+data EqualL a = EqualL
+  { equalM :: a -> a -> Bool
+  }
+
+data NatL a = NatL
+  { incM :: a -> a
+  , decM :: a -> a
+  , zeroM :: a -> Bool
+  }
+
+f1 :: EqualL a -> NatL a -> a -> a
+f1 el nl x =
+  if zeroM nl x && equalM el x x
+     then incM nl x
+     else decM nl x
+
+-- instances using the library passing transform
+
+instance_l1 :: EqualL Int
+instance_l1 = EqualL {equalM = equal } where
+  equal x y = x==y
+
+instance_l2 :: NatL Int
+instance_l2 = NatL { incM=inc, decM=dec, zeroM=zero } where
+  inc x = x+1
+  dec x = x+1
+  zero 0 = True
+  zero n = False
+
+instance_l3 :: EqualL N
+instance_l3 = EqualL { equalM = equal } where
+  equal Z Z = True
+  equal (S x) (S y) = equal x y
+  equal _ _ = False
+
+instance_l4 :: NatL N
+instance_l4 = NatL {incM = inc, decM = dec, zeroM = zero } where
+  inc x = S x
+  dec (S x) = x
+  zero Z = True
+  zero (S _) = False
+
+instance_l5 :: EqualL a -> EqualL [a]
+instance_l5 lib = EqualL { equalM = equal } where
+  equal [] [] = True
+  equal (x:xs) (y:ys) = equalM lib x y && equal xs ys
+  equal _ _ = False
+
+instance_l6 :: NatL a -> NatL [a]
+instance_l6 lib = NatL { incM = inc, decM =dec, zeroM = zero } where
+  inc xs = map (incM lib) xs
+  dec xs = map (decM lib) xs
+  zero xs = all (zeroM lib) xs
+
+---------------------------------
+
+data Proof a b = Ep{from :: a->b, to:: b->a}
+
+data Rep t
+  =              Int  (Proof t Int)
+  |              Char (Proof t Char)
+  |              Unit (Proof t ())
+  | forall a b . Arr  (Rep a) (Rep b) (Proof t (a->b))
+  | forall a b . Prod (Rep a) (Rep b) (Proof t (a,b))
+  | forall a b . Sum  (Rep a) (Rep b) (Proof t (Either a b))
+  |              N    (Proof t N)
+  | forall a   . List (Rep a) (Proof t [a])
+
+
+equalX :: Rep a -> a -> a -> Bool
+
+incX  :: Rep a -> a -> a
+decX  :: Rep a -> a -> a
+zeroX :: Rep a -> a -> Bool
+
+
+f2 :: Rep a -> a -> a
+f2 r x =
+  if zeroX r x && equalX r x x
+     then incX r x
+     else decX r x
+
+
+incX (Int p)    x = to p (inc (from p x)) where inc x = x+1
+incX (N p)      x = to p (inc (from p x)) where inc x = S x
+incX (List a p) x = to p (inc (from p x)) where inc xs = map (incX a) xs
+
+
+decX (Int p)    x = to p (dec (from p x)) where dec x = x+1
+decX (N p)      x = to p (dec (from p x)) where dec x = S x
+decX (List a p) x = to p (dec (from p x)) where dec xs = map (decX a) xs
+
+
+
+zeroX (Int p)    x = zero (from p x) where zero 0 = True
+                                           zero n = False
+zeroX (N p)      x = zero (from p x) where zero Z = True
+                                           zero (S _) = False
+zeroX (List a p) x = zero (from p x) where zero xs = all (zeroX a) xs
+
+
+
+equalX (Int p)    x y = h equal p x y where equal x y = x==y
+equalX (N p)      x y = h equal p x y where equal Z Z = True
+                                            equal (S x) (S y) = equal x y
+                                            equal _ _ = False
+equalX (List a p) x y = h equal p x y where equal [] [] = True
+                                            equal (x:xs) (y:ys) = equalX a x y && equal xs ys
+                                            equal _ _ = False
+
+h equal p x y = equal (from p x) (from p y)
+
+-- </PRE>

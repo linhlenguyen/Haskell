@@ -1,0 +1,109 @@
+
+kind Nat = Zero | Succ Nat
+
+data List :: *0 ~> Nat ~> *0 where
+  Nil :: List a Zero
+  Cons :: a -> List a m -> List a (Succ m)
+
+sum :: Nat ~> Nat ~> Nat
+{sum Zero x} = x
+{sum (Succ y) x} = Succ {sum y x}
+
+app :: List a n -> List a m -> List a {sum n m}
+app Nil ys = ys
+app (Cons x xs) ys = Cons x (app xs ys)
+
+-----------------------------------------
+data Cd n f t = Cd (forall p . Exp p n f t)
+
+data Var:: *0 ~> *0 ~> *0 where
+  Z:: Var (b,a) a
+  S:: Var w x -> Var (w,y) x
+
+data Exp:: *0 ~> *0 ~> *0 ~> *0 ~> *0 where
+  Const:: t -> Exp past now future t
+  V:: Var now t -> Exp past now future t
+  Abs:: Exp p (n,s) f t -> Exp p n f (s -> t)
+  App:: Exp p n f (t1->t) -> Exp p n f t1 -> Exp p n f t
+  Br:: Exp (p,n) c f t -> Exp p n (c,f) (Cd c f t)
+  Esc:: Exp p b (n,f) (Cd n f t) -> Exp (p,b) n f t
+  Csp:: Exp p b (n,f) t -> Exp (p,b) n f t
+  Pair:: Exp p n f s -> Exp p n f t -> Exp p n f (s,t)
+  Run:: (forall x . Exp p n (x,f) (Cd x f t)) -> Exp p n f t
+
+
+data Env:: *0 ~> *0 ~> *0 where
+  EnvZ:: a -> Env (b,a) c
+  EnvS::  Env a b -> Env (a,c) (b,c)        
+
+ 
+eval :: Exp past now future t -> now -> t
+eval (Const n) env = n
+eval (V Z) (x,y) = y
+eval (V (S v)) (x,y) = eval (V v) x
+eval (App f x) env = (eval f env) (eval x env)
+eval (Abs e) env = \ v -> eval e (env,v) 
+eval (Pair x y) env = (eval x env, eval y env)
+eval (Br e) env = Cd (bd (EnvZ env) e)
+eval (Run e) env = case eval e env of { Cd x -> eval x () }
+ 
+bd :: Env a z -> Exp a n f t -> Exp z n f t
+bd env (Const n) = Const n 
+bd env (V z) = V z
+bd env (App x y) = App (bd env x) (bd env y)
+bd env (Abs e) = Abs(bd env e)
+bd env (Pair x y) = Pair (bd env x) (bd env y)
+bd env (Br e) = Br(bd (EnvS env) e)
+bd env (Run e) = Run(bd env e)
+bd (EnvZ env) (Esc e) = case eval e env of { Cd x -> x}
+bd (EnvS r) (Esc e) = case bd r e of { Br x -> x; y -> Esc y }
+bd (EnvZ env) (Csp e) = Const(eval e env)
+bd (EnvS r) (Csp e) = Csp(bd r e)
+
+
+-------------------------------------------------------------
+shv :: Var e t -> Int
+shv Z = 0
+shv (S x) = 1 + shv x
+
+she :: Exp p n f t -> String
+she (Const x) = "%"++show x
+she (V v) = "x"++ show (shv v)
+she (App x (y@(App _ _))) = she x++"("++she y++")"
+she (App x y) = she x++" "++she y
+she (Abs x) = "(\\ -> "++she x++")"
+she (Pair x y) = "("++she x++","++she y++")"
+she (Br e) = "<"++she e++">"
+she (Run x) = "(run "++she x++")"
+she (Esc (e@(V _))) = "~"++she e
+she (Esc e) = "~("++she e++")"
+she (Csp e) = "%"++she e
+
+x0 = V Z
+x1 = V(S Z)
+x2 = V(S (S Z))
+
+{-
+-|val puzzle = 
+  run ((run <fn a => 
+              ~( (fn x => <x>) 
+                 (fn w => <a>) ) 
+              5>) 
+        3);
+-}
+
+-- (fn x => <x>)
+exp1 = Abs (Br (Csp(V Z)))
+-- fn w => <a>)
+exp2 = Abs (Br ( (V (S Z))))
+-- ~((fn x => <x>) (fn w => <a>)) 
+exp3 = Esc(App exp1 exp2)
+--- <fn a => ~( (fn x => <x>) (fn w => <a>) )  5>
+exp4 = Br(Abs(App exp3 (Const 5)))
+-- exp5 = App (Run exp4) (Const 3)
+
+-- exp4 ::Exp a (b,c) (d,e) (Cd d e (a1 -> Cd (a1,d) e b))) 
+
+a1 = App (Esc(Br(Abs (Br(Csp (V (S Z))))))) (Const 5)
+a2 = Br (Abs a1)
+

@@ -1,0 +1,176 @@
+(* <PRE> Code from the 3rd lecture.
+*)
+
+(* ************** Datatypes from previous lecture **************** *)
+
+datatype Tree = Tip | Node of Tree * int * Tree;
+
+datatype Exp
+  = Const of int
+  | Add of Exp * Exp
+  | Mult of Exp * Exp
+  | Sub of Exp * Exp;
+
+
+datatype Token
+  = Id of string
+  | Plus
+  | Times
+  | Eql
+  | Int of int
+  | Illegal;
+
+datatype RE
+  = Empty
+  | Union of RE * RE
+  | Concat of RE * RE
+  | Star of RE
+  | C of char;
+
+datatype Label = Epsilon | Char of char;
+type Start = int;
+type Finish = int;
+datatype Edge = Edge of Start * Label * Finish;
+
+
+val (ex6 as (start,finish,edges)) =
+  (8,15,
+   [Edge (9,Epsilon,10),Edge (8,Epsilon,0),Edge (8,Epsilon,6),
+    Edge (1,Epsilon,9),Edge (7,Epsilon,9),Edge (0,Char #"+",1),
+    Edge (6,Epsilon,2),Edge (6,Epsilon,4),Edge (3,Epsilon,7),
+    Edge (5,Epsilon,7),Edge (2,Char #"-",3),Edge (4,Epsilon,5),
+    Edge (11,Epsilon,14),Edge (10,Char #"D",11),Edge (14,Epsilon,12),
+    Edge (13,Epsilon,15),Edge (14,Epsilon,15),Edge (15,Epsilon,14),
+    Edge (12,Char #"D",13)]);
+
+(* **************** Sets as lists ********************** *)
+(* represent a set as an ordered list without duplicates *)
+
+fun mem x [] = false
+  | mem x (y::ys) =
+     if x=y then true
+            else mem x ys;
+
+fun setAdd x [] = [x]
+  | setAdd x (y::ys) =
+      case Int.compare (x,y) of
+        EQUAL => (y::ys)
+      | LESS => x::y::ys
+      | GREATER => y :: setAdd x ys;
+
+fun setUnion [] [] = []
+  | setUnion [] ys = ys
+  | setUnion xs [] = xs
+  | setUnion (x::xs) (y::ys) =
+     case Int.compare (x,y) of
+        EQUAL => setUnion xs (y::ys)
+      | LESS =>  x:: setUnion xs (y::ys)
+      | GREATER => y :: setUnion (x::xs) ys;
+
+fun setConcat [] = []
+  | setConcat (x::xs) = setUnion x (setConcat xs);
+
+(* Turn a list into a set, sort and remove duplicates. *)
+fun sort [] = []
+  | sort (x::xs) = setAdd x (sort xs);
+
+fun remDupFromOrdered [] = []
+  | remDupFromOrdered [x] = [x]
+  | remDupFromOrdered (x::y::zs) =
+      if x=y then remDupFromOrdered (y::zs)
+             else x:: remDupFromOrdered (y::zs);
+
+fun norm xs = remDupFromOrdered(sort xs);
+
+fun setToString xs =
+  let fun help [] = "]\n"
+        | help [x] = Int.toString x ^ "]\n"
+        | help (x::xs) = Int.toString x ^ "," ^ help xs
+  in "[" ^ help xs end
+
+
+(* ********************************************************** *)
+
+fun oneStep n (Edge(s,Epsilon,f)) =
+       if n=s then [f] else []
+  | oneStep n (Edge(s,Char _,f)) = []
+
+fun oneStepFromEdges es n =
+  setConcat(map (oneStep n) es);
+
+fun oneStepFromSet es states =
+   setConcat (map (oneStepFromEdges es) states);
+
+
+fun eclose edges states =
+    let val new = oneStepFromSet edges states
+        val union = setUnion new states
+    in if union = states
+          then states
+          else ( print (setToString states)
+               ; print (setToString new)
+               ; print (setToString union)
+               ; print "-----------------------\n"
+               ; eclose edges union )
+    end;
+
+
+fun fix f init =
+  let val new = f init
+  in if new=init then new else fix f new end;
+
+fun eclose2 edges xs =
+   let fun step x = setUnion x (oneStepFromSet edges x)
+   in fix step xs end;
+
+
+(* ************************************************ *)
+
+fun transitionOn c states edges =
+  let fun good (Edge(s,Char x,f)) = (c=x) andalso (mem s states)
+        | good _ = false
+      fun finish (Edge(s,_,f)) = f
+  in map finish (List.filter good edges) end;
+
+
+fun nfa edges final states [] = mem final states
+  | nfa edges final states (c::cs) =
+     let val _ = print ("State = "^setToString states)
+         val _ = print ("Input = "^implode(c::cs)^"\n")
+         val new = eclose2 edges (transitionOn c states edges)
+         val _ = print ("On '"^implode [c]^"' we can get to "^setToString new)
+     in if new = []
+           then false
+           else nfa edges final new cs
+     end;
+
+
+
+fun accept (start,final,edges) input =
+    nfa edges final
+       (eclose2 edges [start])
+       (explode input)
+
+(* *******************************************************888 *)
+
+fun innerWhile x [] ans = ans
+  | innerWhile x (y::ys) ans = innerWhile x ys ((x,y)::ans);
+
+fun outerWhile ys [] ans = ans
+  | outerWhile ys (x::xs) ans = outerWhile ys xs (innerWhile x ys ans);
+
+fun cross xs ys = outerWhile ys xs [];
+
+
+val ex8 =  map (fn (x,y) => (x,y)) (cross [1,2,3,4] [true,false]);
+
+(*
+[(4,false),(4,true)
+,(3,false),(3,true)
+,(2,false),(2,true)
+,(1,false) (1,true)] : (int * bool) list
+
+*)
+
+
+(* </PRE> *)

@@ -1,0 +1,51 @@
+<title>In class exercise - Drawing Trees with Graphviz </title>
+
+<CENTER>
+<BIG>In class exercise - Drawing Trees with Graphviz </BIG>
+</CENTER>
+
+<p>
+In this exercise we will draw trees using the Graphviz tool "dot".
+<p>
+To get started do the following
+<ul>
+<li> Download the Graphviz library we discussed in class: <A HREF="../Lib/Graphviz.hs">Graphviz.hs</A>.
+<li> Go to the <A HREF="http://www.graphviz.org/">Graphviz website</A> and down load the tools.
+<li> Install the tools on your computer. See <A HREF="http://www.graphviz.org/Download..php">here</A>.
+    You might have to add "dot.exe" to your PATH variable (see <A HREF="http://www.computerhope.com/issues/ch000549.htm">here</A>.)
+
+
+<li> Cut and paste the program template below to get started.
+<li> Define your own tree like data type, called <B>Tree</B>,  by adding a "<B>data</B>" declaration.
+<li> Add Instance declarations for <B>Tree</B>, <B>LabeledTree</B>, and <B>Functor</B>
+<li> Define several values, <B>tree1</B>, <B>tree2</B>, and <B>tree3</B>, of type <B>Tree</B>.
+<li> Use the function <A HREF="http://?">toPng</A> (from the Graphviz module) to draw pictures of your tree.
+</ul>
+
+
+<p>
+<HR ALIGN="center" WIDTH="100%">
+<pre>
+module UsingDot where
+
+import Graphviz
+
+data MyTree a = ...
+
+tree1:: MyTree ?
+tree1 = ...
+
+tree2:: MyTree ?
+tree2 = ...
+
+tree3:: MyTree ?
+tree3 = ...
+
+main = toPng tree1
+
+</pre>
+<HR ALIGN="center" WIDTH="100%">
+<p>
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

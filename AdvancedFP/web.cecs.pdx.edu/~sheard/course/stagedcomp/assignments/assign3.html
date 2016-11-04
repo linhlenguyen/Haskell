@@ -1,0 +1,60 @@
+<PRE>
+cs510 FSC Staged Computation             Assignment # 3               Winter 2005
+assigned Tuesday Jan. 18, 2005                 due in class Tuesday Jan. 25, 2005
+
+NOTE - THIS IS AN HTML FILE which contains HTML TAGS TO DISPLAY METAML CODE PROPERLY
+
+1) Consider the function append : 'a list -&gt; 'a list -&gt; 'a list
+
+fun append [] ys = ys
+  | append (x::xs) ys = x :: (append xs ys);
+
+A) write two new versions with the staged types:
+
+appendA : 'a list -&gt; &lt;'a list&gt; -&gt; &lt;'a list&gt;
+appendB : &lt;'a list&gt; -&gt; 'a list -&gt; &lt;'a list&gt;
+
+B) Discuss the utility of the two staged versions. How do they differ. Does one lend it self
+to staging more than the other?
+
+C) Is the lift annotation usefull? Compare the types printed by MetaML when
+using lift, and when not using lift. Are they different? When will lift not be usefull?
+
+D) Write a staged version which is a generator (rather than a code transformer) with type
+   appendC :: 'a list -&gt; &lt; 'a list -&gt; 'a list &gt;.  Use the techniques discussed in class,
+   but don't use the trick which looks like:  &lt;fn x =&gt; ~(bodyFun &lt;x&gt;) &gt;  where bodyfun
+   is a code transformer.
+
+2) Consider a simple expresion language for regular expressions,
+whose abstract syntax is given by the MetaML datatype definition:
+
+datatype RE =
+   Lit of string      (* (Lit s) exactly the string s          *)
+ | Or of (RE*RE)      (* (Or (a,b)) either a or b              *)
+ | Concat of (RE*RE)  (* (Concat (a,b)) a followed by b        *)
+ | Star of RE         (* (Star z) zero or more occurences of z *)
+
+data 'a Maybe = Just of 'a | Nothing
+
+the meaning of a regular expression is a function with type:
+  string -> Maybe(string*string).
+
+Suppose the function "f" encodes the meaning of the regular expression
+val r1 = Or(Lit "tim",Star (Concat (Lit "a",Lit "b")))
+then
+
+f "tim123"       --->  Just ("tim","123")
+f "xyz"          --->  Just ("","xyz")        i.e. Zero occurrences
+f "abababtom"    --->  Just ("ababab","tom")
+
+a) write a function eval :: RE -> String -> Maybe(String,String)
+that translates a RE to its meaning.  (hint: first write a function
+prefix :: string -> string -> Maybe String such that
+  prefix "abc" "xyz"     ---> Nothing
+  prefix "abc" "abc123"  ---> Just "123" )
+
+b) Write a new staged version of "eval" called "eval2" with type
+eval2 :: RE -&gt; &lt;string&gt;  -&gt; &lt;(string*string)Maybe&gt;
+
+
+</PRE>

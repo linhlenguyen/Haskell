@@ -1,0 +1,233 @@
+
+<title> CS558 Homework #5 </title>
+
+
+<CENTER>
+<BIG> CS558 Homework #5 </BIG> <BR>
+due 8:00 AM, Monday Feb 15 2016 <BR>
+Although HW #5 is not due until the 10th, the material it <BR>
+covers is fair game for the mid term exam on Feb. 8, 2016.<BR>
+</CENTER>
+
+<p>
+
+Homework must be submitted via D2L. All submitted files (3 for this assignment <B>sol5A.e5</B>,
+<B>hw5A.hs</B>, and <B>sol5B.hs</B>) must be submitted in the appropriate D2L directory in the drop box HW5.It is your
+responsibility to submit the homework in the proper format with the proper names.
+For example.
+<PRE>
+-- Homework 5  Tom Smith   tom_smith@gmail.com
+</PRE>
+
+
+<p>
+All programs mentioned can be downloaded from the this document
+<ul><li> <A HREF="../code/hw5/Hw5.hs">Hw5.hs</A>. A definitional interpreter (in Haskell) for language E5.
+<li>  <A HREF="../code/hw5/static.e5">static.e5</A>. A sample E5 program.
+<li>  <A HREF="../code/hw5/compose.e5">compose.e5</A>.  Another sample E5 program.
+<li>  <A HREF="../code/hw5/map.e5">map.e5</A>.  A third sample E5 program.
+
+</ul>
+
+<p>
+
+This homework has two parts. First, altering the definitional interpreter for a small
+functional language, and Second, writing a few small programs in a functional language (Haskell).
+
+<ol>
+
+<li> Consider the following functional language, which we'll call E5.
+
+
+<PRE>
+prog := { decl } 'in' exp
+
+exp := var
+| int
+| char
+| '(' '=' exp exp ')'
+| '(' 'if' exp exp exp ')'
+| '(' 'let' { decl } 'in' exp ')'
+| '(' 'lambda' ( {var} ) exp ')'
+| '(' '@' exp exp { exp } ')'
+| '(' '+' exp exp ')'
+| '(' '-' exp exp ')'
+| '(' '*' exp exp ')'
+| '(' '/' exp exp ')'
+| '(' '<=' exp exp ')'
+| '(' 'pair' exp exp ')'
+| '(' 'fst' exp ')'
+| '(' 'snd' exp ')'
+| '(' 'ispair' exp ')'
+| '(' 'ischar' exp ')'
+| '(' 'isint' exp ')'
+
+var := letter { letter | digit }
+
+decl := '(' 'fun' var '(' { var } ')' exp ')'
+| '(' 'val' var exp ')'
+</PRE>
+
+<p>
+As usual, comments may be included by enclosing them between comment braces '{-' and '-}'
+characters, and they may be nested.
+
+<p>
+
+E5 is similar to some of our earlier languages (especially E4),
+it retains characters and their operations,
+but lacks imperative features including assignment, while , block , and write.
+<p>
+The local
+expression has been renamed let (to emphasize that it acts like an
+Haskell-style immutable binding). A let contains a series of zero or more declarations,
+the keyword 'in', and then an expression which acts as the body of the let. The value of a let
+is the value of its body, BUT, the body is evaluated in an enriched environment, which contains
+local bindings for the values and functions introduced by the let's declarations.
+<p>
+There are two kinds of declarations: 'fun' and 'val'. A 'val' declaration is much like a 'local'
+declaration from language E4. A declaration (val x exp), extends the environment with the name
+'x', binding it to the value of 'exp'.
+
+<p>
+
+The most important changes are in the treatment of functions, which can be defined
+in two ways.
+<ol>
+<li> The most common is the use of the function declaration '(' 'fun' var { var } exp ')' in a 'let' expression.
+for example, to evaluate (let (fun f (x y) (+ x (- y 1))) in (@ f 2 6)), first create a binary function 'f'
+value whose formal arguments are 'x' and 'y' , whose body is  (+ x (- y 1)), and whose environment
+is the current environment; then bind f to that function value and
+evaluate (@ f 2 6)) in the resulting local environment.
+
+<li> The other way is called an anonymous function, or lambda expression '(' 'lambda' '(' {var } ')' exp ')'.
+For example:
+(\ (x y) exp) introduces a nameless function with two formal parameters 'x' and 'y' and a body 'exp'.
+</ol>
+<p>
+
+Functions are treated as just another kind of value, and they share the same name
+space as other values.
+
+<p>
+
+Applications now take an arbitrary expression in the function position; this must
+evaluate to a function value. Functions take an arbitrary number of
+additional arguments (including zero). Functions are completely "first-class",  i.e.,
+they can be passed as arguments to, or returned as results of, other functions, and
+can be stored in pairs. A program is a series of declarations, the keyword 'in' follwoed
+by an expression. The value of the program is the value of this expression,
+evaluated in an environment created by the declarations.
+
+<p>
+
+The web site gives several example E5 programs. Program <A HREF="../code/hw5/static.e5">static.e5</A>
+illustrates that nested functions use static scoping rules; program
+<A HREF="../code/hw5/compose.e5">compose.e5</A> shows how to write a higher-order function that composes two
+existing functions.
+
+<p>
+
+An E5 interpreter in Haskell (only) has been provided ( <A HREF="../code/hw5/hw5.hs">hw5.hs</A> ).
+
+<p>
+
+In the E5 language there are exactly 4 kinds of values. Ints, Characters, Pairs, and Functions.
+There are 3 predicates on values: <B>ispair</B>, <B>ischar</B>, and <B>isint</B>. With these
+you can test what kind of value any object takes.
+
+In addition, the interpreter for E5 attempts to recognize the convention we have used to encode lists.
+Recall that convention, it uses right-nested pairs ending in 0. For example <B>(pair 4 (pair 'z' 0))</B>
+evaluates to <B>(4.('z'.0))</B>. In the interpreter for E5 if such a right-nested
+pair is recognized it is printed as <B>[4,'z']</B>. The interpreter also recognizes
+right-nested pairs of characters, and prints them as strings. For example
+<B>(pair 'a' (pair 'b' (pair 'c' 0)))</B> prints as <B>"abc"</B>.  There are still only
+4 kinds of values, though we print some of them using the list conventions.
+Here are some examples
+<ol>
+<li> <B>(pair 4 (pair 5 (pair 9 0)))</B> prints as    <B>[4,5,9]</B> .
+<li> <B>(pair 3 (pair 5 6))</B> print as  <B>(3.(5.6))</B>. Note that while it is right nested,
+it does not end in <B>0</B>, so the list form is <EM>not</EM> used.
+<li> <B>(pair 'd' (pair 'z' (pair '3' 0)))</B> print as  <B>"dz3"</B>.
+<li> <B>(pair 'a' (pair 'b' (pair 5 0)))</B> prints as
+<B>['a','b',5]</B>. Note that is starts out looking like a list of Character, but the last
+element is not a Character, so we can't print it as a string. But it stills looks like a list.
+
+</ol>
+
+<p>
+<H3>What to do.</H3>
+<p>
+You will need to write some small E5 programs. You will also modify
+the definitional interpreter. You might try adding the <A HREF="../code/hw3/lists.e3">list convention
+functions</A> to an E5 program. While the idea is the same, the format
+of definitions is very different in E5 than in E3 and E4. This would be good practice before
+you start.
+<UL>
+
+<Li> Modify compose.e5 so that the compose function is Curried, rather
+than taking its arguments as a single pair. Put your solution in file <B>sol5A.e5</B>
+(20 points).
+
+<li> Modify the interpreter to allow E5 functions to be recursive . For
+example, program <A HREF="../code/hw5/map.e5">map.e5</A> (which currently fails with an unbound variable
+error) should work properly when you're done. This requires only a very
+small change. But be careful: programs like <B>static.e5</B> must also continue
+to work when you're done!  To do this you will need to make one small change
+in the <B>elab</B> function (near line 332, the case for FunDecl).
+The <B>elab</B> function is used in the read-eval-print loop, and in the Let case
+of the interpreter (line 298). Without the use of <B>elab</B>
+function the read-eval-print loop (line 741) wouldn't know what definition are in scope
+(40 points).
+
+<p>
+Turn in a file named <B>hw5A.hs</B> in to D2L which is your
+modified interpreter.
+
+
+
+</ul>
+
+<p>
+
+
+Note that this interpreter has some significant changes from the previous one for E4. We
+no longer use a stack, just an environment and a heap. There is
+a (single) environment (because both functions and other values can now be stored
+in the same name space). The environment now maps all identifiers directly to addresses
+in the heap. But, we use addresses only when we allocate
+new cells in the heap, We never change values in the heap since there is no assignment
+(or call by reference).
+
+<p>
+
+
+
+
+<li>
+
+Implement the following functions in Haskell using the Haskell function foldr,
+without using explicit recursion. Submit your solutions to both the exercises in a single file
+<B>sol5B.hs</B>.
+
+<ul>
+
+
+<li> <B>rev:: [a] -> [a]</B>
+reverses an arbitrary list. You make take the "built-in" library function
+(<B>++</B>) (append) as primitive. The function you write should reverse a list. For example
+<B>rev [1,2,5]</B> --->  <B>[5,2,1]</B> (20 points)
+
+<li> <B>forall : (a -> Bool) -> [a] -> Bool</B> , where <B>(forall f l)</B> returns <B>True</B>,
+if for every element <B>x</B> in <B>l</B> , <B>(f x)</B> evaluates to <B>True</B> , or <B>l</B> is empty
+(20 points).
+
+<li> <B>Extra Credit</B>. Do this for fun only. It is <B>not required</B>, and it is worth
+<B>zero points</B>, but it is interesting. Redo the definitions for <B>rev</B> and <B>forall</B>
+using explicit tail recursion and the accumulator style, as discussed in the <A HREF="../notes/funLangNotes.hs">companion notes</A>. Can
+you write them in continuation passing style as well? Call these functions
+revAcc forallAcc and revCPS and forallCPS in your solution.
+</ul>
+
+
+</ol>

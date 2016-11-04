@@ -1,0 +1,113 @@
+-- basic settings the control the game ranges
+rank = 3
+range = rank*rank
+
+dim value#Int = [1 .. range]
+dim coord#Int = [1 .. rank]
+dim array#Int = [0 .. range-1]
+dim standardLocation#Int = [ 1 .. range ]
+dim standardRowSet#Int = [1 .. rank]
+dim standardColSet#Int = [1 .. rank]
+
+-- this controls checking over groups of boxes in the search
+standardRowSets = set #(standardRowSet,standardLocation) [(1, 1), (1, 2), (1, 3), (2, 4), (2, 5), (2, 6), (3, 7), (3, 8), (3, 9)]
+standardColSets = set #(standardColSet,standardLocation) [(1, 1), (1, 4), (1, 7), (2, 2), (2, 5), (2, 8), (3, 3), (3, 6), (3, 9)]
+
+-- this controls the display of each box in the output
+baseColMap = set #(standardColSet,coord,array) [(1, 1, 0), (1, 2, 1), (1, 3, 2), (2, 1, 3), (2, 2, 4), (2, 3, 5), (3, 1, 6), (3, 2, 7), (3, 3, 8)]
+baseRowMap = set #(standardRowSet,coord,array) [(1, 1, 0), (1, 2, 1), (1, 3, 2), (2, 1, 3), (2, 2, 4), (2, 3, 5), (3, 1, 6), (3, 2, 7), (3, 3, 8)]
+
+--------------------------------------------------------------------
+-- Nothing above this line should ever change for 3x3 Base Sudoku --
+--------------------------------------------------------------------
+
+-- how many overlapping Sudoku games
+games = 5 -- 1
+dim gameSet#Int = [1 .. games]
+
+-- rank*rank*games-overlappers
+boxes = 41 -- 9
+dim location#Int = [1 .. boxes]
+
+-- this maps each box onto standard Sudoku games
+
+--For Sudoku, (games=1, boxes=9)
+--gameMap = set #(gameSet, location, standardLocation) [(1, 1, 1), (1, 2, 2), (1, 3, 3), (1, 4, 4), (1, 5, 5), (1, 6, 6), (1, 7, 7), (1, 8, 8), (1, 9, 9)]
+
+--For Multi Sudoku, (games=2, boxes=14)
+--gameMap = set #(gameSet, location, standardLocation) [(1, 1, 1), (1, 2, 2), (1, 3, 3), (1, 4, 4), (1, 5, 5), (1, 6, 6), (1, 7, 7), (1, 8, 8), (1, 9, 9),
+--                                                      (2, 5, 1), (2, 6, 2), (2, 10, 3), (2, 8, 4), (2, 9, 5), (2, 11, 6), (2, 12, 7), (2, 13, 8), (2, 14, 9)]
+
+--For Samurai Sudoku, (games=5, boxes=41)
+gameMap = set #(gameSet, location, standardLocation) [(1, 1, 1), (1, 2, 2), (1, 3, 3), (1, 4, 4), (1, 5, 5), (1, 6, 6), (1, 7, 7), (1, 8, 8), (1, 9, 9),
+                                                      (2, 10, 1), (2, 11, 2), (2, 12, 3), (2, 13, 4), (2, 14, 5), (2, 15, 6), (2, 16, 7), (2, 17, 8), (2, 1, 9),
+                                                      (3, 18, 1), (3, 19, 2), (3, 20, 3), (3, 21, 4), (3, 22, 5), (3, 23, 6), (3, 3, 7), (3, 24, 8), (3, 25, 9),
+                                                      (4, 26, 1), (4, 27, 2), (4, 7, 3), (4, 28, 4), (4, 29, 5), (4, 30, 6), (4, 31, 7), (4, 32, 8), (4, 33, 9),
+                                                      (5, 9, 1), (5, 34, 2), (5, 35, 3), (5, 36, 4), (5, 37, 5), (5, 38, 6), (5, 39, 7), (5, 40, 8), (5, 41, 9)]
+
+------------------------------------------------------------------------------
+-- Above this line will control how the individual 3x3 Sudoku games overlap --
+------------------------------------------------------------------------------
+
+-- this provides the actual puzzle inputs for each box
+puzzle = set #(location,coord,coord,value)
+         [(1, 1, 2, 2), (1, 3, 2, 7), (1, 3, 3, 4), (2, 2, 1, 6), (2, 3, 2, 8), (3, 2, 3, 3),
+          (4, 3, 1, 6), (4, 2, 2, 8), (5, 3, 1, 5), (5, 2, 2, 4), (5, 1, 3, 3), (6, 2, 2, 1), (6, 1, 3, 2),
+          (7, 2, 1, 5), (8, 1, 2, 1), (8, 2, 3, 9), (9, 1, 1, 7), (9, 1, 2, 8), (9, 3, 2, 4)]
+{- Puzzle from http://dingo.sbs.arizona.edu/~sandiway/sudoku/examples.html -}
+
+------------------------------------------------
+-- Nothing below this line should ever change --
+------------------------------------------------
+
+-- this computes some internally useful sets
+rowColSets = games*rank
+dim rowSet#Int = [1 .. rowColSets]
+dim colSet#Int = [1 .. rowColSets]
+
+-- [(1, 1, 1), (1, 2, 2), (1, 3, 3)]
+n = [ (g, r+(g-1)*rank, r) | g <- [1 .. games], r <- [1 .. rank] ]
+gameSetRowSets = set #(gameSet, rowSet, standardRowSet) n
+gameSetColSets = set #(gameSet, colSet, standardColSet) n
+
+-- set #(rowSet,location) [(1, 1), (1, 2), (1, 3), (2, 4), (2, 5), (2, 6), (3, 7), (3, 8), (3, 9)]
+rowSets = $( { (r, l) <- gameSetRowSets(g, r, q),standardRowSets(q, s),gameMap(g, l, s) } )
+-- set #(colSet,location) [(1, 1), (1, 4), (1, 7), (2, 2), (2, 5), (2, 8), (3, 3), (3, 6), (3, 9)]
+colSets = $( { (c, l) <- gameSetColSets(g, c, q),standardColSets(q, s),gameMap(g, l, s) } )
+
+-- functions for processing the display output
+
+-- set #(standardLocation, coord, array) [(1, 1, 0), ...]
+leftCoordMap = $( { (l, c, a) <- standardRowSets(o, l),baseRowMap(o, c, a) } )
+-- set #(standardLocation, coord, array) [(1, 1, 0), ...]
+rightCoordMap = $( { (l, c, a) <- standardColSets(o, l),baseColMap(o, c, a) } )
+-- set #(standardLocation, coord, coord, array, array) [(1, 1, 1, 0, 0), ...]
+baseGameMaps = $( { (l, c, d, a, b) <- leftCoordMap(l, c, a),rightCoordMap(l, d, b) } )
+-- set #(gameSet,array,array,location,coord,coord) [(1, 0, 0, 1, 1, 1), ...]
+gameSets = $( { (g,a,b,l,c,d) <- gameMap(g, l, s), baseGameMaps(s, c, d, a, b)  } )
+
+-- functions for displaying a single game within
+
+getGame r n = $( {(i,j,k) <- r(n,h,l,k),gameSets(q,i,j,n,h,l), q =#gameSet $n} )
+display r n = setToArray (getGame r n)
+
+-- functions used in finding an answer for it
+
+getBox q r = $( {(k) <- r(n,i,j,k), n =#location $q } )
+-- inspired by "quad n x" from Sodoku2!
+getRow q qs r = $( {(k) <- r(n,q,j,k),rowSets(i,n), i =#rowSet $qs, q =#coord $q} )
+getCol q qs r = $( {(k) <- r(n,j,q,k),colSets(i,n), i =#colSet $qs, q =#coord $q} )
+
+and [] = True
+and (x:xs) = x && and xs
+
+-- the actual search for finding an answer for it
+
+exists grid : set #(location,coord,coord,value) puzzle .. fullRel #(location,coord,coord,value)
+ where        and [ full (getBox q grid) | q <- location ]
+              && and [ full (getRow q list grid) | q <- coord, list <- rowSet ]
+              && and [  full (getCol q list grid) | q <- coord, list <- colSet ]
+              && $(grid(i,j,k,n),grid(i,j,k,m) -> n =#value m)
+  find First
+    by SAT
+

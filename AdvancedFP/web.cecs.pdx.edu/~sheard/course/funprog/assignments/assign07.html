@@ -1,0 +1,36 @@
+<PRE>
+CSE536  Functional Programming                     Assignment # 7
+Assigned: Nov. 15, 2004                Due, Monday, Nov. 29, 2004
+
+REACTIVE ANIMATIONS
+
+1) Exercise 15.1 page 234 of the text. part 1.
+   This exercise asks for you to extend the Paddle ball game
+   by displaying the score. 1 point for every time the ball
+   bounces off the paddle. To do this you will need to extend the
+   Picture Datatype to handle Text objects. Look in the modules
+   Picture.hs and Fal.hs to see how this is done. These modules
+   can be found on the website.
+
+2) Exercise 15.2, page 235 of the text. This problem asks you
+   so simulate a bouncing ball, which slows its bouncing due
+   to friction.
+
+HIGHER ORDER DATATYPES AND MONADS
+(Read chapter 18 to get started on these questions)
+
+3) Consider the data defintions:
+
+data Op = Plus | Minus | Times | Div
+data Exp = Const Float | Var String | Oper Op Exp Exp
+
+4) Use the monad-do notation to write the function:
+eval :: Exp -> [(String , Float)] -> Maybe Float
+Note that the possibility of failure comes from division by 0.
+
+5) Use the do monad notation to write the function:
+eval2 :: Exp -> (String -> [Float]) -> [Float]
+If a variable has more than one binding (String -> [Float]) the
+evaluation of an Exp has more than one result.
+
+</PRE>

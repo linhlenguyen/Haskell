@@ -1,0 +1,50 @@
+
+-- <pre>
+
+
+plus:: Nat ~> Nat ~> Nat
+{plus Z m} = m
+{plus (S n) m} = S {plus n m}
+
+
+plusZ :: Nat' n -> Equal {plus n Z} n
+plusZ Z = Eq
+plusZ (S m) = Eq
+  where theorem indHyp = plusZ m
+
+plusAssoc :: Nat' n -> Equal {plus {plus n b} c} {plus n {plus b c}}
+plusAssoc n = undefined
+
+times:: Nat ~> Nat ~> Nat
+{times Z m} = Z
+{times (S n) m} = {plus m {times n m}}
+
+
+timesZ:: Nat' n -> Equal {times n Z} Z
+timesZ Z = Eq
+timesZ (S n) = Eq
+  where theorem ih = timesZ n
+
+distr:: Nat' x -> Equal {times {plus x y} z} {plus {times x z} {times y z}}
+distr Z = Eq
+distr (S n) = Eq
+  where theorem ih = distr n
+        theorem plusAssoc
+
+oneTimes:: Nat' n -> Equal {times 1t n} n
+oneTimes Z = Eq
+oneTimes (S m) = Eq
+  where theorem ih = plusZ m
+
+
+-- These functions are homework for Next week
+-- See Programming in Omega. Exercise 27, page 52
+
+
+{-
+plusS :: Nat' n -> Equal {plus n (S m)} (S{plus n m})
+plusCommutes :: Nat' n -> Nat' m -> Equal {plus n m} {plus m n}
+plusAssoc :: Nat' n -> Equal {plus {plus n b} c} {plus n {plus b c}}
+plusNorm :: Nat' x -> Equal {plus x {plus y z}} {plus y {plus x z}}
+-}
+-- </pre>

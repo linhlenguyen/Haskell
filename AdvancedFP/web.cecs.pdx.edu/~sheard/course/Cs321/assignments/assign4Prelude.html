@@ -1,0 +1,89 @@
+(* <PRE> *)
+
+fun concat xs =
+  let val xsRef = ref xs
+      val ansRef = ref []
+  in while (not (null (!xsRef))) do
+       ( ansRef := !ansRef @  (hd (!xsRef))
+       ; xsRef := tl (!xsRef)
+       );
+     !ansRef
+  end;
+
+fun divides x y = y mod x = 0;
+
+fun factors n =
+  let val count = ref (n-1)
+      val ans = ref []
+  in while (!count > 1) do
+        ( if divides (!count) n
+             then ans := !count :: !ans
+             else ()
+        ; count := !count - 1
+        );
+     !ans
+   end;
+
+fun allTrue xs =
+  let val xsRef = ref xs
+      val ansRef = ref true
+  in while (not (null (!xsRef))) do
+       ( ansRef := ((!ansRef) andalso (hd (!xsRef)))
+       ; xsRef := tl (!xsRef)
+       );
+    !ansRef
+  end;
+
+(* ******************************************************* *)
+
+val filter = List.filter;
+
+fun sort' [] ans = ans
+  | sort' [x] ans = x :: ans
+  | sort' (x::xs) ans =
+     let val small = filter (fn y => y <= x) xs
+         val big = filter (fn y => y > x) xs
+     in sort' small (x::(sort' big ans)) end;
+
+fun nub [] = []
+  | nub [x] = [x]
+  | nub (x::y::xs) = if x=y then nub (x::xs) else x::(nub (y::xs));
+
+fun norm x = nub (sort' x []);
+
+fun equal x y = (norm x) = (norm y);
+
+(* ********************************************** *)
+
+datatype RE
+  = Empty
+  | Union of RE * RE
+  | Concat of RE * RE
+  | Star of RE
+  | C of char;
+
+datatype Label = Epsilon | Char of char;
+type Start = int;
+type Finish = int;
+datatype Edge = Edge of Start * Label * Finish;
+
+val re1 = Concat(Union(C #"+",Union(C #"-",Empty))
+                ,Concat(C #"D",Star (C #"D")));
+
+val re2 = Concat(Union(C #"+",Union(C #"-",Empty))
+                ,Concat(C #"D",(C #"A")));
+
+
+val (n1 as (s1,f1,es1)) =
+  (8,15,
+   [Edge (9,Epsilon,10),Edge (8,Epsilon,0),Edge (8,Epsilon,6),
+    Edge (1,Epsilon,9),Edge (7,Epsilon,9),Edge (0,Char #"+",1),
+    Edge (6,Epsilon,2),Edge (6,Epsilon,4),Edge (3,Epsilon,7),
+    Edge (5,Epsilon,7),Edge (2,Char #"-",3),Edge (4,Epsilon,5),
+    Edge (11,Epsilon,14),Edge (10,Char #"D",11),Edge (14,Epsilon,12),
+    Edge (13,Epsilon,15),Edge (14,Epsilon,15),Edge (15,Epsilon,14),
+    Edge (12,Char #"D",13)]);
+
+
+
+(* </PRE> *)

@@ -1,0 +1,34 @@
+	Mon May 05 11:42 2014 Time and Allocation Profiling Report  (Final)
+
+	   sort1.exe +RTS -p -RTS
+
+	total time  =        1.76 secs   (1763 ticks @ 1000 us, 1 processor)
+	total alloc = 505,286,712 bytes  (excludes profiling overheads)
+
+COST CENTRE MODULE    %time %alloc
+
+larger      Main       65.2   99.1
+smaller     Main       34.2    0.1
+
+
+                                                             individual     inherited
+COST CENTRE     MODULE                     no.     entries  %time %alloc   %time %alloc
+
+MAIN            MAIN                        37           0    0.1    0.0   100.0  100.0
+ CAF            GHC.IO.Encoding.CodePage    59           0    0.0    0.0     0.0    0.0
+ CAF            GHC.IO.Encoding             56           0    0.0    0.0     0.0    0.0
+ CAF            GHC.IO.Handle.FD            51           0    0.0    0.0     0.0    0.0
+ CAF            Main                        44           0    0.0    0.0    99.9  100.0
+  xs            Main                        78           1    0.0    0.1     0.0    0.1
+  n             Main                        75           1    0.0    0.0     0.0    0.0
+  main          Main                        74           1    0.0    0.0    99.9   99.9
+   main.l       Main                        76           1    0.0    0.0    99.9   99.9
+    quik        Main                        77       20001    0.1    0.2    99.9   99.9
+     quik.large Main                        82       10000    0.0    0.1    65.2   99.1
+      larger    Main                        83    15663746   65.2   99.1    65.2   99.1
+       add2     Main                        84    15643750    0.0    0.0     0.0    0.0
+     quik.small Main                        80       10000    0.0    0.1    34.2    0.1
+      smaller   Main                        81    15663746   34.2    0.1    34.2    0.1
+       add2     Main                        85        9996    0.0    0.0     0.0    0.0
+     merge      Main                        79       67491    0.5    0.5     0.5    0.5
+      add1      Main                        86       47491    0.0    0.0     0.0    0.0

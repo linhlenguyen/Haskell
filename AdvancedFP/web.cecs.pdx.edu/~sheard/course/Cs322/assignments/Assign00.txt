@@ -1,0 +1,16 @@
+CS322 Prog Lang & Compilers          Assignment # 1
+Assigned: April 3, 206       Due: Wed. April 5, 2006
+
+Read Chapters 7.1 - 7.3 of the text book
+
+1) Find (and install if necessary) a version of SML
+
+2) Create a files with some ML program
+
+3) Load these into SML.
+
+4) Test them out by typing some examples.
+
+5) Cut and paste your session, print it out, and hand it
+   in during class on Wednesday. Don’t forget your name.
+

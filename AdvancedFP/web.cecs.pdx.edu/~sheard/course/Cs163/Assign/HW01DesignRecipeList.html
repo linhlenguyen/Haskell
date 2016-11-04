@@ -1,0 +1,127 @@
+<title>Homework #1 - Design Recipes - Recursive functions over lists</title>
+
+<CENTER>
+<BIG>Homework #1 - Design Recipes - Recursive functions over lists</BIG>
+</CENTER>
+
+<p>
+In this home work we will practice our skills on using design recipes and writing
+recursive functions over lists.
+<p>
+Recall that every step in a design recipe cooresponds to a product. It must
+be the case that product appears in your solution. It could be a comment,
+or some actual program fragment. Study the design recipes
+<ol>
+<li> <A HREF="../Doc/DesignRecipe.html">Generic program</A> design recipe.
+<li> <A HREF="../Doc/RecursiveDesignRecipe.html">Recursive program</A> design recipe.
+</ol>
+and the <A HREF="../Doc/SimpleDesignRecipeExample.html">example program</A> we created in class to see what kjind of things should
+appear in your file.
+<p>
+For this homework you will create a haskell program which
+defines five functions. Study the problem description below for each function.
+This problem description could form the the basis of the product for
+the <A HREF="../Doc/DesignRecipe.html">generic program design</A> step "understand the problem"
+<p>
+<ol>
+<li> <B>addOne</B> is a list to list function. Its input is a list of Int, and its output
+is a list of Int. The output can be obtained from the input by adding 1 to each element.
+For example: <B>addOne [2,6,7] --> [3,7,8]</B>. Be sure and consider each step in
+<A HREF="../Doc/DesignRecipe.html">Generic program</A> design recipe and the
+<A HREF="../Doc/RecursiveDesignRecipe.html">Recursive program</A> design recipe.
+<p>
+
+<li> <B>addN</B> is a generalization of <B>addOne</B>. It is a list to list function. Its inputs are and Int and a list of Int, and its output
+is a list of Int. The output can be obtained from the input by adding the first input to each element of the second input.
+For example: <B>addN 3 [2,6,7] --> [5,9,10]</B>.
+<p>
+
+<li> <B>interest</B> takes a Double as input and returns a Double as output. The output
+is the yearly interest rate that the National Bank of Haskell pays on a deposit the size of the input.
+The more you deposit the greater the interest rate the bank pays. <br>
+
+<PRE>
++-------------------+-------------+
+|deposit amount     |interest rate|
++-------------------+-------------+
+|0 < x <= 500       |3.0%         |
++-------------------+-------------+
+|500 < x <= 5000    |3.2%         |
++-------------------+-------------+
+|5000 < x <= 20000  |3.6%         |
++-------------------+-------------+
+|20000 < x <= 100000|4.0%         |
++-------------------+-------------+
+|100000 < x         |4.2%         |
++-------------------+-------------+
+</PRE>
+Think carefully about the structure of the input. The input structure has 5 cases,
+so the structure of the function should have 5 cases. Is there more than one
+way to do this?
+<p>
+<li> <B>prefixSums</B> returns a list of numbers.
+<ol>
+<li> The number in the first
+position of the list is the sum of the prefix of the input with length 1.
+<li> The number in the second
+position of the list is the sum of the prefix of the input with length 2.
+<li> The number in the third
+position of the list is the sum of the prefix of the input with length 3, etc.
+</ol>
+<p>
+This is best
+illustrated with an example. If the input is [2,6,7,5]
+<p>
+<ol>
+<li> The prefix of the input with length 1 is [2].
+<li> The prefix of the input with length 2 is [2,6].
+<li> The prefix of the input with length 3 is [2,6,7].
+<li> The prefix of the input with length 4 is [2,6,7,5].
+</ol>
+<p>
+Thus, the result
+is [2,2+6, 2+6+7, 2+6+7+5] --> [2,8,15,20].
+<p>Hint: the function <B>addN</B> might be useful. Be sure and write this function recursively.
+
+
+<p>
+<li> <B>take</B> returns a prefix of a list. The first input is the length of the prefix,
+and the second input is the list that the prefix is obtained from. Its possible that
+the list is not long enough to obtain a prefix of the supplied length. In that case
+return the longest possible prefix.
+For example:
+<p>
+<ol>
+<li> take 0 [3,4,5] --> []
+<li> take 6 [3,4] --> [3,4]
+<li> take 3 [2,5,6,7,8] --> [2,5,6]
+<li> take 2 [] --> []
+</ol>
+<p>
+Hint: this function decomposes both its arguments to make recursive calls.
+</ol>
+
+<H3>What to turn in.</H3>
+Create a Haskell source file. Upload the file to <A HREF="https://bb.pdx.edu/webct/entryPageIns.dowebct">blackboard</A>
+by class time October 8, 2009. The file <B>must have</B>:
+<ul>
+<li> Your name (as the author of the program) indicated in a comment in the very first line
+<li> At least 5 function definitions, one for each of the assigned functions.
+You may define additional functions to help, or to create tests.
+<li> Products for each of the concrete steps in the generic design recipe
+<ol> <li> Understand the problem
+     <li> Write a contract (type) for each function
+     <li> Create a set of examples (HUnit assertions)
+     <li> Create a body for each function where the structure of the body mirrors the structure of the input data.
+     <li> Tests for each your functions (HUnit tests)
+     </ol>
+<li> Any products from the recursive design recipe you deem to be usefull to the reader of your program.
+</ul>
+
+Upload this file using the blackboard assignment
+mechanism.
+
+<p>
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

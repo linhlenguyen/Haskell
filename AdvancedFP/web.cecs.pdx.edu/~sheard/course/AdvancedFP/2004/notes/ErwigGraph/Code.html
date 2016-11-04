@@ -1,0 +1,46 @@
+--<Pre>
+
+import Graph
+import Basic
+
+
+ex1 = mkGraph [(1,"a"),(2,"b"),(3,"c")]
+              [(1,2,"right"),(2,1,"left"),
+               (2,3,"down"),(3,1,"up")]
+
+
+(Just(ps,n,lab,ss),ex2) = match 2 ex1
+
+(Just(ps2,n2,lab2,ss2),ex3) = match 3 ex2
+
+ex4 = (ps2,n2,lab2,ss2) & ex3
+
+
+ex5 = nmap (ord . head) ex1
+
+ex6 = emap length ex1
+
+mymap f g =
+  let ns = nodes g
+      (Just(ps,n,lab,ss),g2) = match (head ns) g
+  in (ps,n,f lab,ss) & (mymap f g2)
+
+
+data Tree a = Branch a [Tree a] deriving Show
+
+df :: Node -> Graph b a -> (Tree b,Graph b a)
+df root g =
+  let (Just(_,v,lab,ss), g') = match root g
+      (r,g1) = dff ss g'
+  in (Branch lab r,g1)
+
+dff :: [(c,Node)] -> Graph b c -> ([Tree b],Graph b c)
+dff [] g = ([],g)
+dff ((lab,v):l) g =
+  let (x,g1) = df v g
+      (y,g2) = dff l g1
+  in (x:y,g2)
+
+ex7 = fst (df 2 ex1)
+
+--</Pre>

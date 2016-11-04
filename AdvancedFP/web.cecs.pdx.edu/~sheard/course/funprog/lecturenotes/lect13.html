@@ -1,0 +1,315 @@
+-- <PRE>
+import Shape
+import Draw
+import Region
+import Picture
+import SOEGraphics hiding (Region)
+import qualified SOEGraphics as G (Region)
+import Win32Misc (timeGetTime)
+import Word (Word32)
+
+-------------- The animation stuff ----------
+
+
+word32ToInt :: Word32 -> Int
+word32ToInt x = fromInteger(toInteger x)
+
+type Animation a = Time -> a
+type Time = Float
+
+rubberBall :: Animation Shape
+rubberBall t = Ellipse (sin t) (cos t)
+
+revolvingBall :: Animation Region
+revolvingBall t
+  = let ball = Shape (Ellipse 0.2 0.2)
+    in Translate (sin t, cos t) ball
+
+planets :: Animation Picture
+planets t
+  = let p1 = Region Red (Shape (rubberBall t))
+        p2 = Region Yellow (revolvingBall t)
+    in p1 `Over` p2
+
+tellTime :: Animation String
+tellTime t = "The time is: " ++ show t
+
+{-
+openWindowEx :: String -> Maybe Point -> Maybe Point ->
+                (Graphic -> DrawFun) -> Maybe Word32 ->
+                IO Window
+-}
+
+animate :: String -> Animation a -> (a -> IO Graphic) -> IO ()
+animate title anim toGraphic
+  = runGraphics (
+    do w <- openWindowEx title (Just (0,0)) (Just (xWin,yWin))
+              drawBufferedGraphic (Just 30)
+       t0 <- timeGetTime
+       let loop =
+             do t <- timeGetTime
+                -- print ("the time is" ++ (show t))
+                let ft = intToFloat (word32ToInt (t-t0)) / 1000
+                -- print "past let"
+                gr <- toGraphic (anim ft)
+                -- print "past toGraphic"
+                setGraphic w gr
+                getWindowTick w
+                loop
+       loop
+    )
+
+
+
+main1 = animate "Animation of a Shape" rubberBall
+         (return . withColor Blue . shapeToGraphic)
+
+main2 = animate "Animated Text" tellTime
+         (return . text (100,200))
+
+main3 = animate "Animated Region" revolvingBall
+  (\r -> return (withColor Yellow
+                          (regionToGraphic r)))
+
+main4 = animate "Animated Picture" planets (return.picToGraphic)
+
+main4a :: IO ()
+main4a = animate "Experiment" both (return.picToGraphic)
+ where both t = Over (Text (1,2) (tellTime t)) (planets t)
+
+
+
+
+regionToGraphic :: Region -> Graphic
+regionToGraphic = drawRegion . regionToGRegion
+
+picToGraphic :: Picture -> Graphic
+picToGraphic (Region c r)
+  = withColor c (regionToGraphic r)
+picToGraphic (p1 `Over` p2)
+  = picToGraphic p1 `overGraphic` picToGraphic p2
+picToGraphic (Text v str) = (text (trans v) str)
+picToGraphic EmptyPic = emptyGraphic
+
+
+
+type Anim = Animation Picture
+
+emptyA :: Anim
+emptyA t = EmptyPic
+overA :: Anim -> Anim -> Anim
+overA a1 a2 t = a1 t `Over` a2 t
+
+overManyA :: [Anim] -> Anim
+overManyA = foldr overA emptyA
+
+-- timeTransA :: (Time -> Time) -> Animation a -> Animation a
+timeTransA :: Animation Time -> Animation a -> Animation a
+
+-- timeTransA f a t = a (f t)
+timeTransA f a = a . f
+
+{-
+  timeTransA (2*) anim
+
+  timeTransA (5+) anim
+
+  timeTransA negate anim
+-}
+
+rBall :: Anim
+rBall t = let ball = Shape (Ellipse 0.2 0.2)
+          in Region Red (Translate (sin t, cos t) ball)
+
+rBalls :: Anim
+rBalls = overManyA [ timeTransA ((t*pi/4)+) rBall | t <- [0..7]]
+
+main5 = animate "Lots of Balls" rBalls   (return . picToGraphic)
+
+------- Type Classes and Animations ---------
+
+newtype Behavior a = Beh (Time -> a)
+
+lift0 :: a -> Behavior a
+lift0 x = Beh (\t -> x)
+
+lift1 :: (a -> b) -> (Behavior a -> Behavior b)
+lift1 f (Beh a)
+  = Beh (\t -> f (a t))
+
+lift2 :: (a -> b -> c) -> (Behavior a -> Behavior b -> Behavior c)
+lift2 g (Beh a) (Beh b)
+  = Beh (\t -> g (a t) (b t))
+
+lift3 :: (a -> b -> c -> d) ->
+          (Behavior a -> Behavior b -> Behavior c -> Behavior d)
+lift3 g (Beh a) (Beh b) (Beh c)
+   = Beh (\t -> g (a t) (b t) (c t))
+
+instance Eq (Behavior a) where
+  a1 == a2 = error "Can't compare animations."
+
+instance Show (Behavior a)  where
+   showsPrec n a1 = error "Can't coerce animation to String."
+
+instance Num a => Num (Behavior a) where
+  (+) = lift2 (+);  (*) = lift2 (*)
+  negate = lift1 negate; abs = lift1 abs
+  signum = lift1 signum
+  fromInteger = lift0 . fromInteger
+
+instance Fractional a => Fractional (Behavior a) where
+  (/) = lift2 (/)
+  fromRational = lift0 . fromRational
+
+instance Floating a => Floating (Behavior a) where
+   pi    = lift0 pi;    sqrt = lift1 sqrt
+   exp   = lift1 exp;   log = lift1 log
+   sin   = lift1 sin;   cos = lift1 cos
+   tan   = lift1 tan
+   asin  = lift1 asin;  acos = lift1 acos
+   atan  = lift1 atan
+   sinh  = lift1 sinh;  cosh = lift1 cosh
+   tanh  = lift1 tanh
+   asinh = lift1 asinh; acosh = lift1 acosh
+   atanh = lift1 atanh
+
+time :: Behavior Time
+time = Beh (\t -> t)
+
+instance Ani [a] where
+  empty = []
+  over  = (++)
+
+instance Ani (Fun a) where
+  empty = Fun id
+  Fun a `over` Fun b = Fun (a . b)
+
+data Fun a = Fun (a->a)
+
+class Ani a where
+  empty :: a
+  over  :: a -> a -> a
+
+instance Ani a => Ani (Float -> a) where
+  empty t = empty
+  over f g t = over (f t) (g t)
+
+instance Ani Picture where
+  empty = EmptyPic
+  over  = Over
+
+instance Ani a => Ani (Behavior a) where
+  empty = lift0 empty
+  over  = lift2 over
+
+overMany :: Ani a => [a] -> a
+overMany = foldr over empty
+
+
+m :: Behavior Picture
+m = let a = lift0 (empty `over` p)
+    in a `over` empty
+
+p :: Picture
+p = empty
+
+timeTrans (Beh t) (Beh a) = Beh (timeTransA t a)
+
+reg   = lift2 Region
+shape = lift1 Shape
+ell   = lift2 Ellipse
+red   = lift0 Red
+blue  = lift0 Blue
+translate (Beh a1, Beh a2) (Beh p)
+      = Beh (\t -> Translate (a1 t, a2 t) (p t))
+
+rBall2 :: Behavior Picture
+rBall2
+  = let ball = shape (ell 0.2 0.2)
+    in reg red (translate (sin time, cos time) ball)
+
+(>*) :: Ord a => Behavior a -> Behavior a -> Behavior Bool
+(>*) = lift2 (>)
+
+ifFun :: Bool -> a -> a -> a
+ifFun p c a = if p then c else a
+
+cond :: Behavior Bool -> Behavior a -> Behavior a -> Behavior a
+cond = lift3 ifFun
+
+rb :: Behavior Color
+rb = cond (sin time >* 0) red blue
+
+animate2 :: String -> Behavior Picture -> IO ()
+animate2 s (Beh pf) =
+  animate s pf (return . picToGraphic)
+
+main6 = animate2 "Wild" rBall2
+
+----- Kaleidoscope example
+
+class Turnable a where
+  turn :: Float -> a -> a
+
+instance Turnable Picture where
+  turn theta (Region c r) = Region c (turn theta r)  -- turn on Regions
+  turn theta (p1 `Over` p2) = turn theta p1 `Over` turn theta p2
+  turn theta EmptyPic = EmptyPic
+
+instance Turnable a => Turnable (Behavior a) where
+  turn theta (Beh b) = Beh(turn theta . b)
+
+rotate :: Float -> Coordinate -> Coordinate
+rotate theta (x,y) =
+    (x*c + y*s, y*c - x*s)
+    where (s,c) = (sin theta,cos theta)
+
+instance Turnable Shape where
+  turn theta (Polygon ps) = Polygon (map (rotate theta) ps)
+  -- lots of missing cases here for
+  -- turn theta (Rectangle s1 s2)  =
+  -- turn theta (Ellipse r1 r2)    =
+  -- turn theta (RtTriangle s1 s2) =
+
+instance Turnable Region where
+  turn theta (Shape sh) = Shape (turn theta sh)
+   -- lots of missing cases here for
+   -- turn theta (Translate (u,v) r)   =
+   -- turn theta (Scale (u,v) r)       =
+   -- turn theta (Complement r)        =
+   -- turn theta (r1 `Union` r2)       =
+   -- turn theta (r1 `Intersect` r2)   =
+   -- turn theta Empty = Empty
+
+spectrum = [ c | c <- [minBound..], c/= Black]  -- All colors but black
+
+slowTime = 0.1 * time
+kaleido :: Integer -> (Float -> Behavior Coordinate) -> Behavior Picture
+kaleido n f =
+   lift2 turn (pi * sin slowTime)
+     (overMany (zipWith reg (map lift0 (cycle spectrum))
+                            (map (flip turn poly) rads)))
+  where rads = map (((2 * pi/fromInteger n)*).fromInteger) [0..n-1]
+        poly = polyShapeAnim (map f rads)
+
+polyShapeAnim :: [Behavior Coordinate] -> Behavior Region
+polyShapeAnim = lift1 (Shape . Polygon).synclist
+  where synclist :: [Behavior a] -> Behavior[a]
+        synclist l = Beh(\t -> map (\(Beh f) -> f t) l)
+
+syncPair :: (Behavior a,Behavior b) -> Behavior(a,b)
+syncPair (Beh f,Beh g) = Beh(\t -> (f t,g t))
+
+kaleido1 = kaleido 6 star
+  where star x = syncPair (2*cos(v*c+l),2 * abs(sin(slowTime * s - l)))
+         where v = lift0 x
+               l = v * (slowTime + 1)
+               (s,c) = (sin l,cos l)
+
+animateB :: String -> Behavior Picture -> IO ()
+animateB s (Beh x) = animate s x
+   (return . picToGraphic)
+
+main7 =  animateB "kaleido1" kaleido1
+-- </PRE>

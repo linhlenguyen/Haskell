@@ -1,0 +1,26 @@
+
+twoRolls = [(i,j) | i <- [1..6], j <- [1..6]]
+twoSums =  [ i+j  | i <- [1..6], j <- [1..6]]                              
+twoBySum= [[x | x <- twoSums, x==n] | n <- [2..12] ]
+
+p2 = mapM_ print twoBySum
+
+twoFreq = [ (n,length [x | x <- twoSums, x==n]) | n <- [2..12] ]
+
+-------------------------------------------------------
+
+threeRolls = [(i,j,k) | i <- [1..6], j <- [1..6], k <- [1..6]]
+threeSums =  [ i+j+k  | i <- [1..6], j <- [1..6], k <- [1..6]]
+threeBySum= [[x | x <- threeSums, x==n] | n <- [3..18] ]
+threeFreq = [ (n,length [x | x <- threeSums, x==n]) | n <- [3..18] ]
+
+p3 = mapM print threeBySum
+
+-------------------------------------------------------
+
+fourRolls = [(i,j,k,l) | i <- [1..6], j <- [1..6], k <- [1..6], l <- [1..6]]
+fourSums =  [ i+j+k+l  | i <- [1..6], j <- [1..6], k <- [1..6], l <- [1..6]]
+fourBySum= [[x | x <- fourSums, x==n] | n <- [4..24] ]
+fourFreq = [ (n,length [x | x <- fourSums, x==n]) | n <- [4..24] ]
+
+p4 = mapM print fourBySum

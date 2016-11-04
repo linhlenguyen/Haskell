@@ -1,0 +1,40 @@
+<PRE>
+cs510 FSC Staged Computation             Assignment # 4                Winter 2005
+assigned Tuesday Jan. 25, 2005                   due in class Tuesday Feb. 1, 2005
+
+
+1) Consider the ML datatypes representing patterns over list of integers:
+
+datatype Pint = Iconst of int | Ivar of string;
+
+datatype LP = Pnil | Pcons of Pint * LP | Lvar of string;
+
+A) write a function match with type:   LP -&gt; int list -&gt; bool
+
+B) Stage the function so that it has type: LP -&gt; &lt;int list -&gt; bool&gt;
+
+for example:
+
+match (Pcons (Iconst 4, Lvar "x")) [4,5,6]  ---&gt; returns true
+match (Pcons (Iconst 4, Lvar "x")) [6,5]    ---&gt; returns false
+
+match (Pcons (Ivar "x", Pcons (Ivar "y", Pnil))) [4,5] --&gt; returns true
+match (Pcons (Ivar "x", Pcons (Ivar "y", Pnil))) [5]   --&gt; returns false
+
+
+2) Rewrite the match function so that it has type:
+    LP -&gt; int list -&gt; ((string*int)list * (string* int list) list) option
+
+match (Pcons (Ivar "w", Lvar "x")) [4,5,6]  ---&gt; SOME([("w",4)],[("x",[5,6])])
+match (Pcons (Iconst 4, Lvar "x")) [6,5]    ---&gt; NONE
+
+match (Pcons (Ivar "x", Pcons (Ivar "y", Pnil))) [4,5] --&gt; SOME([("x",4),("y",5)],[])
+
+3) Now stage the function from 2) so that it has type:
+
+LP -&gt; &lt;int list -&gt; ((string*int)list * (string* int list) list) option&gt;
+
+Think about this carefully, it can be considerably harder than the program in 1) if you
+aren't careful.
+
+</PRE>

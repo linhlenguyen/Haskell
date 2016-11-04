@@ -1,0 +1,61 @@
+<title>Glossary of terms for programming in Haskell</title>
+
+<CENTER>
+<BIG> Glossary of terms for programming in Haskell </BIG>
+</CENTER>
+
+<p>
+To effectively program in Haskell we need to master some
+new skills. These words will help us describe these skills.
+
+<ul>
+
+<li> Computation - A program fragment indicating a sequence of operations to be carried out by the computer. Some
+program fragments do not describe computations.
+<li> Value - A result of a computation. A piece of data that requires no further computation to be completed.
+5 is a value, but (3 + 4) is not. It is also often is used to describe a computation that will not cause any side effects as it is computed.
+Some times called a <B>pure computation</B>.
+<li> Command - A computation that causes side effects. Examples include reading or writing to a file,
+assigning a new value to mutable reference, interacting with the physical world.
+<li> Syntax - the actual physical <B>marks</B> that make up the program on paper. Syntax is structured.
+Not all <B>marks</B> make up a legal program.
+<ol>
+<li> Variable - A primitive name for a computation. The name denotes the actual computation. Variables
+ arise from naming declarations and from formal arguments to functions. Variable always start with
+ a lower case letter.
+<li> Expression - A structured name for a computation. Usually consisting of operators and control.
+Operators in Haskell are infix operators (+) (-) and prefix functions (reverse). Control in Haskell
+includes things like <B>if</B>, <B>case</B>, <B>where</B> etc. See the
+<A HREF="../Haskell/Crib01.png">Basic Haskell Program Structure</A> for some example control expressions and
+the <A HREF="../Haskell/Crib02.png">Basic types and their operations</A> for some example operators.
+
+
+<li> Statement - A syntactic form denoting a Command, i.e. a non-pure computation. In Haskell
+statements are formed using the <B>do</B> syntax.
+</ol>
+<li> Type - A type is a way of classifying as similar a set of values. I.e. all integers, all strings, etc.
+The set a type classifys can be infinite. In Haskell types always start with a capital letter.
+See the <A HREF="../Notes/UsingTypes.ppt">note on types</A> for some examples.
+<ol>
+<li> Type constructor - A parameterized type. Examples include <B>[Int]</B>, <B>Tree Bool</B>, and <B>IO String</B>
+<li> Type Synonym - A shorthand for a type. Often used when the type is large or unwieldy, a synonym can
+introduce a shorter name.
+<li> Polymorphic type - A type some of whose components are unconstrained, that is these components can take on
+any type. Polymorphic types always have type variables in them. A type variable always starts with
+a lowercase letter. Examples include <B>[a]</B>, and <B>(Int,b)</B>.
+</ol>
+<li> Class - A mechanism used in Haskell to introduce over loading. I.e. using the same name
+for different sequences of computation steps. In Haskell over loading is always type based, i.e. the
+particular sequence of computation steps chosen is determined by the type of the overloaded operator
+or its arguments.
+<ol>
+<li> Method - What Haskell calls overloaded operators
+<li> Constraint - A predicate on types. examples include <B>Show a</B>, <B>Eq b</B>, and  <B>Ord x</B>.
+     Constraints always start with a capital letter, and always appear before the =&gt; in a type.
+     For example the type of print is <B>Show a =&gt; a -> IO ()</B>.
+</ol>
+</ul>
+
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

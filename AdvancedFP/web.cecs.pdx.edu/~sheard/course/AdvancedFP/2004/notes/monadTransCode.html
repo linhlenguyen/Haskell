@@ -1,0 +1,89 @@
+-- <pre>
+
+import Monad (liftM2, when)
+import EnvMT
+import StateMT
+import OutputMT
+import ExceptMT 
+
+
+
+infixl 6 :*:, :/:
+infixl 5 :+:, :-:
+infixr 4 :>
+
+
+type Name     = String
+type Message  = String
+data E        = E :+: E | E :-: E | E :*: E | E :/: E | Int Int 
+              | Let Name E E | Var Name
+              | Print Message E
+              | ReadRef Name 
+              | WriteRef Name E 
+              | E :> E
+
+
+
+eval (e1 :+: e2)        = liftM2 (+) (eval e1) (eval e2)
+eval (e1 :-: e2)        = liftM2 (-) (eval e1) (eval e2)
+eval (e1 :*: e2)        = liftM2 (*) (eval e1) (eval e2)
+eval (e1 :/: e2)        = liftM2 div (eval e1) $ 
+                           (do x <- eval e2 
+                               when (x == 0) (raise "division by 0")
+                               return x)
+eval (Int x)            = return x
+eval (Let x e1 e2)      = do v <- eval e1; inModEnv ((x,v):) (eval e2)
+eval (Var x)            = maybe (raise ("undefined variable: " ++ x)) return . 
+                          lookup x =<< getEnv
+eval (Print x e)        = do v <- eval e
+                             output (x ++ show v)
+                             return v
+
+
+eval (ReadRef x)        = maybe (return 0) return . lookup x =<< getSt
+eval (WriteRef x e)     = do v <- eval e
+                             updSt_ $ \s ->  (x,v) : filter ((/= x) . fst) s
+                             return 0
+eval (e1 :> e2)         = eval e1 >> eval e2
+
+
+
+type Heap               = [(Name,Int)]
+type Env                = [(Name,Int)]
+
+
+type M                  = WithState Heap 
+                        ( WithEnv Env  
+                        ( WithOutput String 
+                        ( WithExcept String IO
+                        )))
+
+
+run   :: M a -> IO a
+run m = 
+  do x <- removeExcept $ listOutput $ withEnv [] $ withSt [] m
+     case x of 
+      Left err     -> error ("error: " ++ err)
+      Right (v,o)  -> mapM putStrLn o >> return v
+
+
+
+test e                  = print =<< run (eval e)
+
+
+-- examples:
+
+
+tests = 
+  [ Let "x" (Int 1 :/: Int 0) (Int 2)       -- let is strict
+  , ReadRef "x"                             -- refs are 0 by default
+  , WriteRef "x" (Int 8) :> ReadRef "x"     -- write - read
+  , Let "x" (Int 7) $ WriteRef "x" (Int 2) :> Var "x" :*: ReadRef "x"      -- vars & refs are different
+  ,  Print "x before = " (ReadRef "x")      -- priniting
+  :> WriteRef "x" (Int 7) 
+  :> Print "x after = " (ReadRef "x") 
+  , Let "x" (Int 1) $ Var "x" :+: Let "x" (Int 2) (Var "x") -- nested lets
+  ]
+
+
+-- </pre>

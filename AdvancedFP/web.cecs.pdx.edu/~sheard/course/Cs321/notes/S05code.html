@@ -1,0 +1,159 @@
+(* <PRE> *)
+
+use "../assignments/assign4Prelude.html";
+
+val a = Char #"a"
+val b = Char #"b"
+val e = Epsilon
+
+val nfa1 = map Edge
+   [(0,e,1),(0,e,3),(0,e,7),(0,e,9)
+   ,(1,a,2)
+   ,(3,a,4)
+   ,(7,a,7),(7,b,8)
+   ,(9,a,10)
+   ,(4,b,5)
+   ,(5,b,6)
+   ,(8,b,8)
+   ,(10,b,11)
+   ,(11,a,12)
+   ,(12,b,13)]
+
+
+fun edgesOnFrom c n edges =
+  let fun p (Edge(s,cc,f)) = s=n andalso c=cc
+  in filter p edges end;
+
+fun nodesOnFrom c n es =
+  let fun final (Edge(s,e,f)) = f
+  in map final (edgesOnFrom c n es) end;
+
+fun nodesOnFromMany c xs es = concat(map (fn x => nodesOnFrom c x es) xs)
+
+fun oneStep es xs = norm(xs @ nodesOnFromMany Epsilon xs es);
+
+fun eclosure edges xs =
+   let val ys = oneStep edges xs
+   in if xs=ys then xs else eclosure edges ys end;
+
+fun arcs ns edges =
+  let fun p (Edge(s,Char c,f)) = exists (fn x => x=s) ns
+        | p _ = false
+      fun char (Edge(s,Char c,f)) = c
+  in map char (filter p edges) end;
+
+fun sigma edges =
+  let fun p (Edge(s,Char c,f)) = [c]
+        | p _ = []
+  in concat (map p edges) end;
+
+
+fun nodup [] = []
+  | nodup [x] = [x]
+  | nodup(x::xs) = if exists (fn y => y=x) xs
+                      then nodup xs
+                      else x::(nodup xs);
+
+
+val chars = nodup(sigma nfa1);
+
+val s0 = eclosure nfa1 [0]
+val s0a = nodesOnFromMany (Char #"a") s0 nfa1;
+val s0b = nodesOnFromMany (Char #"b") s0 nfa1;
+val s8 = eclosure nfa1 s0b
+val s2 = eclosure nfa1 s0a
+val s8a = nodesOnFromMany (Char #"a") s8 nfa1;
+val s8b = nodesOnFromMany (Char #"b") s8 nfa1;
+val s2a = nodesOnFromMany (Char #"a") s2 nfa1;
+val s2b = nodesOnFromMany (Char #"b") s2 nfa1;
+val s7 = eclosure nfa1 s2a
+val s5 = eclosure nfa1 s2b
+val s7a = nodesOnFromMany (Char #"a") s7 nfa1;
+val s7b = nodesOnFromMany (Char #"b") s7 nfa1;
+val s5a = nodesOnFromMany (Char #"a") s5 nfa1;
+val s5b = nodesOnFromMany (Char #"b") s5 nfa1;
+val s12 = eclosure nfa1 s5a;
+val s6 =  eclosure nfa1 s5b;
+val s6a = nodesOnFromMany (Char #"a") s6 nfa1;
+val s6b = nodesOnFromMany (Char #"b") s6 nfa1;
+val s12a = nodesOnFromMany (Char #"a") s12 nfa1;
+val s12b = nodesOnFromMany (Char #"b") s12 nfa1;
+val s13 = eclosure nfa1 s12b
+val s13a = nodesOnFromMany (Char #"a") s13 nfa1;
+val s13b = nodesOnFromMany (Char #"b") s13 nfa1;
+
+fun showL f start xs sep finish =
+  let fun help [] = ""
+        | help [x] = f x
+        | help (x::xs) = (f x)^sep^help xs
+  in start ^ (help xs) ^ finish end
+
+fun printL message xs = print (message^(showL Int.toString "[" xs "," "]"))
+
+fun printLL message xs =
+  let fun f xs = showL Int.toString "[" xs "," "]"
+  in print (message^(showL f "" xs "; " "\n")) end
+
+fun printLc state xs =
+  let fun g (c,[]) = ""
+        | g (c,xs) =  (showL Int.toString "[" state "," "]")^" --"^c^"--> "^(showL Int.toString "[" xs "," "]\n   ")
+  in print (showL g "   " xs "" "\n") end
+
+
+fun snd(x,y) = y;
+
+fun nfa2dfa start edges =
+  let val chars = nodup(sigma edges)
+      val s0 = eclosure edges [start]
+      val worklist = ref [s0]
+      val work = ref []
+      val old = ref []
+      val newEdges = ref []
+  in while (not (null (!worklist))) do
+      ( work := hd(!worklist)
+      ; old := (!work) :: (!old)
+      ; worklist := tl(!worklist)
+      ; let fun nextOn c = (Char.toString c,eclosure edges (nodesOnFromMany (Char c) (!work) edges))
+            val possible = map nextOn chars
+            fun add ((c,[])::xs) es = add xs es
+              | add ((c,ss)::xs) es = add xs ((!work,c,ss)::es)
+              | add [] es = es
+            fun ok [] = false
+              | ok xs = not(exists (fn ys => xs=ys) (!old)) andalso
+                        not(exists (fn ys => xs=ys) (!worklist))
+            val new = filter ok (map snd possible)
+        in worklist := new @ (!worklist);
+           newEdges := add possible (!newEdges)
+        end
+      );
+     (s0,!old,!newEdges)
+  end;
+
+
+
+fun nfa2dfa2 start edges =
+let val chars = nodup(sigma edges)
+    val s0 = eclosure edges [start]
+    fun help [] old newEdges = (s0,old,newEdges)
+      | help (work::worklist) old newEdges =
+          let val processed = work::old
+              fun nextOn c = (Char.toString c
+                             ,eclosure edges (nodesOnFromMany (Char c) work edges))
+              val possible = map nextOn chars
+              fun add ((c,[])::xs) es = add xs es
+                | add ((c,ss)::xs) es = add xs ((work,c,ss)::es)
+                | add [] es = es
+              fun ok [] = false
+                | ok xs = not(exists (fn ys => xs=ys) processed) andalso
+                          not(exists (fn ys => xs=ys) worklist)
+              val new = filter ok (map snd possible)
+          in help (new @ worklist) processed
+                  (add possible newEdges) end
+in help [s0] [] [] end;
+
+
+
+
+
+
+(* </PRE> *)

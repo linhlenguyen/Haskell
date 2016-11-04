@@ -1,0 +1,327 @@
+<title>Array Based Queues and Radix Sorting</title>
+
+<CENTER>
+<BIG>Array Based Queues and Radix Sorting</BIG>
+</CENTER>
+
+<p>
+In this homework you will write write a set of functions
+to implement Queues using arrays, and you will will use
+the Queues to implement Radix sort.
+<p>
+What to do
+<p>
+<ul>
+<li> Cut and pase the program template between the
+solid horizontal rules, and create a file called
+HW06.hs
+<li> Study the functions and comments and assertions in the
+program template.
+<li> For each undefined, replace it with some Haskell
+code that makes sense.
+<li> Work from the top of the file to the bottom. Each function
+is designed to illustrate one concept. A comment tells what the function
+is supposed to do in words, and the assertions give examples
+that your solutions should adhere to.
+<li> Extend the functions testQ and testRadix so that they exercise
+your code thoroughly.
+<li> Create a main function that illustrates that your code works.
+</ul>
+<p>
+
+To give you some idea of how array based queues work study
+the data declaration. A Queue as six components.
+<p>
+<pre>
+data ArrQueue a =
+   ArrQueue Int       -- index just to the left of the front element (if one exists)
+            Int       -- index of the last element (if one exists)
+            Int       -- low bound of the array
+            Int       -- high bound of the array
+            Bool      -- is the Queue full
+            (Array a) -- the array that stores the elements
+</pre>
+<p>
+A Queue represetned as follows:
+<p>
+<pre>
+ArrQueue 1 3 0 3 False (listArray [undefined,undefined,5,6])
+</pre>
+<p>
+Might be visualized as:
+<p>
+<pre>
+   front = 1
+   |
+[_,_,5,6] not full
+       |
+       rear = 3
+</pre>
+To see how a sequence of operations modify the queue
+study the illustration below that starts with an empty Queue
+and then enQueuies and deQueues a number of elements. The pictures
+illustrate the state of the Queue, and what elements are actually in the queue.
+<p>
+<pre>
+------- enQueue 4 -------
+ front = 0
+ |
+[_,4,_,_] not full
+   |
+   rear = 1
+
+elements = [4]
+
+------- deQueue -------
+   front = 1
+   |
+[_,_,_,_] not full
+   |
+   rear = 1
+
+elements = []
+
+------- enQueue 5 -------
+   front = 1
+   |
+[_,_,5,_] not full
+     |
+     rear = 2
+
+elements = [5]
+
+------- enQueue 6 -------
+   front = 1
+   |
+[_,_,5,6] not full
+       |
+       rear = 3
+
+elements = [5,6]
+
+------- enQueue 7 -------
+   front = 1
+   |
+[7,_,5,6] not full
+ |
+ rear = 0
+
+elements = [5,6,7]
+
+------- enQueue 8 -------
+   front = 1
+   |
+[7,8,5,6] full
+   |
+   rear = 1
+
+elements = [5,6,7,8]
+</pre>
+It is your job to fill in the template below to implement queues
+and radix sort. Be sure your tests of the queue demonstrate
+that you handle full and empty queues correctly.
+
+<HR ALIGN="center" WIDTH="100%">
+<pre>
+-- Author : _________________
+
+
+module RadixSortArrayStack where
+
+import ArrCommands
+
+data ArrQueue a =
+   ArrQueue Int       -- index just to the left of the front element (if one exists)
+            Int       -- index of the last element (if one exists)
+            Int       -- low bound of the array
+            Int       -- high bound of the array
+            Bool      -- is the Queue full
+            (Array a) -- the array that stores the elements
+
+-- Next avaiblable slot to store an element after "i" in an
+-- array with low bound "lo" and high bound "hi"
+
+incr lo hi i = if i==hi then lo else i+1
+
+-- Add element "a" to the Q. Raise an error if its full
+
+enQueue :: (Show a) => a -> ArrQueue a -> IO (ArrQueue a)
+enQueue a (ArrQueue front rear low hi full arr)
+   | rear==front && full = error ("Queue full "++show a)
+   | True = undefined
+
+
+-- Remove an element from the Queue, return a pair containing the
+-- removed element and the new Q. Raise an error if the Queue is empty
+
+deQueue :: ArrQueue t -> IO (t, ArrQueue t)
+deQueue (ArrQueue front rear low hi full arr)
+   | undefined  = error "Queue empty"
+   | True = undefined
+
+
+-- Return a list of all the lements in the Queue. Does not change the Q
+
+qAll :: ArrQueue t -> IO [t]
+qAll (ArrQueue front rear low hi full arr) = undefined
+
+
+-- Create a new Queue with slots numbered from 0..n. Fill each
+-- slot with "init". Its good practice to use a strange "init" value
+-- (like -99) when writing the code, to help you discover errors.
+
+newQ :: Int -> a -> IO (ArrQueue a)
+newQ n init = undefined
+
+
+-- Reset a Queue to the empty state.
+
+resetQ :: ArrQueue t -> ArrQueue t
+resetQ (ArrQueue front rear low hi full arr) = ArrQueue low low low hi False arr
+
+-----------------------------------------------
+-- testing
+
+testQ =
+  do { q <- newQ 3 (-99)
+     ; showQ q
+     ; undefined
+     }
+
+------------------------------------------------
+-- Displaying Q's
+-- I have written showQ to help you test your code.
+
+showQ :: (Show b) => ArrQueue b -> IO ()
+showQ (ArrQueue front rear low hi full arr) =
+  do { elems <- toListArr arr
+     ; let xs = zipWith (showSlot front rear full) [0..] elems
+           status True = " full\n"
+           status False = " not full\n"
+     ; let fpos = pos front xs
+           rpos = pos rear xs
+           str = tag fpos ("front = "++show front++ "\n") ++
+                 tag fpos "|\n["     ++
+                 plistf id xs  ++ "]"   ++ (status full) ++
+                 tag rpos "|\n"     ++
+                 tag rpos ("rear = "++show rear++ "\n")
+     ; putStrLn str
+     }
+
+
+pos 0 xs = 1
+pos n (x:xs) = length x +1 + pos (n-1) xs
+
+showSlot f r full n x
+  | f==r = if full then show x else "_"
+  | f<r && n>f && n<=r = show x
+  | f>r && (n<=r || n>f) = show x
+  | True = "_"
+
+
+tag n s = replicate n ' '++s
+
+plistf f [x] = f x
+plistf f [] = ""
+plistf f (x:xs) = f x ++ "," ++ plistf f xs
+
+------------------------------------------------------------
+-- A radix sort for (key,satellite)
+-- where key is a 3 digit Int
+
+-----------------------------------------
+-- Break a 3 digit Int into a list of Int
+-- digits 345 = [3,4,5]
+-- digits 976 = [9,7,6]
+
+digits:: Int -> [Int]
+digits 0 = []
+digits n = digits (n `div` 10) ++ [n `mod` 10]
+
+----------------------------------------------------
+-- Using zero based indexing, get the bucket number
+-- from the key and digit position
+-- bucketFromKey 2 345 ---> 5
+-- bucketFromKey 1 345 ---> 4
+-- bucketFromKey 0 345 ---> 3
+
+bucketFromKey :: Int -> Int -> Int
+bucketFromKey digitPosition key = undefined
+
+
+-------------------------------------------------------------
+-- Make a pass for digit position "n". enQueue each element
+-- into the Queue in the correct location in the array using
+-- the key and the digit position. You will need to read the
+-- Queue from the array, enQueue the element into the Queue
+-- then write the new Queue back into the array.
+
+pass :: (Show t) => Int -> Array (ArrQueue (Int, t)) -> [(Int, t)] -> IO ()
+pass n arr [] = return ()
+pass n arr ((key,value):more) =
+  do { let bucketNumber = bucketFromKey n key
+     ; undefined }
+
+
+----------------------------------------------------------
+-- For each Queue in the array. Get a list of all the elements from that
+-- Queue and append them (from left to right) into one large
+-- list. Besure and reset the Queue, and write the reset Q back into the array.
+
+collectAndReset :: Show a => (Int, Int) -> Array (ArrQueue a) -> IO [a]
+collectAndReset (index,high) arr
+  | index > high = return []
+  | True = undefined
+
+
+
+-------------------------------------------------------------
+-- makes three passes. One for each digit position. Starts with the
+-- least significant digit (the ones digit, then the tens digit,
+-- then the hundreds digit). For each pass, distributes the list
+-- across the Queues in the array, then collects the elements from
+-- the Queues, then resets each Queue, and than makes the next pass.
+
+passes:: Show t => Int -> Array (ArrQueue (Int, t)) -> [(Int, t)] -> IO [(Int, t)]
+passes n arr elems | n < 0 = return elems
+passes n arr elems = undefined
+
+----------------------------------------------------
+-- Performs a radix sort for keys of three digits. Allocates
+-- an Array of Queues to use as buckets. I have made a list
+-- of Queues you can use to fill the array. Then makes three
+-- passes. The result of the last pass should be sorted.
+
+radixSort :: forall t. (Show t) => [(Int, t)] -> IO [(Int, t)]
+radixSort [] = return []
+radixSort elems =
+  do { qs <- mapM (\ x -> newQ 5 (head elems)) [0..9]
+     ; undefined
+     }
+
+--------------------------------------------------------------
+
+testRadix = radixSort [(123,1),(345,2),(452,3),(945,4),(923,5),(641,6)]
+
+
+
+</pre>
+<p>
+<HR ALIGN="center" WIDTH="100%">
+<p>
+<H3>What to turn in.</H3>
+Create a file by cutting and pasting the template between
+the dark black horizontal lines.  Be sure you do the following
+<ul>
+<li> Include your name (as the author of the program) on the very first line
+<li> Replace the all "undefined" with haskell code.
+<li> Extend the testQ and the testRadix functions to illustrate your code works
+<li> Uploaded the file to blackboard
+<li> Due before class on Thursday, November 12, 2009.
+</ul>
+
+
+<p>
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

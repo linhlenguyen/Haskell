@@ -1,0 +1,252 @@
+-- <PRE>
+
+import Music
+import Ratio
+import System(system)
+
+-- Be sure and maker HUGS look in the directory where the
+-- Haskore module code is stored using the "path" mechanism
+import Haskore(outputMidiFile, midiFileToString,MidiFile(..)
+              ,Division(..),MEvent(..),MidiEvent(..),MidiChannel(..)
+              ,ProgNum(..),MetaEvent(..))
+
+
+cScale1 =
+  line [c 4 qn , d 4 qn , e 4 qn ,
+        f 4 qn , g 4 qn , a 4 qn ,
+		   b 4 qn , c 5 qn]
+
+---------------------
+type Performance = [Event]
+
+data Event =
+   Event { eTime :: Time,      -- start time
+           eInst :: IName,     -- instrument
+           ePitch :: AbsPitch, -- pitch or note
+           eDur  :: DurT }     -- duration
+     deriving (Eq,Ord,Show)
+
+type Time      = Float
+type DurT      = Float
+
+-----------------------------
+ratioToFloat  :: Ratio Int -> Float
+ratioToFloat r = intToFloat (numerator r) / intToFloat (denominator r)
+
+intToFloat :: Int -> Float
+
+intToFloat  = fromInteger . toInteger
+
+
+data Context = Context { cTime :: Time, cInst :: IName,
+                         cDur  :: DurT, cKey  :: Key }
+     deriving Show
+
+type Key     = AbsPitch
+
+metro :: Float -> Dur -> DurT
+metro setting dur = 60 / (setting * ratioToFloat dur)
+
+--------------------------------------------------
+
+performSimple c@(Context t i dt k) m =
+ case m of
+   Note p d    -> let dur = ratioToFloat d * dt
+                  in [Event t i (transpose p k i) dur]
+   Rest d      -> []
+   m1 :+: m2   ->
+      performSimple c m1 ++
+      performSimple (c {cTime = t + ratioToFloat (dur m1) * dt}) m2
+   m1 :=: m2   -> merge (performSimple c m1) (performSimple c m2)
+   Tempo  a  m ->
+      performSimple (c {cDur = dt / ratioToFloat a} ) m
+   Trans  p  m -> performSimple (c {cKey = k + p} ) m
+   Instr  nm m -> performSimple (c {cInst = nm} ) m
+ where transpose p k Percussion = absPitch p
+       transpose p k _          = absPitch p + k
+
+merge :: Performance -> Performance -> Performance
+
+merge a@(e1:es1) b@(e2:es2) =
+  if eTime e1 < eTime e2 then e1 : merge es1 b
+                         else e2 : merge a es2
+merge [] es2 = es2
+merge es1 [] = es1
+
+--------------------------------
+
+perform :: Context -> Music -> Performance
+perform c m = fst (perf c m)
+
+perf :: Context -> Music -> (Performance, DurT)
+perf c@(Context t i dt k) m =
+  case m of
+    Note p d     -> let dur = ratioToFloat d * dt
+                    in ([Event t i (transpose p k i) dur], dur)
+    Rest d       -> ([], ratioToFloat d * dt)
+    m1 :+: m2    -> let (pf1,d1) = perf c m1
+                        (pf2,d2) = perf (c {cTime = t+d1} ) m2
+                    in (pf1++pf2, d1+d2)
+    m1 :=: m2    -> let (pf1,d1) = perf c m1
+                        (pf2,d2) = perf c m2
+                    in (merge pf1 pf2, max d1 d2)
+    Tempo  a  m  -> perf (c {cDur = dt / ratioToFloat a} ) m
+    Trans  p  m  -> perf (c {cKey = k + p} ) m
+    Instr  nm m  -> perf (c {cInst = nm} ) m
+  where transpose p k Percussion = absPitch p
+        transpose p k _          = absPitch p + k
+
+-------------------------------------------------------
+{- Defined in module Haskore
+data MidiFile = MidiFile MFType Division [Track]
+      deriving (Show, Eq)
+
+type MFType = Int
+type Track  = [MEvent]
+
+data Division = Ticks Int | SMPTE Int Int
+      deriving (Show,Eq)
+
+data MEvent = MidiEvent ElapsedTime MidiEvent
+             | MetaEvent ElapsedTime MetaEvent
+             | NoEvent
+      deriving (Show,Eq)
+
+type ElapsedTime  = Int
+-}
+
+-------------------------------
+{- Defined in Module Haskore
+data MidiEvent = NoteOff    MidiChannel MPitch Velocity
+                | NoteOn     MidiChannel MPitch Velocity
+                | ProgChange MidiChannel ProgNum
+             -- | ...
+      deriving (Show, Eq)
+
+type MPitch      = Int
+type Velocity    = Int
+type ProgNum     = Int
+type MidiChannel = Int
+
+-- Meta Events
+data MetaEvent = SetTempo MTempo
+            -- | ...
+     deriving (Show, Eq)
+
+type MTempo      = Int
+-}
+--------------------------------------
+
+performToMidi :: Performance -> MidiFile
+performToMidi pf =
+  MidiFile mfType (Ticks division)
+                  (map performToMEvs (splitByInst pf))
+
+mfType   = 1 :: Int
+division = 96 :: Int
+
+partition :: (a -> Bool) -> [a] -> ([a],[a])
+partition p xs =
+  foldr select ([],[]) xs
+        where select x (ts,fs)
+                 | p x       = (x:ts,fs)
+                 | otherwise = (ts, x:fs)
+
+splitByInst :: Performance ->[(MidiChannel,ProgNum,Performance)]
+splitByInst p
+  = aux 1 {-  used to be 0 -} p where
+      aux n [] = []
+      aux n pf =
+        let i         = eInst (head pf)
+            (pf1,pf2) = partition (\e -> eInst e == i) pf
+            n'        = if n==8 then 10 else n+1
+        in if i==Percussion
+              then (9, 0, pf1) : aux n pf2
+              else
+                if n>15
+                   then error
+                        "No more than 16 instruments allowed"
+                   else (n, fromEnum i, pf1) : aux n' pf2
+
+
+performToMEvs :: (MidiChannel,ProgNum,Performance) -> [MEvent]
+
+performToMEvs (ch,pn,perf)
+  = let setupInst   = MidiEvent 0 (ProgChange ch pn)
+        setTempo    = MetaEvent 0 (SetTempo tempo)
+        loop []     = []
+        loop (e:es) =
+           let (mev1,mev2) = mkMEvents ch e
+           in  mev1 : insertMEvent mev2 (loop es)
+    in  setupInst : setTempo : loop perf
+
+tempo :: Int
+tempo = 500000
+
+
+--------------------------------------
+insertMEvent :: MEvent -> [MEvent] -> [MEvent]
+
+insertMEvent ev1  []  = [ev1]
+insertMEvent ev1@(MidiEvent t1 _) evs@(ev2@(MidiEvent t2 _):evs')
+  = if t1 <= t2 then ev1 : evs
+                else ev2 : insertMEvent ev1 evs'
+
+mkMEvents :: MidiChannel -> Event -> (MEvent,MEvent)
+
+mkMEvents mChan (Event { eTime = t,
+                         ePitch = p,
+                         eDur = d })
+   = (MidiEvent (toDelta t)    (NoteOn  mChan p 127),
+      MidiEvent (toDelta (t+d))(NoteOff mChan p 127))
+
+toDelta t = round (t * 4.0 * intToFloat division)
+
+-----------------------------------------------------
+
+test :: Music -> IO ()
+test m = outputMidiFile "test.mid"
+           (performToMidi (perform defCon m))
+
+
+defCon :: Context  -- Defauult Initial Context
+defCon = Context { cTime   = 0,
+                   cInst   = AcousticGrandPiano,
+                   cDur    = metro 120 qn,
+                   cKey    = 0 }
+
+{-
+defCon :: Context
+defCon = Context { cTime   = 0
+                 --, cPlayer = fancyPlayer
+                 , cInst   = "piano"
+                 , cDur    = metro 120 qn
+        		 , cKey    = 0
+          		 -- , cVol    = 127
+          		 }
+
+
+-}
+
+testWin95 m =
+  do { test m
+     ; system "mplayer test.mid"
+     ; return () }
+
+testNT    m =
+  do { test m
+     ; system "mplay32 test.mid"
+     ; return ()}
+
+testLinux m =
+  do { test m
+     ;  system "playmidi -rf test.mid"
+     ; return ()}
+
+
+
+m1 = cScale1 :=: (revM (Tempo 2 (delay wn cScale1)))
+
+main = testNT m1
+
+-- </PRE>

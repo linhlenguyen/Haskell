@@ -1,0 +1,44 @@
+<title>Balancing Rotations in Binary Search Trees</title>
+
+<CENTER>
+<BIG> Balancing Rotations in Binary Search Trees </BIG>
+</CENTER>
+
+<p>
+A binary search tree could be defined by the following data declaration
+in Haskell
+<p>
+<pre>
+data Tree a
+   = Tip
+   | Node (Tree a) a (Tree a)
+</pre>
+<p>
+To be a binary search tree it must maintain the search invariant.
+For every <B>(Tree a)</B> of shape <B>(Node left x right)</B> the elements
+of type <B>a</B> in <B>left</B> must be less than <B>x</B>, and the
+elements of type <B>a</B> in <B>right</B> must be greater than or equal to <B>x</B>.
+<p>
+A tree that meets the search invariant can be transformed into an equivalent tree that
+also meets the invariant by a process called rotation. This is best understod by the diagram below.
+<p>
+<A HREF="../Graphics/rotation.png"><IMG SRC="../Graphics/rotation.png" ALT="?" BORDER=0></A>
+<p>
+We can capture the left to right transformation by the function:
+<pre>
+rotR (Node (Node a x b) y c) = (Node a x (Node b y c))
+</pre>
+<p>
+We can capture the right to left transformation by the function:
+<pre>
+rotR (Node a x (Node b y c)) = (Node (Node a x b) y c)
+</pre>
+<p>
+Note that the transformed tree maintains the invariant, and
+<pre>
+search m x  ==  search m (rotR x)  == search m (rotL x)
+</pre>
+
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

@@ -1,0 +1,64 @@
+<PRE>
+CSE536  Functional Programming                      Assignment # 66
+Assigned: Nov. 08, 2004                   Due Monday, Nov. 15, 2004
+
+1) A periodic function, f, with period, p, is a function which "repeats"
+itself such that for all integers, n, greater than 0.
+f x = f(p + x) = f((2*p) + x) = f((3*p) + x) = ... f((n*p) + x).
+
+A periodic function can be constructed from any function, g, which is
+totally defined on the interval [0 .. p) by "re-using" g in an appropriate
+way for values greater than or equal to p. The notation [n .. m) means all x in
+the range n <= x < m.
+
+Define the function periodic, with type:
+
+       periodic :: (Float -> Float) -> Float -> (Float -> Float)
+
+such that (periodic g p) returns a periodic function with period, p,
+which is defined for all values greater than or equal to 0.0, (assuming g
+is defined on the interval [0..p]) and (periodic g p) x == g x for x >= 0
+&& x < p.
+
+Hint: You will find the function properFraction :: Float -> (Int,Float)
+usefull. This function splits a Float into its whole number and fractional
+parts. For example:    properFraction 3.456 --> (3, 0.456)
+
+
+2) A piecewise function, constructs one function from several functions.
+If a function, f, and its domain, the interval [low .. high), is
+represented by the triple: (low,high,f). We can construct a piecewise
+function from a list of such representations. In the questions that
+follow, you may assume that low <= high.
+
+   A) Given an ordered list (in increasing order of low) of such
+   representations, write a Haskell function:
+        contiguous ::  [(Float,Float,Float->Float)] -> Bool
+   which tests if the union of all the domains covers a contiguous
+   non-overlapping region from 0.0 to some upper bound, H.  (10 points)
+
+   B) Assuming that such a list covers a contiguous domain, write the
+   function piecewise :: [(Float,Float,Float->Float)] -> (Float ->
+   Float), which given such a list returns a new function which is the
+   piecewise union of all the functions in the list, on the domains
+   given. For values greater than H, use the last function in the list.
+
+
+3) Using the vocabulary of chapter 13 - A module of simple animations,
+Construct an animation in which a small circle repeatedly follows the
+edges of a square with corners at
+  [(0.0,0.0), (0.0,2.0), (2.0,2.0), (2.0,0.0)]
+
+   A) Draw a graph of the x-position of the circle as a function of time.
+      Draw a graph of the y-position of the circle as a function of time.
+
+
+   B) Write a Haskell function of type: (Behavior Picture) which
+      animates the small circle following the edges of the square
+      as defined above. It should make one complete circuit of the
+      square every 8 seconds.
+
+Hint: use the functions: periodic and piecewise from the earlier questions,
+as well as the functions in lect13.hs from the webpage.
+
+</PRE>

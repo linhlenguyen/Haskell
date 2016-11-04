@@ -1,0 +1,200 @@
+(* MINI Grammar *)
+
+open ProgramTypes;
+
+%%
+%name Mini
+
+%term EOF | Identifier of string
+          | Operator of string
+          | String of string
+          | Integer of string
+          | Real of string
+          | KW_boolean
+          | KW_class
+          | KW_double
+          | KW_else
+          | KW_extends
+          | KW_false
+          | KW_if
+          | KW_int
+          | KW_length
+          | KW_main
+          | KW_new
+          | KW_public
+          | KW_return
+          | KW_static
+          | KW_String
+          | KW_println
+          | KW_this
+          | KW_true
+          | KW_void
+          | KW_while
+          | D_semicolon
+          | D_comma
+          | D_dot
+          | D_lparen
+          | D_rparen
+          | D_lbracket
+          | D_rbracket
+          | D_lbrace
+          | D_rbrace
+          | OP_assign
+          | OP_plus
+          | OP_minus
+          | OP_times
+          | OP_div
+          | OP_and
+          | OP_or
+          | OP_not
+          | OP_eq
+          | OP_neq
+          | OP_le
+          | OP_leq
+          | OP_ge
+          | OP_geq
+
+%nonterm go of Program
+       | Progrm of ClassDec list
+       | ClassDecl of ClassDec
+       | VarDecl of VarDecl
+       | VarDecls of (VarDecl list -> VarDecl list) (* higher order magic *)
+       | MethodDecl of MetDecl
+       | MethodDecls of MetDecl list
+       | FormalParams of Formal list
+       | Formal of Formal
+       | Type of Type
+       | BType of Basic
+       | Statement of Stmt
+       | Statements of Stmt list
+       | Expr of Exp
+       | ExpList of Exp list
+       | Number of Constant
+  
+%pos int
+%start go
+%eop EOF
+%verbose
+
+%nonassoc Identifier
+%right OP_assign
+%left OP_or
+%left OP_and
+%left OP_eq OP_neq OP_le OP_leq OP_ge OP_geq
+%left OP_plus OP_minus
+%left OP_times OP_div
+%right OP_not
+%nonassoc D_lbracket D_rbracket D_dot
+%nonassoc KW_new D_lparen D_rparen
+%nonassoc KW_else (* this makes it shift else, so it binds to the inner if *)
+
+%%
+
+go: Progrm EOF (Program (Progrm1))
+Progrm: ClassDecl ([ClassDecl1])
+      | ClassDecl Progrm (ClassDecl1 :: Progrm1)
+ClassDecl: KW_class Identifier                       D_lbrace
+           VarDecls MethodDecls D_rbrace
+           (ClassDec ((KW_classleft,KW_classright),Identifier1, "Object", VarDecls1 [], MethodDecls1))
+         | KW_class Identifier KW_extends Identifier D_lbrace
+           VarDecls MethodDecls D_rbrace
+           (ClassDec ((KW_classleft,KW_classright),Identifier1, Identifier2, VarDecls1 [], MethodDecls1))
+VarDecls: (fn acc => acc) (* [] @ acc *)
+        | VarDecls VarDecl (fn acc => VarDecls1 (VarDecl1 :: acc))
+VarDecl: Type Identifier D_semicolon
+         (VarDecl ((Typeleft,Typeright),Type1, Identifier1, NONE))
+       | Type Identifier OP_assign Expr D_semicolon
+         (VarDecl ((Typeleft,Typeright),Type1, Identifier1, SOME Expr1))
+MethodDecls: ([])
+           | MethodDecl MethodDecls (MethodDecl1 :: MethodDecls1)
+MethodDecl: KW_public Type Identifier D_lparen FormalParams D_rparen
+            D_lbrace VarDecls Statements D_rbrace
+            (MetDecl ((Typeleft,Typeright),Type1, Identifier1, FormalParams1, VarDecls1 [], Statements1))
+          | KW_public Type Identifier D_lparen              D_rparen
+            D_lbrace VarDecls Statements D_rbrace
+            (MetDecl ((Typeleft,Typeright),Type1, Identifier1, [], VarDecls1 [], Statements1))
+          | KW_public KW_static KW_void KW_main
+            D_lparen KW_String D_lbracket D_rbracket Identifier D_rparen
+            D_lbrace VarDecls Statements D_rbrace
+            (MetDecl ((KW_publicleft,KW_publicright),VoidType, "main", [Formal (ObjType "String", Identifier)], VarDecls1 [], Statements1))
+            (* ... static? *)
+FormalParams: Formal ([Formal1])
+            | Formal D_comma FormalParams (Formal1 :: FormalParams1)
+Formal: Type Identifier (Formal (Type1, Identifier1))
+Type: BType (BasicType BType1)
+    | BType D_lbracket D_rbracket (ArrayType BType1)
+    | Identifier (ObjType Identifier1)
+    | KW_void (VoidType)
+BType: KW_boolean (Bool)
+     | KW_int     (Int)
+     | KW_double  (Real)
+Statements: ([])
+          | Statement Statements (Statement1 :: Statements1)
+Statement: D_lbrace Statements D_rbrace (Block Statements1)
+         |            Identifier                            OP_assign Expr D_semicolon (Assign (NONE, Identifier1, NONE, Expr1))
+         | Expr D_dot Identifier                            OP_assign Expr D_semicolon (Assign (SOME (Expr1,""), Identifier1, NONE, Expr2))
+         |            Identifier D_lbracket Expr D_rbracket OP_assign Expr D_semicolon (Assign (NONE, Identifier1, SOME(Expr1,Int), Expr2))
+         | Expr D_dot Identifier D_lbracket Expr D_rbracket OP_assign Expr D_semicolon (Assign (SOME (Expr1,""), Identifier1, SOME(Expr2,Int), Expr3))
+
+         |            Identifier D_lparen         D_rparen D_semicolon
+           (CallStmt (This(Identifierleft,Identifierright), Identifier1, NONE, []))
+         |            Identifier D_lparen ExpList D_rparen D_semicolon
+           (CallStmt (This(Identifierleft,Identifierright), Identifier1, NONE, ExpList1))
+         | Expr D_dot Identifier D_lparen         D_rparen D_semicolon
+           (CallStmt (Expr1, Identifier1, NONE, []))
+         | Expr D_dot Identifier D_lparen ExpList D_rparen D_semicolon
+           (CallStmt (Expr1, Identifier1, NONE, ExpList1))
+
+         | KW_if D_lparen Expr D_rparen Statement  (If (Expr1, Statement1, Block []))
+         | KW_if D_lparen Expr D_rparen Statement KW_else Statement (If (Expr1, Statement1, Statement2))
+
+         | KW_while D_lparen Expr D_rparen Statement (While (Expr1, Statement1))
+
+         | KW_println D_lparen D_rparen D_semicolon (PrintT "")
+         | KW_println D_lparen Expr D_rparen D_semicolon (PrintE Expr1)
+         | KW_println D_lparen String D_rparen D_semicolon (PrintT String1)
+
+         | KW_return D_semicolon (Return NONE)
+         | KW_return Expr D_semicolon (Return (SOME Expr))
+Expr: Expr OP_plus  Expr %prec OP_plus  (Binop (ADD, Expr1, Expr2))
+    | Expr OP_minus Expr %prec OP_minus (Binop (SUB, Expr1, Expr2))
+    | Expr OP_times Expr %prec OP_times (Binop (MUL, Expr1, Expr2))
+    | Expr OP_div   Expr %prec OP_div   (Binop (DIV, Expr1, Expr2))
+    | Expr OP_and   Expr %prec OP_and   (Binop (AND, Expr1, Expr2))
+    | Expr OP_or    Expr %prec OP_or    (Binop (OR, Expr1, Expr2))
+    | Expr OP_eq    Expr %prec OP_eq    (Relop (EQ, Expr1, Expr2))
+    | Expr OP_neq   Expr %prec OP_neq   (Relop (NE, Expr1, Expr2))
+    | Expr OP_le    Expr %prec OP_le    (Relop (LT, Expr1, Expr2))
+    | Expr OP_leq   Expr %prec OP_leq   (Relop (LE, Expr1, Expr2))
+    | Expr OP_ge    Expr %prec OP_ge    (Relop (GT, Expr1, Expr2))
+    | Expr OP_geq   Expr %prec OP_geq   (Relop (GE, Expr1, Expr2))
+    | OP_not Expr                       (Not Expr1)
+    | Expr D_lbracket Expr D_rbracket   (ArrayElm (Expr1, Expr2, NONE))
+    | Expr D_dot KW_length D_lparen D_rparen (ArrayLen Expr1)
+
+    | Expr D_dot Identifier D_lparen ExpList D_rparen
+      (Call (Expr1, Identifier1, NONE, ExpList1))
+    |            Identifier D_lparen ExpList D_rparen
+      (Call (This(Identifierleft,Identifierright), Identifier1, NONE, ExpList1))
+    | Expr D_dot Identifier D_lparen         D_rparen
+      (Call (Expr1, Identifier1, NONE, []))
+    |            Identifier D_lparen         D_rparen
+      (Call (This(Identifierleft,Identifierright), Identifier1, NONE, []))
+
+    | Expr D_dot Identifier (Member((Identifierleft,Identifierright),Expr1, "", Identifier1))
+    | Identifier (Var ((Identifierleft,Identifierright),Identifier1))
+
+    | KW_new BType D_lbracket Expr D_rbracket (NewArray (BType1, Expr1))
+    | KW_new Identifier D_lparen D_rparen (NewObject((Identifierleft,Identifierright),Identifier1))
+    | D_lparen Expr D_rparen (Expr1)
+    | KW_this (This(KW_thisleft,KW_thisright))
+    | Number (Literal ((Numberleft,Numberright),Number1))
+
+ExpList: Expr ([Expr1])
+       | Expr D_comma ExpList (Expr1 :: ExpList)
+ 
+Number: Integer                (Cint Integer1)
+      | Real                   (Creal Real1)
+      | KW_true                (Cbool true)
+      | KW_false               (Cbool false)
+

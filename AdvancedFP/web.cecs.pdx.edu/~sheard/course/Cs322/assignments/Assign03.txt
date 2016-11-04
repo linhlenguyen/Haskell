@@ -1,0 +1,15 @@
+CS322 Prog Lang & Compilers                      Prog Assignment #3
+Assigned Tuesday April 17, 2007.       Due Thursday, April 19, 2007
+
+This assignment is to extend the stmt program discussed in class
+(and available for download) so that it can translate while loops
+and block statements.
+
+ fun stmt dict (While(tst,body)) = . . .
+   | stmt dict (Block stmts) = . . .
+
+Base your solution on the if-then-else statement and the discussion
+in the text book about while-loops. You don’t need to add any new
+IR instructions. Block statemtents are very easy (think about what
+they do). Be sure and test your code, print out the tests,
+and hand them in.

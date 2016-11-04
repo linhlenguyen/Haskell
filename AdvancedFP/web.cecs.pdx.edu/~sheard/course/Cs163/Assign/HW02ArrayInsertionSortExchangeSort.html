@@ -1,0 +1,86 @@
+<title>Homework #2 - Sorts over Arrays</title>
+
+<CENTER>
+<BIG>Homework #1 - Sorts over Arrays</BIG>
+</CENTER>
+
+<p>
+In this home work we will write two sorting algorithms over
+arrays. An insertion sort, and an exchange sort. You are
+required to follow the steps of the design recipes
+we have studied in class.
+<p>
+Recall that every step in a design recipe cooresponds to a product. It must
+be the case that every product appears in your solution. It could be a comment,
+or some actual program fragment. Study the design recipes
+<ol>
+<li> <A HREF="../Doc/DesignRecipe.html">Generic program</A> design recipe.
+<li> <A HREF="../Doc/RecursiveDesignRecipe.html">Recursive program</A> design recipe.
+<li> <A HREF="../Doc/ArrayProcessingDeignRecipes.html">Array processing</A> design recipes.
+</ol>
+
+<p>
+For this homework you will create one haskell program which
+defines two functions. Study the problem description below for each function.
+Note that you are required to write two functions. You may write additional
+helper functions if you desire. You must include tests, and you must include
+a "main" function that acts as a "harness" and demonstrates (in addition to your tests)
+that the two functions work.
+<p>
+<ol>
+<li> <B>insertionSort</B> <p>
+<li> <B> exchangeSort </B> <p>
+</ol>
+<p>
+<H3>Getting Started.</H3>
+<p>
+You will need to download the library file <A HREF="../Haskell/ArrCommands.hs">ArrCommands</A>
+and put a copy in the same directory as your solution.
+<p>
+Your program will probaby look something like
+<HR ALIGN="center" WIDTH="100%">
+<pre>
+-- Author Tom Smith
+module HW02 where
+
+import ArrCommands
+
+insertionSort:: Array a -> IO ()
+
+exchangeSort:: Array a -> IO ()
+
+
+main =
+  do { ... }
+
+tests = ...
+</pre>
+<HR ALIGN="center" WIDTH="100%">
+
+<H3>What to turn in.</H3>
+Create a Haskell source file. Upload the file to <A HREF="https://bb.pdx.edu/webct/entryPageIns.dowebct">blackboard</A>
+by class time October 20, 2009. The file <B>must have</B>:
+<ul>
+<li> Your name (as the author of the program) indicated in a comment in the very first line
+<li> At least 2 function definitions, one for each of the assigned functions.
+You may define additional functions to help, or to create tests.
+<li> Products for each of the concrete steps in the generic design recipe
+<ol> <li> Understand the problem
+     <li> Write a contract (type) for each function
+     <li> Create a set of examples (HUnit assertions)
+     <li> Create a body for each function where the body
+          is based upon one of the design recipes above.
+     <li> Tests for each your functions (HUnit tests) including a named value "tests" that runs all your tests.
+     <li> A "main" function that acts as a "harness" and demonstrates (in addition to your tests)
+          that the two functions work.
+     </ol>
+<li> Any products from the recursive design recipe you deem to be usefull to the reader of your program.
+</ul>
+
+Upload this file using the blackboard assignment
+mechanism.
+
+<p>
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

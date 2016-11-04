@@ -1,0 +1,141 @@
+
+cs510 FSC Staged Computation         Assignment # 5          Winter 2005
+assigned Tuesday Feb. 1, 2005          due in class Tuesday Feb. 8, 2005
+
+1) Staging with continutations.
+Recall the example done in class which interpreted Regular Expressions.
+
+--------------------------------------------
+datatype 'a Maybe = Just of 'a | Nothing;
+
+datatype RE =
+   Lit of string
+ | Or of (RE*RE)
+ | Concat of (RE*RE)
+ | Star of RE;
+
+fun prefix [] xs = Just xs
+  | prefix (y::ys) (x::xs) = if  y=x then prefix ys xs else Nothing
+  | prefix ys xs = Nothing;
+---------------------------------------------
+
+We can build a different style of interpreter which uses 2
+continuations (that is functions). The first is to be applied to 2
+arguments (the input consumed by the current operation, and the rest
+of the input) when the current operation succeeds, and the second is
+applied to 1 argument (the rest of the input) when the current
+operation fails. Here is an example of changing the prefix function
+into that style.
+
+prefix3 :
+       string ->
+       char list ->
+       (string -> char list -> 'a ) ->   (* Continuation #1 *)
+       (char list -> 'a ) ->             (* Continuation #2 *)
+       'a
+
+fun prefix3 pattern input good bad =
+  case prefix (explode pattern) input of
+    Nothing => bad input
+  | Just more => good pattern more;
+
+Here is the eval function redone in this style. Note the the types of
+the two continutations, and that the final "answer" ( 'a ) is
+polymorhic.
+
+ev :   RE ->
+       char list ->
+       (string -> char list -> 'a ) ->
+       (char list -> 'a ) ->
+       'a
+
+fun ev x input good bad =
+ case x of
+   Lit s => prefix3 s input good bad
+ | Or(a,b) => ev a input good (fn ys => ev b ys good bad)
+ | Concat(a,b) =>
+     ev a input  (fn s1 => fn input1 =>
+     ev b input1 (fn s2 => fn input2 => good (s1^s2) input2) bad) bad
+ | Star e => let fun loop cs xs =
+                     ev e xs (fn cs2 => fn xs2 => loop (cs ^ cs2) xs2)
+                             (fn xs2 => good cs xs2)
+             in loop "" input end;
+
+
+To answer this question you must do three things.
+
+A) First, write a staged version of prefix3 with the following type.
+
+prefix4 :
+ ['a]. string ->
+       <char list> ->
+       (<string> -> <char list> -> <'a >) ->
+       (<char list> -> <'a >) ->
+       <'a >
+
+Note how the two continuations are both code transformers.
+
+B) Second, stage the version of the "ev" function with the type.
+ev4 :  RE ->
+       <char list> ->
+       (<string> -> <char list> -> <'a >) ->
+       (<char list> -> <'a >) ->
+       <'a >
+You will need to use your staged prefix function defined in A) above
+
+C) Third, Test your result with the following test harness function
+
+fun testharness t2 =
+   <fn s => ~(ev4 t2 <explode s>
+                     (fn s => fn x => <(~s,implode ~x)>)
+                     (fn x => <error "No Match">))>;
+
+
+=======================================================================
+2) Practice with Monads
+
+Consider the monad of state which propogates a single mutable integer
+
+datatype 'a M = M of (int -> ('a * int));
+
+fun return x = M(fn n => (x,n));
+fun bind (M f) g =
+  M(fn n => let val (a,n1) = f n
+                val M h = g a
+            in h n1 end);
+val m = Mon(return,bind);
+
+This monad supports a useful operation (non-standard morphism)
+for generating "fresh" names:
+
+fun newvar s = M(fn n => (s^(toString n),n+1));
+
+1) Use the monad to redo the interpreter for the MetaML subset from
+lecture 8. The newvar function comes in handy when generating
+new names in the "rebuilding" phase.
+
+You will need to make a slight modification to the type of
+values. By making the VF constructor take a function from values
+to M computations of values (rather then value -> value). See the
+datatype decl below for the modification. 
+
+datatype value = 
+    VI of int 
+  | VF of (value -> value M)
+  | VC of exp
+and exp  = . . .
+
+
+ev2: exp -> env -> value M
+
+fun ev1 e env =
+case e of
+  EI n => Return m (VI n)
+| ...
+
+
+2) Now stage the interpreter so that it has type:
+
+ev3: exp -> env' -> <value M>
+
+Think about what type env' should be.

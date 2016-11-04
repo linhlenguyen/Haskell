@@ -1,0 +1,341 @@
+
+
+datatype exp =
+  EI of int           (* integers *)
+| EA of exp * exp     (* applications *)
+| EL of string * exp  (* lambda-abstractions *)
+| EV of string;       (* variables *)
+
+datatype value = 
+  VI of int 
+| VF of (value -> value);
+
+
+fun showe e =
+case e of
+  EI n => show n
+| EA(f,x as EA(_,_)) => (showe f)^" ("^(showe x)^")"
+| EA(f,x) => (showe f)^" "^(showe x)
+| EL(x,e) => "(fn "^x^" => "^(showe e)^")"
+| EV x => x
+
+
+(* ************ example terms ******************** *)
+
+val ID = EL("x",EV "x");
+
+val COMPOSE = 
+   EL("f",
+      EL("g",
+         EL("x",EA(EV "f",
+                   EA(EV "g",EV "x")))));
+
+
+(* *********** example values ********************** *)
+
+val id = VF(fn x => x);
+
+val compose = 
+   VF(fn (VF f) => 
+         VF (fn (VF g) => 
+                VF(fn x => f(g x))));
+
+val square = VF (fn (VI x) => VI(x * x));
+
+val bang =
+  let fun fact n = if n=0 then 1 else n*(fact (n-1))
+  in VF (fn (VI x) => VI(fact x)) end;
+
+
+(* *************** environments **************  *)
+
+type env =string -> value;
+
+exception NotBound of string
+val env0 = fn x => (print x; raise (NotBound x));
+
+fun ext env x v = (fn y => if x=y then v else env y);
+
+fun ev0 env e =
+case e of
+  EI i => VI i
+| EA(e1,e2) => (case (ev0 env e1,ev0 env e2) of (VF f,v) => f v)
+| EL(x,e1) => VF(fn v => ev0 (ext env x v) e1)
+| EV x => env x;
+
+val ex1 = ev0 env0 (EA(ID,EI 5));
+
+(* ************* Constants ********************* *)
+
+val plus = VF(fn (VI x) => VF(fn (VI y) => VI(x+y)));
+val minus = VF(fn (VI x) => VF(fn (VI y) => VI(x-y)));
+val times = VF(fn (VI x) => VF(fn (VI y) => VI(x*y)));
+
+val env1 = ext env0 "*" times;
+
+val SQUARE = EL("x",EA(EA(EV "*",EV "x"),EV "x"));
+
+val ex2 = ev0 env1 (EA (SQUARE,EI 5));
+
+
+val Z = fn n => fn tf => fn ff => if n=0 then tf 0 else ff n;
+fun Z n tf ff = if n=0 then tf 0 else ff n;
+val ifzero = 
+  VF(fn (VI n) => 
+  VF(fn (VF tf) =>
+  VF(fn (VF ff) => if n=0 then tf(VI 0) else ff(VI n))));
+
+val Y = let fun Y' f = f (fn v => (Y' f) v) in Y' end;
+fun Y f = f (fn v => (Y f) v);
+
+val recur = 
+  let fun recur' (VF f) =
+           f(VF (fn v=> (case (recur' (VF f)) of 
+                            VF fp => fp v
+                         | w => error "off end in recur")))
+  in VF recur' end;
+
+val env1 =
+ ext(ext(ext(ext(ext env0 "+" plus) 
+             "-" minus) 
+         "*" times) 
+     "Z" ifzero) 
+ "Y" recur;
+
+fun h1 n z = if n=0 then z else (fn x => (h1 (n-1) (x+z))) n;
+
+val h1 = Y(fn h1' => fn n => fn z => 
+            if n=0 then z else (fn x => (h1' (n-1) (x+z))) n);
+
+val h1 = Y(fn h1' => fn n => fn z => 
+           Z n (fn _ => z) (fn n => (fn x => (h1' (n-1) (x+z))) n));
+
+
+fun minus x y = EA(EA(EV "-",x),y);
+fun plus x y  = EA(EA(EV "+",x),y);
+
+val H1 =
+ EA(EV "Y",EL("h1",EL("n",EL("z",
+  EA(EA(EA(EV "Z",EV "n")
+       ,EL("w",EV "z"))
+    ,EL("n",EA(EL("x",EA(EA(EV "h1",minus (EV "n") (EI 1))
+                        ,plus (EV "x") (EV "z")))
+              ,EV "n")))))));
+
+val IT = EA(EA(H1,EI 3),EI 4);
+
+val answer = ev0 env1 IT;
+
+(******* adding staging **************** *)
+
+datatype value = 
+    VI of int 
+  | VF of (value -> value)
+  | VC of exp
+and exp  =
+    EI of int           (* integers *)
+  | EA of exp * exp     (* applications *)
+  | EL of string * exp  (* lambda-abstractions *)
+  | EV of string        (* variables *)
+  | EB of exp           (* brackets *)
+  | ES of exp           (* escape *)
+  | ER of exp           (* run *)
+  | EC of string * value;  (* cross-stage constants *)
+
+
+type env = string -> exp;
+fun env0 x = EV x;
+
+
+fun showe e =
+case e of
+  EI n => show n
+| EA(f,x as EA(_,_)) => (showe f)^" ("^(showe x)^")"
+| EA(f,x) => (showe f)^" "^(showe x)
+| EL(x,e) => "(fn "^x^" => "^(showe e)^")"
+| EV x => x
+| EB e => "<"^(showe e)^">"
+| ES(EV x) => "~"^x
+| ES e => "~("^(showe e)^")"
+| ER e => "run("^(showe e)^")"
+| EC(s,v) => "%"^s;
+
+
+val id = VF(fn x => x);
+val compose = VF(fn (VF f) => VF (fn (VF g) => VF(fn x => f(g x))));
+val square = VF (fn (VI x) => VI(x * x));
+val bang =
+  let fun fact n = if n=0 then 1 else n*(fact (n-1))
+  in VF (fn (VI x) => VI(fact x)) end;
+
+val ID = EL("x",EV "x");
+val COMPOSE = EL("f",EL("g",EL("x",EA(EV "f",EA(EV "g",EV "x")))));
+
+(* ************* Constants ********************* *)
+
+fun g s f (VI x) (VI y) = f (x,y)
+  | g s f a b = error ("Non int to oper in "^s);
+
+val plus = VF(fn x => VF(fn y => VI(g "plus" (op +) x y)));
+val minus = VF(fn x => VF(fn y => VI(g "minus" (op - ) x y)));
+val times = VF(fn x => VF(fn y => VI(g "times" (op * ) x y)));
+
+val env1 = ext env0 "*" (EC("*",times));
+
+val SQUARE = EL("x",EA(EA(EV "*",EV "x"),EV "x"));
+
+val Z = fn n => fn tf => fn ff => if n=0 then tf 0 else ff n;
+val ifzero = 
+  VF(fn (VI n) => 
+  VF(fn (VF tf) =>
+  VF(fn (VF ff) => if n=0 then tf(VI 0) else ff(VI n))));
+
+val Y = let fun Y' f = f (fn v => (Y' f) v) in Y' end;
+fun Y f = f (fn v => (Y f) v);
+
+val recur = 
+  let fun recur' (VF f) =
+           f(VF (fn v=> (case (recur' (VF f)) of 
+                            VF fp => fp v
+                         | w => error "off end in recur")))
+  in VF recur' end;
+
+
+val env1 =
+ ext(ext(ext(ext(ext env0 "+" (EC("+",plus))) 
+             "-" (EC("-",minus))) 
+         "*" (EC("*",times))) 
+     "Z" (EC("if",ifzero))) 
+ "Y" (EC("Y",recur));
+
+(* ************************************ *)
+
+val ctr = ref 0;
+fun NextVar s = let val _ = ctr := (!ctr) + 1
+                in s^(toString (! ctr)) end;
+
+
+
+fun ev1 env e = 
+case e of
+  EI i => VI i
+| EA(e1,e2) => 
+   (case (ev1 env e1,ev1 env e2) of (VF f,v) => f v)
+| EL(x,e1) => VF(fn v => ev1 (ext env x (EC(x,v))) e1)
+| EV x => (case env x of EC(_,v) => v | w => VC w)
+| EB e1 => VC(eb1 1 env e1)
+| ER e1 => 
+   (case ev1 env e1 of VC e2 => ev1 env0 e2)
+| EC(_,v) => v
+| ES e1 => error "escape at level 0"
+| w => error "Fall off ev1"
+
+and eb1 n env e = 
+case e of
+  EI i => EI i
+| EA(e1,e2) => EA(eb1 n env e1,eb1 n env e2)
+| EL(x,e1) => let val x' = NextVar x 
+              in EL(x',eb1 n (ext env x (EV x')) e1) end
+| EV y => env y
+| EB e1 => EB(eb1 (n+1) env e1)
+| ES e1 => if n=1
+              then (case ev1 env e1 of VC e => e | _ => error "BAD")
+              else ES(eb1 (n-1) env e1)
+| ER e1 => ER(eb1 n env e1)
+| EC(s,v) => EC(s,v)
+| w => error "fall of eb1"
+
+
+
+val H2 = let fun minus x y = EA(EA(EV "-",x),y)
+             fun plus x y  = EA(EA(EV "+",x),y)
+in  EA(EV "Y",EL("h1",EL("n",EL("z",
+      EA(EA(EA(EV "Z",EV "n")
+           ,EL("w",EV "z"))
+        ,EL("n",EB(EA(EL("x",ES(EA(EA(EV "h1",minus (EV "n") (EI 1))
+                                  ,EB(plus (EV "x") (ES (EV "z"))))))
+                    ,EV "n"))))))))
+end;
+
+val IT = EA(EA(H2,EI 3),EB(EI 4));
+
+val VC answer = ev1 env1 IT;
+
+(*
+-| showe answer;
+val it = "(fn x1 => (fn x2 => (fn x3 => %+ x3 (%+ x2 (%+ x1 4))) %n) %n) %n" 
+ : string
+*)
+
+(* ******************************************************* *)
+
+val puzzle = run ((run <fn a => ~( (fn x => <x>) (fn w => <a>) ) 5>) 3);
+
+(* (fn x => <x>) *)
+val t1 = EL("x",EB(EV "x")); 
+
+(* (fn w => <a>) *)
+val t2 = EL("w",EB(EV "a")); 
+
+(*  <fn a => ~( (fn x => <x>) (fn w => <a>) ) 5> *)
+val t3 = EB(EL("a",EA(ES(EA(t1,t2)),EI 5)));
+
+val puzzle = ER(EA(ER t3,EI 3));
+val _ = print(showe puzzle);
+
+val answer = ev1 env1 (ER puzzle);
+
+fun coverE env e =
+case e of
+  EI i => EI i
+| EA(e1,e2) => EA(coverE env e1,coverE env e2)
+| EL(x,e1) =>  EL(x,coverE env e1)
+| EV y => env y
+| EB e1 => EB(coverE env e1)
+| ES e1 => ES(coverE env e1)
+| ER e1 => ER(coverE env e1)
+| EC(s,v) => EC(s,coverV env v)
+
+and coverV env v =
+case v of
+  VI i => VI i
+| VF f => VF((coverV env) o f)
+| VC e => VC(coverE env e);
+
+
+
+fun ev1 env e = 
+case e of
+  EI i => VI i
+| EA(e1,e2) => (case (ev1 env e1,ev1 env e2) of (VF f,v) => f v)
+| EL(x,e1) => VF(fn v => ev1 (ext env x (EC(x,v))) e1)
+| EV x => (case env x of EC(_,v) => v | w => VC w)
+| EB e1 => VC(eb1 1 env e1)
+| ER e1 => (case ev1 env e1 of VC e2 => ev1 env0 e2)
+| EC(s,v) => coverV env v
+| ES e1 => error "escape at level 0"
+
+and eb1 n env e = 
+case e of
+  EI i => EI i
+| EA(e1,e2) => EA(eb1 n env e1,eb1 n env e2)
+| EL(x,e1) => let val x' = NextVar x 
+              in EL(x',eb1 n (ext env x (EV x')) e1) end
+| EV y => env y
+| EB e1 => EB(eb1 (n+1) env e1)
+| ES e1 => if n=1
+              then (case ev1 env e1 of VC e => e)
+              else ES(eb1 (n-1) env e1)
+| ER e1 => ER(eb1 n env e1)
+| EC(s,v) => EC(s,coverV env v)
+
+
+datatype 'a M = M of (int -> ('a * int));
+fun newvar s = M(fn n => (s^(toString n),n+1));
+
+fun return x = M(fn n => (x,n));
+fun bind (M f) g = 
+  M(fn n => let val (a,n1) = f n
+                val M h = g a
+            in h n1 end);
+val m = Mon(return,bind);

@@ -1,0 +1,220 @@
+<title> CS 322, Languages and Compiler Design, Lecture Notes </title>
+
+<CENTER>
+<BIG>CS 322, Languages and Compiler Design, Spring 2007, Lecture Notes </BIG>
+</CENTER>
+
+<P ALIGN=left>
+The following are powerpoint slides (and associated code) from the lectures.
+
+<OL>
+
+
+<LI> Lecture 1
+      <UL>
+         <LI> Lecture #1. Tuesday, April 3, 2007.
+         <LI> Introduction, class information,Course Mechanics
+              Text Book, Down-loading SML, Themes, Back-end tasks,
+              Language design issues, I.R., Machine Code, Optimization,
+              Interpretation.
+         <LI> <A HREF="S01Intro.ppt">Power Point Slides</A>
+         <LI> <A HREF="MLIntro.ppt">Slides on using ML</A>
+      </UL>
+
+
+
+
+<LI> Lecture 2
+      <UL>
+         <LI> Lecture #2. Thursday, April 5, 2007.
+         <LI> Overview of backend issues
+              (storage locations, registers, aliasing),
+              Translating arithmetic, Register allocation, Reducing demand for registers,
+              Reuse of registers,  List.find, Anonymous functions.
+         <LI> <A HREF="S02Arithmetic.ppt">Power Point Slides</A>
+         <LI> <A HREF="S02code.sml">"S02code.sml"</A>. Code from the lecture.
+         <LI> <A HREF="ProgramTypes.sml">"ProgramTypes.sml"</A>. Datatypes from CS321
+      </UL>
+
+
+<LI> Lecture 3
+      <UL>
+         <LI> Lecture #3. Tuesday, April 10, 2007.
+         <LI> Boolean expressions, Positional encoding,
+              Short circuit evaluation, Conditional move,
+              Array expressions.
+         <LI> <A HREF="S03BooleansArrays.ppt">Power Point Slides</A>
+         <LI> <A HREF="S03code.sml">"S03code.sml"</A>. Code from the lecture.
+      </UL>
+
+
+<LI> Lecture 4
+      <UL>
+         <LI> Lecture #4. Thursday, April 12, 2007.
+         <LI> Strings (representation, byte operation, copying),
+              Structures (representation, anonymus value, field information, layout),
+              Control Flow (basic blocks, generating code, loops).
+         <LI> <A HREF="S04StringsStructControlFlow.ppt">Power Point Slides</A>
+         <LI> <A HREF="S04code.sml">"S04code.sml"</A>. Code from the lecture.
+      </UL>
+
+
+<LI> Lecture 5
+      <UL>
+         <LI> Lecture #5. Tuesday, April 17, 2007.
+         <LI> Array Access, Case stmt, Jump tables, Procedure call,
+              Machine dependent strategy, OO-langauages.
+         <LI> <A HREF="S05ArrayCaseProcOO.ppt">Power Point Slides</A>
+         <LI> <A HREF="S05code.sml">"S05code.sml"</A>. Code from the lecture.
+         <LI> <A HREF="../project/JenkeLiProjTemplates.pdf">Project 1 Templates</A>. Slides from Jenke Li about templates for MiniJava Translation.
+         <LI> <A HREF="MiniIR1.sml">"MiniIR1.sml"</A>. ML datatypes declarations for IR #1
+      </UL>
+
+
+<LI> Lecture 6
+      <UL>
+         <LI> Lecture #6. Thursday, April 19, 2007.
+         <LI> The project 1 description. Instructions for
+              downloading and using the template files. Due date May 3, 2007.
+         <LI> <A HREF="S06Proj1Description.ppt">Power Point Slides</A>
+         <LI> <A HREF="../project/index.html">Where to download project resources.</A>
+
+      </UL>
+
+
+<LI> Lecture 7
+      <UL>
+         <LI> Lecture #7. Tuesday, April 24, 2007.
+         <LI> More about IR1,  Library Functions, Canonicalization
+              OO runtime issues, Object size, Initialization.
+         <LI> <A HREF="S08MoreAboutIR1.ppt">Power Point Slides</A>
+         <LI> <A HREF="S08code.sml">"S08code.sml"</A>. Code from the lecture.
+
+      </UL>
+
+<LI> Lecture 8
+      <UL>
+         <LI> Lecture #8. Thursday, April 26, 2007.
+         <LI> Using comments, Example output from Phase1,
+              Language Semantics (Operational, Axiomatic, Denotational),
+              An interpreter for IR1. Review for exam
+         <LI> <A HREF="S09InterpretingIR1.ppt">Power Point Slides</A>
+         <LI> <A HREF="S09code.sml">"S09code.sml"</A>. Code from the lecture.
+
+      </UL>
+
+<LI> Mid Term Exam
+      <UL>
+         <LI> Midterm. Tuesday May 1, 2007.
+         <LI> In class, 1.5 hours
+         <LI> <A HREF="S09InterpretingIR1.ppt">practice questions</A> in the April 26 notes.
+      </UL>
+
+
+<LI> Lecture 9
+      <UL>
+         <LI> Lecture #9. Thursday, May 3, 2007.
+         <LI> Project 2 introduction.
+         <LI> Project #2, Peephole optimizations.
+         <LI> <A HREF="S10Project2Peephole.ppt">Power Point Slides</A>
+      </UL>
+
+<LI> Lecture 10
+     <UL>
+        <LI> Go over midterm exam
+        <LI> Continue project 2 description discussion and Peephole optimizations from
+        last class meeting.
+     </UL>
+
+<LI> Lecture 11
+      <UL>
+         <LI> Lecture #11. Tuesday, May 8, 2007.
+         <LI> Optimizations (local, loop, global). Liveness Analysis, Spilling, Problems with Jumps, Ranges,
+              Intervals, Linear Scan register allocation.
+         <LI> <A HREF="S11Optimizations.ppt">Power Point Slides</A>
+      </UL>
+
+
+<LI> Lecture 12
+      <UL>
+         <LI> Lecture #12. Thursday, May 10, 2007.
+         <LI>Basic Blocks.
+         <LI> <A HREF="S12BasicBlocksLivenessAnaly.ppt">Power Point Slides</A>
+
+      </UL>
+
+
+<LI> Lecture 13
+      <UL>
+         <LI> Lecture #13. Tuesday, May 15, 2007.
+         <LI> Control flow graphs, Liveness using data flow,
+              dataflow equations, Using fixed-points. Dynamic Liveness,
+              The halting problem, Register Interference Graphs,
+              Graph coloring, Flow graph relations, Dominators.
+
+         <LI> <A HREF="S13ControlFlow.ppt">Power Point Slides</A>
+      </UL>
+
+<LI> Lecture 14
+      <UL>
+         <LI> Lecture #7. Thursday, May 17, 2007.
+         <LI> Intro to the x86 architecture and assembly language
+         <LI> <A HREF="S07X86Arch.ppt">Power Point Slides</A>
+
+      </UL>
+
+
+
+<LI> Lecture 15
+      <UL>
+         <LI> Lecture #15. Tuesday, May 22, 2007.
+         <LI> Project 3, C calling convention, The IA32 module, Translating.
+         <LI> <A HREF="S14Project3.ppt">Power Point Slides</A>
+         <LI> <A HREF="IA32.sml">The IA32 module</A>
+      </UL>
+
+<LI> Lecture 16
+      <UL>
+         <LI> Lecture #16. Thursday, May 24, 2007. (lecture by Nathan Linger)
+         <LI> Project 3, Runtime.c, Running the code, debugging assembler,
+              division, strings for println, making test files.
+         <LI> <A HREF="S15DebuggingAssembler.ppt">Power Point Slides</A>
+      </UL>
+
+<LI> Lecture 17
+      <UL>
+         <LI> Lecture #17. Thursday, May 31, 2007.
+         <LI> Data flow equations, available expressions, live variables (again),
+              solving data flow equations, constant propagation, using associativity and comuutativity,
+         <LI> <A HREF="S16MoreControlFlow.ppt">Power Point Slides</A>
+      </UL>
+
+
+<LI> Lecture 18
+      <UL>
+         <LI> Lecture #18. Tuesday, June 5, 2007.
+         <LI> Static Single Assingment.
+              computing dominators.
+         <LI> <A HREF="S18SsaDominators.ppt">Power Point Slides</A>
+      </UL>
+
+<!--
+
+
+
+
+
+<LI> Lecture 17
+      <UL>
+         <LI> Lecture #17. Thursday June 7, 2007.
+         <LI> Staging, Reduction order, power example,  languages and calculation,
+              staging interpreters, binding time improvements, pre- and post-generation time optimization.
+              Study guide for final exam.
+         <LI> <A HREF="S17CompilersAsStagedProg.ppt">Power Point Slides</A>
+      </UL>
+
+
+ -->
+</OL>
+<p>
+<A HREF="../index.html"> Back</A> to CS 322, Languages and Compiler Design, Home Page

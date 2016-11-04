@@ -1,0 +1,195 @@
+<title> CSE581, Lecture Notes </title>
+
+<CENTER>
+<BIG>CSE581 - Advanced Functional Programming, Lecture Notes</BIG>
+</CENTER>
+
+<P ALIGN=left> Here is a proposed topic schedule for winter 2003.
+I will post the lecture notes, and adjust this page as the course
+proceeds. The notes are in the form of powerpoint slides.
+
+<OL>
+
+<LI> January 7, 2003.
+  <UL> <LI> <A HREF="l01IntroTypeClasses.ppt"> Slides: </A> Course information,
+            Introduction to Type Classes.
+        <LI> <A HREF="typeClasses.html"> Haskell code </A>.
+  </UL>
+
+<LI> January 9, 2003.
+  <UL> <LI> <A HREF="l02moreTypeClasses.ppt"> Slides: </A>
+             Higher order types. Higher order type classes.
+             The Monad Class. Multi-parameter type classes.
+             Mutable: the generic reference class. An example:
+             unification in a generic monad.
+        <LI> <A HREF="moreTypeClasses.html"> Haskell code </A>.
+  </UL>
+
+<LI> Monday January 13, 2003. <B>Special Monday Lecture due to POPL</B>.
+  <UL> <LI> <A HREF="l03FuncDependImplicitParameters.ppt"> Slides: </A> Type classes with functional dependencies.
+            Implicit parameters.
+       <LI> <A HREF="l03code.html"> Haskell code </A>.
+  </UL>
+
+<LI> January 21, 2003.
+  <UL> <LI> <A HREF="l04HoodDebugger.ppt"> Slides: </A> Debugging Haskell with the Hood Debugger.
+       <LI> <A HREF="l04code.html"> Haskell code </A>.
+  </UL>
+
+
+<LI> January 23, 2003.
+  <UL> <LI> <A HREF="l05Alg4HindleyMilner.ppt"> Slides: </A>
+         Algorithms for Hindley-Milner type inference.
+      <LI> <A HREF="l05code.html"> Haskell code </A>
+  </UL>
+
+
+<LI> Reference Lecture on Monads.
+  <UL> <LI> <A HREF="l05Monads.ppt"> Slides: </A>
+         More about Monads:
+         Monads as an ADT, Monad axioms, the Io monad example.
+      <LI> <A HREF="l05code.html"> Haskell code </A>.
+  </UL>
+
+
+<LI> January 27, 2003.
+  <UL> <LI> <A HREF="l06Monads&Interp.ppt"> Slides: </A>
+        Monads and Intepreters. Rules for language design and implementation.
+        Sequence of language variations with different monads.
+        Monadic plumbing. Modular language fragments. Sub classes of
+        Monad, with extra functionality. The Eval class. Tying it all together.
+        A "Rich" monad.
+      <LI> <A HREF="l06code.html"> Haskell code </A>.
+  </UL>
+
+
+<LI> January 29, 2003.
+  <UL> <LI> <A HREF="l07MonadsLazyState.ppt"> Slides: </A>
+         Making instances of the Monad class, return and (>>=).
+         Rules for recognizing the patterns within the plumbing.
+         Instances for the "Rich" monad. State based algorithms.
+         State in Haskell. The renaming example. The runST function.
+         Rank two polymorphism.
+
+      <LI> <A HREF="l07code.html"> Haskell code </A>.
+  </UL>
+
+
+<LI> February 4, 2003.
+  <UL> <LI> <A HREF="l07.5MonadTrans.ppt"> Slides: </A>
+         Monads as a data structures.
+		 Transformers as functions.
+		 Visualizing Transforms (using MetaML).
+         Transformers as classes.
+
+      <LI> <A HREF="l07.5code.html"> Haskell code </A>.
+      <LI> <A HREF="Monads.zip"> The Monad Library</A>
+      <LI> <A HREF="monadTransCode.html"> The interpreter example.</A>.
+  </UL>
+
+
+<LI> February 6, 2003.
+  <UL> <LI> <A HREF="l08Rank2Poly.ppt"> Slides: </A>
+         Polymorphism, Rank 2 polymorphism, Church Numerals,
+         cata-build fusion,  Hindley-Milner Polymorphism.
+      <LI> <A HREF="l08code.html"> Haskell code </A>.
+  </UL>
+
+<LI> February 11, 2003.
+  <UL> <LI> <A HREF="l11NonRegularTypes.ppt"> Slides: </A>
+        Non Regular types
+      <LI> <A HREF="l11code.html"> Haskell code </A>.
+  </UL>
+
+<LI> February 13,& 18 2003.
+  <UL> <LI> <A HREF="generics.ppt"> Slides: </A>
+       4 different styles of generic programming
+      <LI> <A HREF="generics.html"> Haskell code </A>.
+  </UL>
+
+<LI> February 20 2003.
+  <UL> <LI> <A HREF="continuations.ppt"> Slides: </A>
+       Continuation passing style,
+	   Continuation monad,
+	   Throw and catch, Callcc.
+      <LI> <A HREF="continuations.html"> Haskell code </A>.
+  </UL>
+
+<LI> February 25 2003.
+  <UL> <LI> <A HREF="dynamicProgAndParsers.ppt"> Slides: </A>
+       Dynamic Programming and Parsers.
+       Dynamic programming.
+	   Memoization and lazy arrays.
+	   Parsing – String based.
+	   Parsing – Array based.
+      <LI> <A HREF="parsing.html"> Haskell code </A>.
+  </UL>
+
+
+<LI> March 4, 2003.
+  <UL> <LI> <A HREF="ErwigGraph/ErwigGraph.ppt"> Slides: </A>
+         Functional Graphs, a la Martin Erwig. King & Launchbury
+         Depth-Frist search algorithms.
+      <LI> <A HREF="ErwigGraph/Code.html"> Haskell code </A>.
+      <LI> <A HREF="ErwigGraph/Graph.hs"> Graph Module </A>.
+      <LI> <A HREF="ErwigGraph/Basic.hs"> Basic Module </A>.
+      <LI> <A HREF="DepthFirstSearch.html"> Launchbury & King DFS code </A>.
+  </UL>
+
+
+
+
+
+<LI> March 6, 2003.
+  <UL> <LI> <A HREF="ExtensibleRecords/ExRecLecture.ppt"> Slides: </A>
+       Extensible Records
+
+      <LI> <A HREF="ExtensibleRecords/ExRecCode.html"> Haskell code </A>.
+  </UL>
+
+
+
+<LI> March 11, 2003.
+  <UL> <LI> <A HREF="Staging/IntroMetaML.ppt"> Slides: </A>
+        Differences between ML and Haskell. Intro to MetaML.
+       <LI> <A HREF="Staging/MetaMLExamples.ppt"> Slides: </A>
+      MetaML Examples:
+	  Staged Pattern Matching,
+	  Staaged interpreter.
+	  MetaML extensions.
+      <LI> <A HREF="Staging/HaskellComparison.html"> Haskell code for Comparison </A>.
+      <LI> <A HREF="Staging/MLComparison.html"> ML code for Comparison </A>.
+      <LI> <A HREF="Staging/MLExtensionsIllustrated.html"> ML extensions illustrated </A>.
+  </UL>
+
+<LI> March 13, 2003.
+  <UL> <LI> <A HREF="CoAlgebras/CoAlgebras.ppt"> Slides: </A>
+        Algebraic and CoAlgebraic Programs.
+		F Algebras.
+		Initial and Final Algebras.
+        Induction and CoInduction.
+      <LI> <A HREF="CoAlgebras/Code.html"> Haskell code. </A>.
+  </UL>
+
+
+<!--
+<LI> February 13, 2003.
+  <UL> <LI> <A HREF="l10ConstrainedTypes.ppt"> Slides: </A>
+        Constrained types and type inference
+      <LI> <A HREF="l10code.html"> Haskell code </A>.
+  </UL>
+
+
+ -->
+<LI> Additional Lectures to be determined. Some suggestions follow:
+  <UL> <LI> Module Systems
+       <LI> Testing Functional Programs
+       <li> Incremental Computation
+       <li> Foreign Function interfaces
+       <li> Gui's and user interfaces (Fudgets, TCL-Haskell, Fran etc.)
+       <li> calculating time and space complexity of lazy programs.
+
+  </UL>
+</OL>
+
+<A HREF="../index.html"> Back</A> to CSE583 Home Page

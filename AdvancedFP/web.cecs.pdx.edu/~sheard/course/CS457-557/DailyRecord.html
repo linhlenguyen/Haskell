@@ -1,0 +1,446 @@
+October 14<title>  CS 457/557 - Functional Languages- Daily Record - Fall Term 2015 </title>
+
+
+<CENTER>
+<BIG> CS 457/557 - Functional Languages- Daily Record - Fall Term 2015</BIG>
+</CENTER>
+
+
+<P ALIGN=left>
+Instructor: <A HREF="http://cs.pdx.edu/~sheard"> Tim Sheard</A><BR>
+Office: <A HREF="DirecToMyOffice.html">FAB 120-04</A> <BR>
+phone: 503-725-2410 <BR>
+email: <img src="pdxemail.jpg"> <BR>
+office hours: TBA <BR>
+CRN 14766       CS 457 Functional Languages (4 cr)      (undergraduate) <BR>
+CRN 14767       CS 557 Functional Languages (3 cr)      (graduate) <BR>
+Time:   Monday Wednesday        16:30-18:30<BR>
+Room:  FAB 40-06
+ <BR>
+<p>
+
+<BR> The <A HREF="Haskell/HaskellLinks.html">Haskell programming resource page</A>.
+
+
+<P ALIGN=left><A HREF="syllabus.html">Syllabus</A>. A list of
+coures goals, and topics covered in the course.
+
+<P ALIGN=left><A HREF="syllabus.html#Texts">Text books</A>.
+A listing of pertinent information about the required textbooks and readings.
+
+<p>
+<HR ALIGN="center" WIDTH="100%">
+<B>Below this line, course schedules and assignments are tentative.</B>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<OL>
+
+
+<LI> <A NAME="Today"></A>
+<PRE>
+Monday <B>September 28</B>, 2015
+Due Today:
+Announcements:
+        I would like to acknowledge <A HREF="http://web.cecs.pdx.edu/~mpj/">Mark Jones</A> for help in preparing this course.
+        Many of the notes, slides, exercises, and example programs were developed
+        by Mark when we taught this class together in the Spring of 2009.
+Class Topic:
+        Background <A HREF="Doc/cs457quest.pdf">questionaire</A>
+        <A HREF="Notes/Startegies4LearningToProgram.pdf">Strategies</A> for learning to program.
+        <A HREF="Haskell/HaskellLinks.html">Haskell Resource page</A>
+        Introductory notes (<A HREF="Notes/01Into.pdf">4 up pdf</A>) (<A HREF="Notes/01Into1SlidePerPage.pdf">1 per page pdf</A>)
+                <A HREF="Notes/frac.lhs">Literate Haskell source code from slides</A>
+    Take a look at the <A HREF="http://cheatsheet.codeslower.com/CheatSheet.pdf">Haskell Cheat Sheet</A> by Justin Bailey.
+    Some <A HREF="Doc/HowToUseTheLabMachines.html">notes on using the machines in the lab</A>.
+    <A HREF="http://learnyouahaskell.com/">Learn You Haskell</A>
+Assigned today:
+        Get a working copy of the <A HREF="http://hackage.haskell.org/platform/">Haskell Platform</A> that you can use.
+                see the <A HREF="Notes/GettingStartedWithHaskell.pdf">notes</A> on getting started with Haskell
+                Due by class time Wednesday, September 30, 2015.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>September 30</B>, 2015
+Due Today:
+        A working copy of the <A HREF="http://hackage.haskell.org/platform/">Haskell Platform</A> on your machine due today.
+Announcements:
+        <STRONG>Bring your laptop to the lab</STRONG>. We will have an in class exercise today!
+        We will use D2L email to communicate in class.
+        How to <A HREF="Assign/HowToTurnInHomeWork.hs">turn in</A> assignments.
+        Suggested topics from questionaire:
+        	Monads, Higher order functions, internet interaction, graph algorithms, AI, comprehensions,
+        	parraellism, currying, DSL design, co-monads, FRP, category theory, theorem provers,
+        	recursion, polymorphism, monaoids.
+Class Topic:
+        <A HREF="http://planet.haskell.org/">Planet Haskell</A> is a compilation of blogs about Haskell.
+        Notes (<A HREF="Notes/UsingTypes.pptx">pptx</A>) (<A HREF="Notes/UsingTypes.pdf">pdf</A>) about types and Type classes as type predicates.
+                effect on error messages.
+        <A HREF="Notes/ProgrammingOutLoud1.hs">Programming outloud</A> the stringToInt function.
+                The <A HREF="Notes/ProgrammingOutLoudSol.hs">code</A> we wrote in class in 2011.
+                The <A HREF="Notes/ProgrammingOutLoudSol2015.hs">code</A> we wrote in class in spring 2015.
+                The <A HREF="Haskell/ProgrammingOutLoudFall2015.hs">code</A> we wrote today (Fall 2015).
+        Excell Tables
+                The Excell <A HREF="Lib/Excell.hs">library</A>
+                The Excell <A HREF="Haskell/Crib05.png">crib sheet</A>
+                The CSV <A HREF="Lib/CSV.hs">library</A> (needed for the Excell library)
+                  A <A HREF="Haskell/ExcellDemo.hs">demo file</A>.
+        In class exercises <A HREF="Haskell/Wk01NamingValues.hs">Naming values</A> and <A HREF="Haskell/Wk02UsingTypes.hs">Using types</A>.
+Assigned today:
+        <A HREF="Assign/Ex01Calendar.hs">Homework 1</A>, Create an Excel-like Calendar. Due Monday October 7, 2015.
+</PRE>
+
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Monday <B>October 5</B>, 2015
+Due Today:
+        The <A HREF="Assign/Ex01Calendar.hs">Excel Calendar</A> due today.
+Announcements:
+Class Topic:
+        Work through <A HREF="Haskell/Wk01NamingValues.hs">Naming values</A> and <A HREF="Haskell/Wk02UsingTypes.hs">Using types</A> as a class.
+        Compositional programming -- Large data from small programs
+                Comprehensions and lists <A HREF="http://web.cecs.pdx.edu/~sheard/course/CyberMil/Notes/Crib04.png">cribsheet</A>
+                The Excell library revisited
+                <A HREF="Haskell/Wk05Comprehensions.hs">Creating Lists</A> work sheet
+        Notes on creating functions (<A HREF="Notes/CreatingFunctions.pptx">pptx</A>) (<A HREF="Notes/CreatingFunctions.pdf">pdf</A>) in Haskell
+                The Haskell <A HREF="Notes/CreatingFunctions.hs">source code</A> from the notes.
+        Creating functions <A HREF="Haskell/Crib06.png">crib sheet</A>
+    In class exercise: Defining functions <A HREF="Exercise/Wk06CreatingFunctions.hs">worksheet</A>
+        See the <A HREF="Haskell/DesignRecipe.html">program design recipe</A>
+Assigned today:
+        <A HREF="Assign/Hw02.lhs">Homework 2</A>, writing simple functions. Due October 12.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 7</B>, 2015
+Due Today:
+Announcements:
+Class Topic:
+        <A HREF="Notes/FixingBrokenPrograms.pptx">Notes</A> on strategies for fixing broken programs
+                Fixing errors <A HREF="Exercise/FixingErrors.hs">worksheet</A>
+        <A HREF="Notes/ListAlgebraicData.pdf">Notes</A> on lists and algebraic data types.
+        In class exercise: <A HREF="Exercise/MatchingOnLists.hs">matching on lists worksheet</A>.
+                See the <A HREF="Haskell/RecursiveDesignRecipe.html">recursive function design recipe</A>
+        Example use of algebraic data types. <A HREF="Notes/Shapes.hs">Code for defining transformations and shapes</A>.
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>October 12</B>, 2015
+Due Today:
+        <A HREF="Assign/Hw02.lhs">Homework 2</A> is due today.
+Announcements:
+Class Topic:
+        Finding and using resources
+                The Haskell 98 <A HREF="http://www.haskell.org/onlinereport/">report</A>.
+                Justin Bailey's <A HREF="http://cheatsheet.codeslower.com/CheatSheet.pdf">Haskell Cheat Sheet</A>.
+                <A HREF="http://www.haskell.org/ghc/docs/latest/html/users_guide/index.html">GHC users guide</A> especially the pages on <A HREF="http://www.haskell.org/ghc/docs/latest/html/users_guide/ghci.html">using GHCI</A>.
+                GHC <A HREF="http://www.haskell.org/ghc/docs/latest/html/libraries/index.html">Standard Library Documentation</A>
+                To get a local copy, go to the <A HREF="http://haskell.org/haskellwiki/GHC">wiki</A>, and download one of the *.tar.bz2 files.
+                In-class exercise,  <A HREF="Exercise/UsingResources.html">using online documentation worksheet</A>.
+        The Hackage Package database <A HREF="http://hackage.haskell.org/packages/hackage.html">web page</A>..
+                Using Cabal to install a package from the Hackage Package database
+                        into the GHC system (<A HREF="Notes/Cabal.pptx">power point</A>) (<A HREF="Notes/Cabal.pdf">pdf</A>).
+                In class exercise, install haskore-vintage on your machine.
+        <A HREF="Notes/Trees.pptx">Notes</A> about Trees as Haskell datatypes (<A HREF="Notes/Trees.pdf">pdf</A>)
+                <A HREF="Notes/Trees.hs">Haskell Code</A> from the notes
+        In class exercise, <A HREF="Exercise/DefiningTrees.hs">The defining trees worksheet</A>.
+Assigned today:
+        <A HREF="Assign/Hw03.lhs">Homework 3</A>, binary numbers. Due October 19.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 14</B>, 2015
+Due Today:
+Announcements:
+Class Topic:
+        Creating bit mapped graphics. <A HREF="Notes/DemoPPM.hs">Code</A> discussed.
+                        Examples. <A HREF="Haskell/Pic/Fractal.jpg">jpg</A> format, <A HREF="Haskell/Pic/Fractal.ppm">ppm</A> format.
+                Download the <A HREF="Lib/Colour.hs">Colour library</A>
+                Download the <A HREF="Lib/PPM6.hs">PPM6 library</A>
+                A viewer that can display ppm files <A HREF="http://www.irfanview.net/">IrfanView</A> (for the <A HREF="http://irfanview2.software.informer.com/download-irfanview-mac/">Mac</A>?)
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>October 19</B>, 2015
+Due Today:
+        <A HREF="Assign/Hw03.lhs">Homework 3</A> due today.
+Announcements:
+Class Topic:
+        <A HREF="Notes/Folds.pdf">Notes</A> on folds.
+        Powerpoint Haskore <A HREF="Notes/HaskoreMusic.pptx">notes</A> (<A HREF="Notes/HaskoreMusic.pdf">pdf</A>).
+                Haskell source of <A HREF="Haskell/MusicNotes.hs">examples from notes</A>
+        Some <A HREF="Doc/SampleMusicCode.html">sample music</A>.
+        Get the <A HREF="http://hackage.haskell.org/cgi-bin/hackage-scripts/package/haskore-vintage-0.1">haskore-vintage</A> (version 0.3) package from Hackage.
+                    Install it with Cabal. You may have to do "cabal update" to see version 0.3
+                        <A HREF="Notes/Cabal.pptx">How to install a Hackage package using Cabal</A>
+                    (for users of the Haskell platform) (<A HREF="Notes/Cabal.pdf">pdf</A>).
+        Get the <A HREF="Lib/Music.hs">music library</A>, save in your programming work space.
+        <A HREF="http://timidity.sourceforge.net/#download">Timidity</A> a linux midi player
+        <A HREF="Notes/HaskoreLecture.lhs">Haskore Lecture of Iavor Diatchki</A>.
+        In class exercise, <A HREF="Exercise/MusicWorksheet.html">Creating music worksheet</A>.
+        A <A HREF="Notes/FrereJacques.hs">familiar round</A> ... <A HREF="Notes/frereJacques.mid">listen</A> to it.
+Assigned today:
+        <A HREF="Assign/Hw04.html">Homework 4</A>, do something creative, make a graphics picture, or create music. Due October 26.</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 21</B>, 2015
+Due Today:
+Announcements:
+        Mid term exam tentatively set for Weednesday Nov.4, 2015.
+Class Topic:
+        <A HREF="Notes/NotesOnTesting.pdf">Notes</A> on testing in Haskell
+                HUnit <A HREF="http://www.haskell.org/haskellwiki/HUnit_1.0_User%27s_Guide">users guide</A>
+                The <A HREF="http://hunit.sourceforge.net/HUnit-1.0/Guide.html">HUnit users guide</A> on sourceforge.
+                Quickcheck <A HREF="https://hackage.haskell.org/package/QuickCheck">homepage</A> and Haskell wiki <A HREF="http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck">page</A>.
+        Using HUnit to develop programs. An <A HREF="Notes/HUnitDemo.hs">example</A>. (In class we produced <A HREF="Notes/HUnitDemoResult.html">this</A>.)
+                A small <A HREF="Haskell/CombineHUnitQuickCheck.hs">program</A> combining QuickCheck and HUnit.
+        In class <A HREF="Exercise/HUnitQuickCheckTesting.html">exercise</A> using HUnit and QuickCheck.
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>October 26</B>, 2015
+Due Today:
+        <A HREF="Assign/Hw04.html">Homework 4</A> due today.
+Announcements:
+Class Topic:
+        Students discuss their Homework 4 artifacts.
+        <A HREF="Notes/EquationalReasoning.pdf">Reasoning</A> about programs in Haskell. (<A HREF="Notes/EquationalReasoning-6up.pdf">6 up format</A>)
+        In class exercise: <A HREF="Exercise/LawsWorksheet.txt">Laws worksheet</A>.
+        Notes on <A HREF="Notes/Induction.html">proofs by induction</A>
+Assigned today:
+        <A HREF="Assign/Hw05.html">Home work 5</A>: proving things about programs. Due Monday, November 2, 2015.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 28</B>, 2015
+Due Today:
+Announcements:
+        Mid term exam set for 1 week from today!
+Class Topic:
+        <A HREF="Notes/TypeClassesUsingTrees.pdf">Notes</A> on Type Classes, motivated by a discussion about Trees. (<A HREF="Notes/TypeClassesUsingTrees-6up.pdf">6-up</A> for printing).
+                Code from the notes. On <A HREF="Notes/treedot1.lhs">trees</A>, On <A HREF="Notes/treedot2.lhs">type classes</A>.
+        More information about <A HREF="http://www.graphviz.org/">graphviz</A>.
+        In <A HREF="Exercise/UsingDotToDrawTrees.html">class exercise</A> - Using Graphviz to draw trees.
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>November 2</B>, 2015
+Due Today:
+        <A HREF="Assign/Hw05.html">Home work 5</A>: proving things about programs due today, uploaded to <A HREF="https://d2l.pdx.edu">D2L</A>.
+Announcements:
+        Midterm exam next class meeting!
+Class Topic:
+        <A HREF="Notes/WhatsOnTheExam.html">What might be on the exam</A>?
+        <A HREF="Doc/SampleMidtermQuestions.txt">Sample</A> midterm questions
+        <A HREF="Notes/PuttingLazinessToWork.pptx">Notes</A> on putting laziness to work (<A HREF="Notes/PuttingLazinessToWork.pdf">pdf</A>)
+                Haskell <A HREF="Notes/LazyDemos.hs">Code</A> for Lazy demos
+                <A HREF="Notes/DepthFirstSearch.hs">Code</A> for Depth First Search
+        An extended example: A simple tree editor. <A HREF="Notes/SimpleTreeEditor.pdf">notes</A>,  <A HREF="Notes/treeEdit.lhs">haskell code</A>
+Assigned today:
+        Final Project <A HREF="Assign/FinalProjectDescription.html">proposals</A> are due Monday, November 9, 2015.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>November 4</B>, 2015
+Due Today:
+Announcements:
+        Mid Term Exam Today
+Class Topic:
+        How to write a proposal plan
+        In-class <A HREF="Exercise/LazyWorksheet.html">exercise</A> on laziness.
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>November 9</B>, 2015
+Due Today:
+        Final Project <A HREF="Assign/FinalProjectDescription.html">proposals</A> are due today. Hand them in in class!
+Announcements:
+Class Topic:
+        Go over exam. Exam <A HREF="notes/MidtermStat2015.png"><IMG SRC="" ALT="" BORDER=0>statistics</A>.
+        <A HREF="Notes/Laziness.pdf">Slides</A> about Leveraging laziness, also available in <A HREF="Notes/Laziness-6up.pdf">6-up</A> for printing.
+        <A HREF="http://www.cse.chalmers.se/~rjmh/Papers/whyfp.html">Why Functional programming Matters</A>, a paper about the power of laziness.
+        KnotWorksheet.lhs: Some <A HREF="Exercise/KnotWorksheet.lhs">exercises</A> in knot tying
+        <A HREF="Notes/IOActions.pdf">Slides</A> about IO Actions, also available in <A HREF="Notes/IOActions-6up.pdf">6-up</A> for printing.
+                <A HREF="Lib/IOActions.hs">IOActions.hs</A>
+                <A HREF="Lib/WebActions.hs">Webactions.hs</A>
+                <A HREF="Lib/Treedot.lhs">Treedot.lhs</A>
+        In class <A HREF="Exercise/IOExercises.hs">exercise</A> on using IO actions.
+		Discuss this weeks homework.
+Assigned today:
+        <A HREF="Assign/Hw06.lhs">Homework 6</A>, finite types. Due, Monday. November 16, 2015.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>November 11</B>, 2015
+Due Today:
+Announcements:
+	No Class Veterans Day
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>November 16</B>, 2015
+Due Today:
+        <A HREF="Assign/Hw06.lhs">Homework 6</A>, finite types. Due today.
+Announcements:
+        A copy of IO Action examples we <A HREF="Haskell/IOActionExamples2.hs">created in class</A>.
+        Another version of the same thing <A HREF="Exercise/IOExercisesSolvedInClass.hs">created in another class</A>, compare them!
+Class Topic:
+        Feedback on Final Project Proposals returned.
+        Continue discussion of <A HREF="Notes/IOActions.pdf">slides</A> about IO Actions.
+        <A HREF="Notes/DefiningParsers.hs">Simple Parsers</A> as Monads.
+        In class <A HREF="Exercise/IOExercisesUsingDo.hs">exercise</A> . Using the do notation.
+        Some papers on Monadic IO.
+                <A HREF="http://research.microsoft.com/en-us/um/people/simonpj/papers/marktoberdorf/mark.pdf">Tackling the Awkward Squad</A>. Simon Peyton Jones, 2005.
+                <A HREF="http://portal.acm.org/citation.cfm?id=158524">Imperative Functional Programming</A>. Simon Peyton Jones and Philip Wadler, POPL 1993.
+Assigned today:
+        No more weekly homeworks. Work on project.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>November 18</B>, 2015
+Due Today:
+Announcements:
+Class Topic:
+        <A HREF="Notes/Monads.pptx">Notes</A> about more on monads.
+        A simple reader library <A HREF="Lib/CSVReader.hs">CSVReader.hs</A>.
+        A reader library with line and col information <A HREF="Lib/CSVReader2.hs">CSVReader2.hs</A>.
+        A third try at a reader with a simpler interface <A HREF="Lib/CSVReader3.hs">CSVReader3.hs</A>.
+        The <A HREF="Lib/Excell.hs">Excell.hs</A> Library
+        The <A HREF="Lib/CSV.hs">CSV.hs</A> Library (comma separated values)
+        In class <A HREF="Exercise/ExcelReader.hs">exercise</A>. Write a program to import an Excell table
+                Get the excell table <A HREF="Haskell/DemoMajors.csv">DemoMajors.csv</A> to practice on.
+Assigned today:
+        Work on project.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>November 23</B>, 2015
+Due Today:
+Announcements:
+Class Topic:
+        Discussion about the <A HREF="Exercise/ExcelReaderWork.hs">exercise</A> on monadic Readers for Excell.
+        <A HREF="Notes/l06Monads&Interp.ppt">Notes</A> on monads and interpreters.
+        The haskell <A HREF="Notes/l06code.hs">code</A> with the examples
+        An in class <A HREF="Exercise/MonadInterpWorksheet.hs">exercise</A>. A language with mutable variables.
+        Discussion about the <A HREF="Assign/FormatFinalProject.pdf">format of the final project</A>
+Assigned today:
+        Work on project.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>November 25</B>, 2015
+Due Today:
+Announcements:
+Class Topic:
+	Thanksgiving Break
+Assigned today:
+        Work on project.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Monday <B>November 30</B>, 2015
+Due Today:
+Announcements:
+Class Topic:
+	Discussion of oral presentations starting on Wednesday..
+        Discussion about the <A HREF="Exercise/MonadInterpWorksheetDiscussion.hs">exercise</A> on a language with mutable variables.
+        <A HREF="Notes/GrabBag.pptx">Notes</A> on higher order type constuctors and classes, Files, IOerrors, and Arrays.
+        <A HREF="Notes/GrabBag.hs">Code</A> to go with notes.
+Assigned today:
+        Work on project.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Wednesday <B>December 2</B>, 2015
+Due Today:
+        <A HREF="Assign/FinalProjectDescription.html">Final project</A> <A HREF="Assign/FormatFinalProject.pdf">reports</A> are due today in D2L before class.
+Readings:
+Class Topic:
+	Oral presentations of final projects start today, and
+	continue Monday December 7, 2015, and Wednesday Dec 9 2015. See schedule below.
+	<A HREF="Notes/FinalProjectSignupSheet.html">Schedule</A>.
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Monday <B>December 7</B>, 2015
+Due Today:
+	<A HREF="Assign/FinalProjectDescription.html">Final project</A> <A HREF="Assign/FormatFinalProject.pdf">reports</A> are due today in D2L at 5:00 PM
+	     regardless of the day of your presentation.
+
+Final Exam period 5:30-7:20 PM. This is not our normal class time!.
+See <A HREF="https://www.pdx.edu/registration/final-exams-fall-2015#/?section=eveningclassesmeetingbetween1640and1759">PSU Fall final exam schedule</A>.
+We will use this time for Group 2 presentations.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wenesday <B>December 9</B>, 2015
+Group 3 presentations, room TBA.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+
+
+
+
+
+
+</OL>
+

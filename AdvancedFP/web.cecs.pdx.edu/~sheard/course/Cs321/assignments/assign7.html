@@ -1,0 +1,46 @@
+<PRE>
+CS321 Prog Lang & Compilers                   Assignment # 6
+Assigned: Feb. 5, 2007               Due: Wed. Feb. 14, 2007
+
+Cut and paste the following into your solution file.
+==================================================================
+
+datatype RE
+  = Empty
+  | Union of RE * RE
+  | Concat of RE * RE
+  | Star of RE
+  | C of char;
+
+================================================================
+
+The purpose of today's home work is to write functions analogous
+to "first" and "follow" for context free grammars from todays
+lecture. There are two differences, The functions you will write
+for homework are for regular expressions, not context free
+grammars, and since REs don't have non-terminal and terminal
+symbols, the functions are for a complete RE rather than a
+symbol.
+
+Write 3 ML functions
+
+1) Write   (nullable: RE -> boolean) Returns a boolean, true if
+the empty string is a member of the set of strings recognized by
+the RE, false otherwise.
+
+2) Write  (first: RE -> char list) Returns a (char list) which
+contains those characters which may appear as the first
+character in the strings recognized by that RE.
+
+3) Write  (last: RE -> char list). Returns a char list which
+contains those characters which may appear as the last character
+in the strings recognized by that RE.
+
+All these functions a simple functions defined with pattern matching.
+One clause for each constructor of RE.
+
+</Pre>
+
+<HR ALIGN="center" WIDTH="100%">
+<A HREF="index.html"> Back</A> to CS 321, Languages and Compiler Design, Assignment Page
+

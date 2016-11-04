@@ -1,0 +1,64 @@
+*Main> trace
+
+Tracing is on.
+*Main> interp "count.e2"
+Expression:
+(block (:= n 1)
+       (while (<= n 2) (block (write n) (:= n (+ n 1)) ))
+       )
+Compiles to:
+[Const 1, Dup, Store n, Pop, Label 0:, Const 2, Load n, Swap, Leq,
+ Branchz 1, Load n, Dup, Print, Pop, Const 1, Load n, Plus, Dup,
+ Store n, Pop, Branch 0, Label 1:, Const 0]
+Executing:
+
+*Const 1 with stack   with Env
+*Dup with stack 1  with Env
+*Store n with stack 1, 1  with Env
+*Pop with stack 1  with Env n=1
+*Label 0: with stack   with Env n=1
+*Const 2 with stack   with Env n=1
+*Load n with stack 2  with Env n=1
+*Swap with stack 1, 2  with Env n=1
+*Leq with stack 2, 1  with Env n=1
+*Branchz 1 with stack 1  with Env n=1
+*Load n with stack   with Env n=1
+*Dup with stack 1  with Env n=1
+*Print with stack 1, 1  with Env n=1
+1
+*Pop with stack 1  with Env n=1
+*Const 1 with stack   with Env n=1
+*Load n with stack 1  with Env n=1
+*Plus with stack 1, 1  with Env n=1
+*Dup with stack 2  with Env n=1
+*Store n with stack 2, 2  with Env n=1
+*Pop with stack 2  with Env n=2
+*Branch 0 with stack   with Env n=2
+*Label 0: with stack   with Env n=2
+*Const 2 with stack   with Env n=2
+*Load n with stack 2  with Env n=2
+*Swap with stack 2, 2  with Env n=2
+*Leq with stack 2, 2  with Env n=2
+*Branchz 1 with stack 1  with Env n=2
+*Load n with stack   with Env n=2
+*Dup with stack 2  with Env n=2
+*Print with stack 2, 2  with Env n=2
+2
+*Pop with stack 2  with Env n=2
+*Const 1 with stack   with Env n=2
+*Load n with stack 1  with Env n=2
+*Plus with stack 2, 1  with Env n=2
+*Dup with stack 3  with Env n=2
+*Store n with stack 3, 3  with Env n=2
+*Pop with stack 3  with Env n=3
+*Branch 0 with stack   with Env n=3
+*Label 0: with stack   with Env n=3
+*Const 2 with stack   with Env n=3
+*Load n with stack 2  with Env n=3
+*Swap with stack 3, 2  with Env n=3
+*Leq with stack 2, 3  with Env n=3
+*Branchz 1 with stack 0  with Env n=3
+*Label 1: with stack   with Env n=3
+*Const 0 with stack   with Env n=3
+
+Evaluates to: 0

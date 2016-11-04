@@ -1,0 +1,124 @@
+-- <PRE>
+
+import Shape
+
+-- Sets as Characteristic functions
+
+type Set a = a -> Bool
+
+even2 :: Int -> Bool
+even2 x = (x `mod` 2) == 0
+
+x `union2` y = \ z -> x z || y z
+
+x `intersect2` y = \ z -> x z && y z
+
+complement2 x = \ z -> not (x z)
+
+
+
+-- A Region is either:
+data Region =
+   Shape Shape               -- primitive shape
+ | Translate Vector Region   -- translated region
+ | Scale     Vector Region   -- scaled region
+ | Complement Region         -- inverse of region
+ | Region `Union` Region     -- union of regions
+ | Region `Intersect` Region -- intersection of regions
+ | Empty
+       deriving Show
+
+type Vector = (Float, Float)
+type Ray = (Vector,Vector)
+
+
+isLeftOf :: Vertex -> Ray -> Bool
+(px,py) `isLeftOf` ((ax,ay),(bx,by))
+       = let (s,t) = (px-ax, py-ay)
+             (u,v) = (px-bx, py-by)
+         in  s*v >= t*u
+
+
+
+containsS :: Shape -> Vertex -> Bool
+(Rectangle s1 s2) `containsS` (x,y)
+   = let t1 = s1/2
+         t2 = s2/2
+     in -t1<=x && x<=t1 && -t2<=y && y<=t2
+(Ellipse r1 r2) `containsS` (x,y)
+   = (x/r1)^2 + (y/r2)^2 <= 1
+(Polygon pts) `containsS` p
+   = let shiftpts = tail pts ++ [head pts]
+         leftOfList =
+            map isLeftOfp(zip pts shiftpts)
+         isLeftOfp p' = isLeftOf p p'
+     in foldr (&&) True leftOfList
+(RtTriangle s1 s2) `containsS` p
+   = (Polygon [(0,0),(s1,0),(0,s2)]) `containsS` p
+
+
+
+containsR :: Region -> Vertex -> Bool
+(Shape s)           `containsR` p       =
+   s `containsS` p
+(Translate (u,v) r) `containsR` (x,y)   =
+   r `containsR` (x-u,y-v)
+(Scale (u,v) r)     `containsR` (x,y)   =
+   r `containsR` (x/u,y/v)
+(Complement r)      `containsR` p       =
+   not (r `containsR` p)
+(r1 `Union` r2)     `containsR`   p     =
+   r1 `containsR` p || r2 `containsR` p
+(r1 `Intersect` r2) `containsR`   p     =
+   r1 `containsR` p && r2 `containsR` p
+Empty               `containsR`   p     = False
+
+
+--- More on  Higher Order Functions
+
+simple :: Float -> Float -> Float -> Float
+simple n a b = n * (a+b)
+
+multSumByFiveA a b = simple 5 a b
+multSumByFiveB = simple 5
+
+
+listSum1, listProd1 :: [Integer] -> Integer
+listSum1  xs        = foldr (+) 0 xs
+listProd1 xs        = foldr (*) 1 xs
+
+listSum2, listProd2 :: [Integer] -> Integer
+listSum2            = foldr (+) 0
+listProd2           = foldr (*) 1
+
+and1, or1 :: [Bool] -> Bool
+and1 xs   = foldr (&&) True  xs
+or1  xs   = foldr (||) False xs
+
+and2, or2 :: [Bool] -> Bool
+and2      = foldr (&&) True
+or2       = foldr (||) False
+
+
+
+reverse1 xs = foldl revOp [] xs
+  where revOp acc x = x : acc
+
+revOp1 acc x = flip (:) acc x
+revOp2 = flip (:)
+
+reverse2 xs = foldl (flip (:)) [] xs
+reverse3 = foldl (flip (:)) []
+
+squareArea (x,y) = x * y
+sumList = listSum1
+
+totalSquareArea1 sides
+  = sumList (map squareArea sides)
+
+totalSquareArea2 sides
+  = (sumList . (map squareArea)) sides
+
+totalSquareArea3 = sumList . map squareArea
+
+-- </PRE>

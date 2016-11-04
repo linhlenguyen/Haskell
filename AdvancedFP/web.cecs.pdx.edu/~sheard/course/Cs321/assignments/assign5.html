@@ -1,0 +1,40 @@
+<PRE>
+CS321 Prog Lang & Compilers                  Assignment # 5
+Assigned: Jan 29, 2007               Due: Wed. Jan 31, 2007
+
+======================================================================
+1) Your job is to write a function that interprets regular expressions
+as a set of strings.
+
+- reToSetOfString;
+val it = fn : RE -> string list
+
+To do this you will need the definition of regular expressions (the
+datatype RE) and the functions that implemenent sets of strings as
+lists of strings without duplicates. Tou will also need the "cross"
+operator from lecture 4. All these functionas can be found in the file
+"assign5Prelude.html" which can be downloaded from the assignments page
+of the course website. The first line of your solution should include
+this file by using
+
+use "assign5Prelude.html";
+
+"reToSetOfString" is fairly easy to write (use pattern matching),
+except some regular expressions represent an infinite set of strings.
+These come from use of the Star operator. To avoid this we will write a
+function that computes an approximate set of strings. Star will produce
+0,1,2, and 3 repetitions only. For example:
+
+reToSetOfString (Concat (C #"a",Star (C #"b"))) ---> ["abbb","abb","ab","a"]
+
+BONUS 10 points. Write a version reToN which given an interger n
+creates exactly 0,1, ... n  repetitions exactly.
+
+reToN 2 (Concat (C #"a",Star (C #"b"))) ---> ["abb","ab","a"]
+reToN 4 (Concat (C #"a",Star (C #"b"))) ---> ["abbbb","abbb","abb","ab","a"]
+
+
+</PRE>
+
+<HR ALIGN="center" WIDTH="100%">
+<A HREF="index.html"> Back</A> to CS 321, Languages and Compiler Design, Assignment Page

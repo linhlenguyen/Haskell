@@ -1,0 +1,337 @@
+<title> CSE536 Functional Programming, Lecture Notes </title>
+
+<CENTER>
+<BIG>CSE536 Functional Programming, Lecture Notes</BIG>
+</CENTER>
+
+<P ALIGN=left>
+The following are powerpoint slides (and associated code) from the lectures.
+All lectures are listed. The slides will be become available the day of the
+lecture.
+
+<OL>
+ <LI> September 27, 2004
+      <UL>
+          <LI> <A HREF="S01IntroHugs.ppt"> Slides: </A>
+               Course information, Intro to Hugs, Syllabus
+          <LI> <A HREF="lect01.html"> Haskell Code: </A>
+               hd,tl,plus,len,sort, etc.
+      </UL>
+
+
+ <LI> September, 29, 2004.
+      <UL>
+        <LI> <A HREF="S02IntroHugs2.ppt"> Slides: </A>
+             tuples, polymorphism, higher order functions, strings & characters, lazy evaluation
+        <LI> <A HREF="lect02.html"> Haskell Code: </A>
+             mymap, myfoldr, split, next, within, etc.
+        <LI> <A HREF="S02.5SimpleEx.ppt">Additional examples not covered in lecture</A>
+      </UL>
+
+
+ <LI> October 4, 2004.
+      <UL>
+        <LI> <A HREF="S03Shape.ppt"> Slides: </A>
+              Usefull pre-defined functions on lists.
+              Data-Type declarations,
+              Defining functions over datatypes using patterns,
+              Enumerations,
+              and the Shape Datatype of the text.
+               This lecture defines the
+                            <A HREF="Shape.hs"> module Shape </A>
+
+        <LI> <A HREF="lect03.html"> Haskell Code: </A>
+             Day, valday, dayval, Move, beats, Direction,
+             Tagger, isNum, Temp, toKelvin, Shape, circle, square, area, triArea, distBetween etc.
+      </UL>
+
+
+<LI> October 6, 2004.
+      <UL>
+        <LI> <A HREF="S04ProofModuleGrapics.ppt"> Slides: </A>
+              Homework #1 Solutions,
+              Program Manipulation,
+              Comparing the functional paradigm,
+              Actions and Haskell,
+              Monads,
+              Simple Graphics.
+
+        <LI> <A HREF="lect04a.html"> Homework #1 examples </A>
+        <LI> <A HREF="lect04.html"> Haskell Code: </A>
+              strlen, fact, ncopies, power, str2int, explist, Bintree, leftmost, replace, replace', ex2,
+              getline', wc, ex7, spaceclose,
+              etc.
+      </UL>
+
+
+<LI> October 11, 2004
+      <UL>
+        <LI> <A HREF="S05DrawingShapes.ppt"> Slides: </A>
+              Using the graphics primitives,
+              Drawing Primitive Shapes,
+              Sierpinski’s Triangle,
+              Snow-flake,
+              Coordinate Systems,
+              Position independent shapes,
+              Drawing the Shape Data-type.
+              This lecture defines the
+                            <A HREF="Draw.hs"> module Draw </A>
+
+
+        <LI> <A HREF="lect05.html"> Haskell Code: </A>
+              fillTri, sierpinskiTri,drawPloy,eqTri,drawStar,
+              snow1,snow2,snow3,sh1,sh2,sh3,sh4,ColoredShapes,
+              drawShapes etc.
+
+      </UL>
+
+
+<LI> October 13, 2004
+      <UL>
+        <LI> <A HREF="S06PolyHOfunPerim.ppt"> Slides: </A>
+              Polymorphic Functions,
+              Polymorphic datatypes,
+              Type Constructors define polymorphic Constructor functions,
+              Recursive datatypes,
+              Higher Order functions,
+              Perimeters of Shapes.
+
+        <LI> <A HREF="lect06.html"> Haskell Code: </A>
+               len,tag1,Option,pos,Pair,Pair2,Mylist,Twolist,append2,rev2,Nat,twoNat,
+               mymap,myfoldr,applyTwice.,z,concat1
+               concat2,perimeter,sides, side2, nextEl.
+
+
+      </UL>
+
+
+<LI> October 18, 2004
+      <UL>
+        <LI> <A HREF="S07Trees.ppt"> Slides: </A>
+              Trees,
+              Kinds of trees - branching factor,
+              functions over trees,
+              flattening a tree -- use of accumulating parameter,
+              patterns of recursion - the fold for trees,
+              Arithmetic expressions,
+              Infinite trees.
+        <LI> <A HREF="lect07.html"> Haskell Code: </A>  Tree, IntegerTree, SimpleTree, InternalTree, FancyTree, mapTree, fringe, treeSize, treeHeight, foldTreee, Expr2, Expr, evaluate, sumFromN, sumAll, add1, sumAll2,
+        showE, Region.
+
+
+      </UL>
+
+
+
+<LI> October 20, 2004
+      <UL>
+        <LI> <A HREF="S08Region.ppt"> Slides: </A>
+        Sets and characteristic functions,
+        Regions,
+        Is a point in a Region?,
+        Currying,
+        Sections,
+        Anonymous functions,
+        function composition.
+        This lecture defines the
+                            <A HREF="Region.hs"> module Region </A>
+
+
+        <LI> <A HREF="lect08.html"> Haskell Code: </A>
+           Set, even, union, intersect, complement.
+           Region, Vector, Ray, isLeftOf, containsS,
+           containsR, simple, totalSquareArea.
+
+      </UL>
+
+
+
+<LI> October 25, 2004 -- <STRONG>Guest Lecture by Tom Harke.</STRONG>
+      <UL>
+        <LI> <A HREF="S10ProofInd.ppt"> Slides: </A>
+        Review of Proofs by calculation,
+         Structure of Proofs by induction over lists,
+        Proofs by induction with case analysis,
+        Proofs by structural Induction,
+        Proofs by induction over Trees.
+
+        <LI> There is no Haskell Code associted with this
+        lecture, but there are additional sildes on using
+        proof by induction to prove things about programs
+        <A HREF="S11CalcToImprove.ppt"> here: </A>
+        Using Calculation to prove 2 functions are equal,
+        An example from class drawPic,
+        Laws about Monads,
+        Laws about sequence,
+        Using Calculation to improve functions,
+        An example from the first Homework assignment.
+      </UL>
+
+
+<LI> <STRONG>Special Friday Lecture.</STRONG> October 29, 2004
+      <UL>
+        <LI> <A HREF="S09DrawRegion.ppt"> Slides: </A>
+        Pictures,
+         Low level graphics bit-maps: G.Region,
+         From Region to G.Region,
+        Shape to G.Region,
+        Drawing G.Region,
+        Reactive Pictures.
+        This lecture defines the
+                            <A HREF="Picture.hs"> module Picture </A>
+
+
+
+        <LI> <A HREF="lect09.html"> Haskell Code: </A>
+        Picture, regionToGRegion,shapeToGRegion,
+        drawRegionInWindow,drawPic,draw,spaceClose
+
+
+      </UL>
+
+
+
+<LI> November 1, 2004. <STRONG>Guest Lecture by Tom Harke.</STRONG>
+      <UL>
+        <LI> <A HREF="S12QualTypesAndClass.ppt"> Slides: </A>
+        The Haskell Class system,
+        Instance declarations,
+        Inheritance and dependent classes,
+        Derived instances,
+        The Show class,
+        The Fix operator from homework #5.
+
+        <LI> <A HREF="lect12.html"> Haskell Code: </A>
+        Eq,Aop,Aexp,aop_eq,aexp_eq.
+        Complex, complex_add, complex_sub, complex_mult.
+        Num, Ord, Tree, Mylist, int_list_eq, list_eq.
+        Bush, Show, showTree, showsTree, showsList.
+        Color, Exp, member, fix.
+      </UL>
+
+<LI> November 3, 2004.  <STRONG>Midterm Exam.</STRONG> Open Book.
+
+
+<LI> November 8, 2004
+      <UL>
+        <LI> <A HREF="S13SimpleAnim.ppt"> Slides: </A>
+        Simple animations,
+        Buffered graphics,
+        Animations in Haskell,
+        Complex animations,
+        Lifting  primitives to animations,
+        Behaviors,
+        Type classes animations and Behaviors,
+        Time translation.
+        <LI> <A HREF="lect13.html"> Haskell Code: </A>
+         Animation, Time,rubberBall,revolvingBall, Planets,
+         animate,regionToGraphic,picToGraphic. Behavior, lift0,
+         lift1, lift2. Instance defintions for Behavior(Num,Fractional,Floating). Class Ani with methods "empty" and "over". Instances for Ani([ ],
+         (->), Picture,Behavior). timeTrans, ifFun, cond, animate2. Class Turnable, rotate, kaleido, spectrum.
+         This lecture defines the <A HREF="Animation.hs"> module Animation.</A>
+      </UL>
+
+
+
+<LI> November 10, 2004
+      <UL>
+        <LI> <A HREF="S14Streams.ppt"> Slides: </A>
+         Infinite lists v.s. Streams,
+         Normal order evaluation,
+         Recursive streams,
+         Stream Diagrams,
+         Lazy patterns,
+         Memoization,
+         Inductive properties of infinite lists.
+        <LI> <A HREF="lect14.html"> Haskell Code: </A>
+          Stream, twos, ignore, fibA, fibs, counter, ifx, followedby,
+          Response, Request, client, server, reqs, resps, fibsFn, memo1.
+          The memo function memo1 can be found in the <A HREF="../lib/Memo.lhs"> memo library.</A>
+      </UL>
+
+
+<LI> November 15, 2004
+      <UL>
+        <LI> <A HREF="S15ReactAnim.ppt"> Slides: </A>
+          Simple Animations - Review.
+          Reactive animations.
+          Vocabulary.
+           Examples.
+           Implementation of  behaviors and events.
+
+        <LI> <A HREF="lect15.html"> Haskell Code: </A>
+            This lecture defines the
+           <A HREF="Fal.hs"> module Fal.</A>
+      </UL>
+
+
+<LI> November 29, 2004
+      <UL>
+        <LI> <A HREF="S16CommWorld.ppt"> Slides: </A>
+          Files, Channels, and Handles.
+          IO exception handling.
+          First Class Channels.
+          Concurrency and ForkIO.
+
+        <LI> <A HREF="lect16.html"> Haskell Code: </A>
+
+      </UL>
+
+
+<LI> December 1, 2004. lecture 17
+      <UL>
+        <LI> <A HREF="S18HigherOrderTypes.ppt"> Slides: </A>
+          Higher Order types.
+          Type constructors that take types as arguments.
+          Functor,
+          Monad,
+          MonadPlus and MonadZero.
+
+        <LI> <A HREF="lect18.html"> Haskell Code: </A>
+
+      </UL>
+
+
+<LI> Dec 1 & 6,  2004, Lecture 18
+      <UL>
+        <LI> <A HREF="S19Music.ppt"> Slides: </A>
+          Haskore System.
+          The Music datatype.
+          MIDI Instruments.
+          Pitch & absolute Pitch.
+          Composing Music:
+          Delay,
+          Repeating,
+          Transposing.
+          Manipulating Music:
+          Duration,
+          Cutting,
+          Reversing.
+          Percussion.
+          Presentation and the MIDI file format.
+        <LI> <A HREF="lect19.html"> Haskell Code: </A>
+        <LI> <A HREF="Music.hs"> The Music Module.</a>
+      </UL>
+
+
+<LI> Dec 6,  2004. Lecture 19
+      <UL>
+        <LI> <A HREF="s20InterpMusic.ppt"> Slides: </A>
+        Interpreting Music,
+        Performance,
+        MidiFile.
+
+        <LI> <A HREF="lect20.html"> Haskell Code: </A>
+      </UL>
+<!--
+
+<LI> Dec 11,  2004
+   <UL>
+    <LI> Final Exam
+   </UL>
+ -->
+<HR ALIGN=center WIDTH="100%">
+
+
+
+<A HREF="../index.html"> Back</A> to CSE536 Home Page
