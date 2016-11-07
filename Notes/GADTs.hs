@@ -30,7 +30,7 @@ eval' (Mul _ (B b) = Nothing
 eval' (Mul e1 e2) = eval e1 * eval e2 --Have to write + and * extention on Maybe
 
 --GADTs
-data Expr'' where
+data Expr a where
 	I :: Int -> Expr Int
 	B :: Bool -> Expr Bool
 	Add :: Expr Int -> Expr Int -> Expr Int
