@@ -9,3 +9,4 @@ Learning Haskell notes and test codes
   * [Existential types](https://wiki.haskell.org/Existential_type)
   * [ST Monad](https://en.wikibooks.org/wiki/Haskell/Existentially_quantified_types)
   * [Advanced Haskell](http://web.cecs.pdx.edu/~sheard/course/AdvancedFP/)
+  * http://www.vex.net/~trebla/haskell/index.xhtml
