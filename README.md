@@ -1,6 +1,6 @@
 # Haskell
 ![Cover](https://github.com/linhlenguyen/Haskell/blob/master/images/cover.jpg)
-Learning Haskell notes and test codes
+Learning Haskell notes and exercises
 ---
 ## Useful links
   * [State Monad - tutorial for the confused](http://brandon.si/code/the-state-monad-a-tutorial-for-the-confused/)
@@ -9,4 +9,6 @@ Learning Haskell notes and test codes
   * [Existential types](https://wiki.haskell.org/Existential_type)
   * [ST Monad](https://en.wikibooks.org/wiki/Haskell/Existentially_quantified_types)
   * [Advanced Haskell](http://web.cecs.pdx.edu/~sheard/course/AdvancedFP/)
-  * http://www.vex.net/~trebla/haskell/index.xhtml
+  * [Haskell Notes And Examples - Albert Y. C. Lai](http://www.vex.net/~trebla/haskell/index.xhtml)
+  * [Monad notes](http://homepages.inf.ed.ac.uk/wadler/topics/monads.html#marktoberdorf)
+  

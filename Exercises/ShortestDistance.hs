@@ -22,10 +22,14 @@ where
     where foldf :: (Int,[(String, [Int])]) -> String -> (Int,[(String, [Int])])
           foldf (index, ls) = undefined
 
+  --m a -> (a -> m b) -> m b
   --brute force
   shortestDistance :: [Int] -> [Int] -> Int
   shortestDistance xs ys = let fs = (map (\x -> (subtract x)) xs)
     in minimum $ concatMap (\y -> map (\f -> abs $ f y) fs) ys
+
+  sD :: [Int] -> [Int] -> Int
+  sD xs ys = xs map to list of differences
 
   --reduceLists :: ([Int],[Int]) -> ([Int],[Int])
   --reduceLists (xs,ys) =
