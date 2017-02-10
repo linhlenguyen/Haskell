@@ -71,42 +71,33 @@ instance of a well-known problem, but I didn't catch the name of it.
 -}
 
 type SessionId = Int
-type NormalizedQuery = String
+type NormalizedQuery = Char
 type ProductId = Int
 
-{-|
-SessionId -> Query
-1 -> 'a'
-1 -> 'b'
-2 -> 'a'
-3 -> 'c'
+stq :: [(SessionId, NormalizedQuery)]
+stq = [(1, 'a'), (1, 'b'), (2, 'a'), (3, 'c')]
 
-Product
-1 -> p1
-1 -> p3
-1 -> p4
-2 -> p2
+stp :: [(SessionId, ProductId)]
+stp = [(1, 101), (1, 103), (1, 104), (2, 102)]
 
-Query -> [SessionId] -> [Product]
-[(Query, [Product])]
--}
-
-queryToSessionID :: (Ord b) => [(a, b)] -> Map b [a]
-queryToSessionID xs = Data.Foldable.foldl' foldf Data.Map.empty xs
+qts :: (Ord b) => [(a, b)] -> Map b [a]
+qts xs = Data.Foldable.foldl' foldf Data.Map.empty xs
   where foldf :: (Ord b) => Map b [a] -> (a, b) -> Map b [a]
         foldf m (a, b) = case (Data.Map.lookup b m) of
-                                { Nothing -> m;
+                                { Nothing -> insert b [a] m;
                                   Just x -> insert b (a:x) m ; }
 
-normaliseSessionProduct :: (Ord a) => [(a, c)] -> Map a [c]
-normaliseSessionProduct xs = Data.Foldable.foldl' foldf Data.Map.empty xs
+stlp :: (Ord a) => [(a, c)] -> Map a [c]
+stlp xs = Data.Foldable.foldl' foldf Data.Map.empty xs
   where foldf :: (Ord a) => Map a [c] -> (a, c) -> Map a [c]
         foldf m (a, c) = case (Data.Map.lookup a m) of
-                                { Nothing -> m;
+                                { Nothing -> insert a [c] m;
                                   Just x -> insert a (c:x) m; }
 
-queryToProduct :: Map b [a] -> [(a, c)] -> Map b [c]
-queryToProduct m (x:xs) = undefined
+qtp qts stp = Data.Map.map mf qts
+  where mf as = concatMap (stp!) as
+
+
 
 {-|
 4.) You're given an array which contains the numbers from 1 to n, in
@@ -114,11 +105,17 @@ random order, except there is one missing. Write a function to return
 the missing number.
 -}
 
+--sort then search
+--traverse then find
+
+
 {-|
 5.) Write a function to reconstruct a binary tree from its preorder
 traversal and inorder traversal. Take into account that the traversals
 could be invalid.
 -}
+
+
 
 {-|
 6.) You have a [(WeatherStationId, Latitude, Longitude)]. Similar to
@@ -126,6 +123,8 @@ could be invalid.
 structure from which you can easily determine the nearest Weather
 Station, given an arbitrary Latitude and Longitude.
 -}
+
+
 
 {-|
 7.) Write a function for scoring a mastermind guess. That is, in a
