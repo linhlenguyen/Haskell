@@ -9,6 +9,7 @@ module StatefulTree(
     import Control.Monad
     import Data.Functor
     import Data.Foldable
+    import Data.Traversable
 
     data Tree a = Empty | Node a (Tree a) (Tree a) deriving (Show)
 
@@ -20,6 +21,11 @@ module StatefulTree(
       foldr f acc Empty = acc
       foldr f acc (Node a lhs rhs) = foldr f (f a (foldr f acc rhs)) lhs
 
+    instance Traversable Tree where
+      --traverse :: (Applicative f) => (a -> f b) -> t a -> f (t b)
+      traverse f Empty = pure Empty
+      traverse f (Node a lhs rhs) = Node <$> (f a) <*> traverse f lhs <*> traverse f rhs
+
     addNode' :: (Ord a) => Tree a -> a -> Tree a
     addNode' t a = addNode a t
 
@@ -30,11 +36,11 @@ module StatefulTree(
     foldf :: (Ord a) => a -> Tree (a, a) -> Tree (a, a)
     foldf a tb = addNode (a, a) tb
 
+    foldi :: (Ord a) => a -> (Int, Tree (Int, a)) -> (Int, Tree (Int, a))
+    foldi a (i, t) = (i+1, addNode (i, a) t)
+
     mfoldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
     mfoldr = undefined
-
-    --testTree :: Tree T
-    --testTree = Node 'f' [Node 'd' [Node 'b' [Node 'a' , Node 'c' []], Node 'e' []], Node 'h' [Node 'g'[], Node 'i'[]]]
 
     testTree :: Tree Char
     testTree = Prelude.foldl (\x t -> addNode' x t) Empty ['f','d','b','a','c','e','h','g','i']
@@ -42,11 +48,14 @@ module StatefulTree(
     testTree' :: Tree Int
     testTree' = Prelude.foldl (\x t -> addNode' x t) Empty [5,7,6,2,1,3,8]
 
-    addIndex :: Tree a -> Tree a
-    addIndex t = undefined {- runST $ do
+    addIndex :: Tree a -> Tree (Int, a)
+    addIndex t = runST $ do
       i <- newSTRef 0
-      t' <- applyIndex t
-      where applyIndex t = -}
+      mapM (\x -> do
+             i' <- readSTRef i
+             writeSTRef i (i'+1)
+             return (i', x)
+             ) t
 
     main :: IO ()
     main = putStrLn (show testTree)
