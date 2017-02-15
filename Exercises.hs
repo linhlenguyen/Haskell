@@ -105,8 +105,10 @@ random order, except there is one missing. Write a function to return
 the missing number.
 -}
 
---sort then search
---traverse then find
+--sort then search O(nlogn)
+--traverse then find O(n)
+--sum n and subtract O(n)
+--
 
 
 {-|
@@ -115,6 +117,14 @@ traversal and inorder traversal. Take into account that the traversals
 could be invalid.
 -}
 
+data Tree a = Empty | Cons a (Tree a) (Tree a) deriving (Show)
+
+addNode :: (Ord a) => a -> Tree a -> Tree a
+addNode a Empty = (Cons a Empty Empty)
+addNode a (Cons v l r) = if (v <= a) then (Cons v (addNode a l) r) else (Cons v l (addNode a r))
+
+reconstructTree :: (Ord a) => [a] -> Tree a
+reconstructTree xs = Prelude.foldr (addNode) Empty xs
 
 
 {-|
@@ -124,7 +134,27 @@ structure from which you can easily determine the nearest Weather
 Station, given an arbitrary Latitude and Longitude.
 -}
 
+{-
+ 1 2 3 4 5
+1
+2  a
+3        c
+4    b
+5        d
+-}
 
+--(1,3) -> a
+--[(x,y)]
+
+type WeatherStationId = Int
+type Latitude = Float
+type Longitude = Float
+
+weatherStations :: [(WeatherStationId, Latitude, Longitude)]
+weatherStations = zip3 [1, 2, 3, 4, 5, 6] [12.4,21.6,23.7,44.0,100.0,200] [9.0, 98.0, 45.2, 2.0, 80.5, 121.5]
+
+findNearestWeatherStation :: Latitude -> Longitude -> WeatherStationId
+findNearestWeatherStation = undefined
 
 {-|
 7.) Write a function for scoring a mastermind guess. That is, in a
@@ -147,3 +177,66 @@ with that prefix.
 function to perform some kind of evaluation of "how shuffled" a deck
 of cards is.
 -}
+
+shuffle :: [a] -> [a]
+shuffle a = undefined
+
+type Coin = Int
+
+coins :: [Coin]
+coins = [1,2,5,10,20,50,100,200]
+
+--56
+--56x1
+--54x1 1x2
+
+--1 ~ 1 *
+--2 ~ 2x1, 2 *
+--3 ~ 3x1, 1 + 2
+--4 ~ 4x1, 2x1 + 2, 2x2
+--5 ~ 5x1, 3x1 + 2, 2x2 + 1, 5 *
+--6 ~ 6x1, 4x1 + 2, 2x1 + 2x2, 3x2, 5 + 1
+--7 ~ 7x1, 5x1 + 2, 3x1 + 2x2, 1 + 3x2, 2x1 + 5, 2 + 5
+--8 ~ 8x1, 6x1 + 2, 4x1 + 2x2, 2x1 + 3x2, 4x2, 1x3 + 5, 1 + 2 + 5,
+--9 ~ 9x1, 7x1 + 2, 5x1 + 2x2, 3x1 + 3x2, 1 + 4x2, 4x1 + 5, 2x1 + 2 + 5, 2x2 + 5
+--10 *
+--21 ~ 21x1, 19x1 + 2 .. 1 + 10x2, 16x1 + 5 .. 1 + 8x2 + 5, 11x1 + 2x5 .. 1 + 5x2 + 2x5, 11x1 + 10 .. 1 + 5x2 + 10, 6x1 + 5 + 10, 3x2 + 5 + 10, 1 + 2x5 + 10, 1 + 2x10
+
+findP :: Int -> [Coin] -> [[(Int, Coin)]]
+findP _ [] = []
+findP 0 _ = []
+findP s (x:xs) = let pn = [(div s x)..0] in
+  case pn of {  [0] -> findP s xs;
+                _ -> map (\d -> (d,x) : (findP (s - (d*x)) (x:xs))) pn;
+              }
+
+-- dp ~
+-- i <- coins
+-- j <- coins[i], j <= amount
+-- dp[j] += dp[j - coins[i]]
+
+findP' :: Int -> [Coin] -> [(Int, Coin)]
+findP' s (x:xs) = f s (reverse (x:xs))
+ where f :: Int -> [Coin] -> [(Int, Coin)]
+       f _ [] = []
+       f s (x:xs) = let d = div s x
+                        r = mod s x in
+                      if d > 0 then (d,x):(f r xs)
+                      else (f s xs)
+
+                      -- first 15 mins 1-1000
+                      -- +4
+                      -- p1 - 1 -> 375
+                      -- p2 - 125 -> 500
+                      -- p3 - 500 -> 875
+                      -- p4 - 625 -> 1000
+                      -- +2
+                      -- next 15 mins 125-375
+                      -- p1
+                      -- p2
+                      -- p3
+                      -- p4
+
+                      -- 4 -> 16 -> 64 -> 256
+                      -- 5 -> 25 -> 125 -> 625
+                      -- 6 -> 36 -> 216 -> 1296

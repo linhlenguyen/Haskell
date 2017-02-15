@@ -17,3 +17,6 @@ concatMap (\x ->
         ) [1..3]
     ) [1..3]
 --}
+
+getPairs :: [a] -> [b] -> [(a, b)]
+getPairs as bs = concatMap (\x -> map (\y -> (x,y)) bs) as
