@@ -24,7 +24,21 @@ module StatefulTree(
     instance Traversable Tree where
       --traverse :: (Applicative f) => (a -> f b) -> t a -> f (t b)
       traverse f Empty = pure Empty
-      traverse f (Node a lhs rhs) = Node <$> (f a) <*> traverse f lhs <*> traverse f rhs
+      traverse f (Node a lhs rhs) = Node <$> (f a) <*> traverse f lhs <*> traverse f rhs -- pre Order
+
+    -- (a -> b -> c) <$> t a <*> t b
+
+    preOrderFold :: (a -> b -> b) -> b -> Tree a -> b
+    preOrderFold f acc Empty = acc
+    preOrderFold f acc (Node a lhs rhs) = preOrderFold f (preOrderFold f (f a acc) lhs) rhs
+
+    inOrderFold :: (a -> b -> b) -> b -> Tree a -> b
+    inOrderFold f acc Empty = acc
+    inOrderFold f acc (Node a lhs rhs) = inOrderFold f (f a (inOrderFold f acc lhs)) rhs
+
+    postOrderFold :: (a -> b -> b) -> b -> Tree a -> b
+    postOrderFold f acc Empty = acc
+    postOrderFold f acc (Node a lhs rhs) = f a (postOrderFold f (postOrderFold f acc lhs) rhs)
 
     addNode' :: (Ord a) => Tree a -> a -> Tree a
     addNode' t a = addNode a t
@@ -43,10 +57,13 @@ module StatefulTree(
     mfoldr = undefined
 
     testTree :: Tree Char
-    testTree = Prelude.foldl (\x t -> addNode' x t) Empty ['f','d','b','a','c','e','h','g','i']
+    testTree = Prelude.foldr (addNode) Empty ['f','d','b','a','c','e','h','g','i']
 
     testTree' :: Tree Int
-    testTree' = Prelude.foldl (\x t -> addNode' x t) Empty [5,7,6,2,1,3,8]
+    testTree' = Prelude.foldr (addNode) Empty [5,7,6,2,1,3,8]
+
+    newTree :: (Ord a) => [a] -> Tree a
+    newTree ls = Prelude.foldr (addNode) Empty ls
 
     addIndex :: Tree a -> Tree (Int, a)
     addIndex t = runST $ do
@@ -56,6 +73,43 @@ module StatefulTree(
              writeSTRef i (i'+1)
              return (i', x)
              ) t
+
+    data Box = forall a. (Show a) => Box a
+
+    instance Eq Box where
+      (Box a) == (Box b) = False
+
+    instance Ord Box where
+      (Box a) <= (Box b) = False
+
+    data Tree' = TEmpty | TNode Box Tree' Tree'
+
+    instance Show Tree' where
+      show TEmpty = "Nothing"
+      show (TNode (Box a) l r) = " " ++ show a ++ " " ++ show l ++ " " ++ show r
+
+    tMap :: (Ord b, Show b) => (Box -> b) -> Tree' -> Tree'
+    tMap f TEmpty = TEmpty
+    tMap f (TNode a lhs rhs) = (TNode (Box (f a)) (tMap f lhs) (tMap f rhs))
+
+    addNodeT' :: Box -> Tree' -> Tree'
+    addNodeT' x TEmpty = TNode x TEmpty TEmpty
+    addNodeT' x (TNode a l r) = if (x <= a) then (TNode a (addNodeT' x l) r) else (TNode a l (addNodeT' x r))
+
+    newTreeT' :: Tree'
+    newTreeT' = Prelude.foldr (\x t -> addNodeT' x t) TEmpty [Box 5, Box 3, Box 'a', Box 'b', Box 1]
+
+    --addIndexls :: [a] -> [(Int, a)]
+    addIndexls ls = runST $ do
+      i <- newSTRef 0
+      traverse (\x -> do
+          i' <- readSTRef i
+          writeSTRef i (i'+1)
+          return (i',x)) ls
+
+    --map :: (a -> m b) -> a -> [m b]
+    --lift :: [m b] -> m [b]
+    --lift xs = return (map (runST) xs)
 
     main :: IO ()
     main = putStrLn (show testTree)

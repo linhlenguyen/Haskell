@@ -4,8 +4,8 @@
 --
 --Events/Streams (anything can be streams)
 --Axis of time/ discreet currency over time of certain events
---E.g Mouse clicks, 
---Change event text field. 
+--E.g Mouse clicks,
+--Change event text field.
 --Event streams of key press filter (\keypress -> keypress.key = 'Enter') keyPressEvents
 --filter, map, merge
 --
@@ -30,7 +30,3 @@ myName 'at' '27-05-2016T12:14:00'
 
 myEditWidget :: Behaviour Text
 liftA2 (<>) myEdit1 myEdit2
-
-
-
-

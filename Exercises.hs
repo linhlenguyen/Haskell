@@ -1,5 +1,6 @@
 import Data.Map
 import Data.Foldable
+import System.Random
 
 {-|
 type families and dependent types
@@ -202,13 +203,17 @@ coins = [1,2,5,10,20,50,100,200]
 --10 *
 --21 ~ 21x1, 19x1 + 2 .. 1 + 10x2, 16x1 + 5 .. 1 + 8x2 + 5, 11x1 + 2x5 .. 1 + 5x2 + 2x5, 11x1 + 10 .. 1 + 5x2 + 10, 6x1 + 5 + 10, 3x2 + 5 + 10, 1 + 2x5 + 10, 1 + 2x10
 
+--catch invalid combinations!
 findP :: Int -> [Coin] -> [[(Int, Coin)]]
-findP _ [] = []
 findP 0 _ = []
-findP s (x:xs) = let pn = [(div s x)..0] in
-  case pn of {  [0] -> findP s xs;
-                _ -> map (\d -> (d,x) : (findP (s - (d*x)) (x:xs))) pn;
-              }
+findP s [x] = [[((div s x),x)]]
+findP s (x:xs) = let pn = [0..(div s x)] in
+    concatMap (\d -> if d > 0 then Prelude.map ((d,x):) (findP (s - (d*x)) xs) else (findP s xs)) (reverse pn);
+
+findPCount :: Int -> [Coin] -> Int
+findPCount s xs = length $ findP s xs
+
+--[0 -> s]
 
 -- dp ~
 -- i <- coins
@@ -224,19 +229,19 @@ findP' s (x:xs) = f s (reverse (x:xs))
                       if d > 0 then (d,x):(f r xs)
                       else (f s xs)
 
-                      -- first 15 mins 1-1000
-                      -- +4
-                      -- p1 - 1 -> 375
-                      -- p2 - 125 -> 500
-                      -- p3 - 500 -> 875
-                      -- p4 - 625 -> 1000
-                      -- +2
-                      -- next 15 mins 125-375
-                      -- p1
-                      -- p2
-                      -- p3
-                      -- p4
+-- first 15 mins 1-1000
+-- +4
+-- p1 - 1 -> 375
+-- p2 - 125 -> 500
+-- p3 - 500 -> 875
+-- p4 - 625 -> 1000
+-- +2
+-- next 15 mins 125-375
+-- p1
+-- p2
+-- p3
+-- p4
 
-                      -- 4 -> 16 -> 64 -> 256
-                      -- 5 -> 25 -> 125 -> 625
-                      -- 6 -> 36 -> 216 -> 1296
+-- 4 -> 16 -> 64 -> 256
+-- 5 -> 25 -> 125 -> 625
+-- 6 -> 36 -> 216 -> 1296
