@@ -1,0 +1,161 @@
+<title>  CS 410/510 - Homework #4 </title>
+
+
+<CENTER>
+<BIG>  CS 410/510 - Homework #4 </BIG>
+</CENTER>
+
+Create a single Haskell file that contains solutions to the following problems.
+Be sure it compiles without errors, and submit it via D2L by class time on
+May April 1st, 2014.
+Start with the file <A HREF="HW4Template.html">HW4Template.html</A>
+which is a variant of the <A HREF="../code/TrivialParser.hs">TrivialParser</A>
+we saw in lecture on Tuesday, and the <A HREF="../code/SimplePrinter.hs">simplePrinter</A> we saw in lecture
+on Thursday. It has all the boiler plate you will need.
+<p>
+Be sure you put your name and e-mail in a comment
+at the beginning of the file</B>. Without this you will not get any feedback.
+
+<p>
+
+In this homework you will write a parser for a subset of haskell. In order to do this
+you will need to write indentation sensitive parsers. Which keep track of
+the column that some sytactic entities start in. This is done with the parsec
+"layout" combinator. An example is given below that parses a "let" statement (given
+parsers for declarations (declP) and expressions ("expP")).
+
+<PRE>
+letParser declP expP =
+  do { pos <- getPosition   -- This gets the SourcePos
+     ; keyworD "let"
+     ; ds <- layout declP (keyworD "in")  -- "in" ends the layout if it is found
+     ; exp <- expP
+     ; return(ds,exp)}
+</PRE>
+
+When a parser "p" is "layed out" a "tab stop" is set at the next non-whitespace
+character. It the parses a sequence of "p" objects. Lines that begin after
+the "tab stop" are continuations of the "p" that started on earlier lines.
+Lines that begin at the "tab stop" are the beginning of the next "p". Lines
+that start before the "tab stop" end the layout rule.  The second argument
+to "layout" <B>(keyworD "in")</B> is a parser the forces the layout to end
+regardless of the where the line begins. Some layout sensisitve
+language copnstructs (such as case, where, and do)
+do not have a terminating token, in which case the parser <B>(return ())</B> will
+do.
+<p>
+One can turn off the
+laout rule by surrounding the sequence of "p" objects by "{" and "}" separating
+by ";". Thus the following pairs all parse the same.
+
+
+<PRE>
+case x of
+  [] -> 0
+  (Cons x xs) -> x + 4
+
+case x of { [] -> 0; (Cons x xs) -> x + 4}
+
+-----------------------------------
+
+let x = 3
+    y = 5
+in x + y
+
+let {x = 3; y = 5} in x+5
+
+-----------------------------------
+
+f x y = x+y+z
+  where a = 5
+        z = a - 3
+
+f x y = x+y+z where { a= 5; z = a-3}
+</PRE>
+
+Luckily all this is handled by the layout parser combinator. In order to
+use the layout combinator one needs a modified version of the Parsec.Token
+module. He one we use is called "LayoutToken" and is included <A HREF="LayoutToken.hs">here</A>.
+Just download this file, along with <A HREF="HW4Template.html">HW4Template.html</A>.
+Rename "HW4Template.html"  to  "hw4.hs", and keep both files in the same directory.
+
+<p>
+The language we are interested in has the following abstract
+syntax. This is a subset of Haskell expressions.
+<p>
+<PRE>
+type Var = (SourcePos,String)  -- Starts lowercase
+type Con = (SourcePos,String)  -- Starts with Upper case
+type Name = (SourcePos,String) -- Starts with either lower case or uppercase
+
+data Lit
+  = Int Int
+  | Char Char
+  | Unit
+  | Float Float
+
+data Pat
+  = Plit Lit                  -- { 5 or 'c' }
+  | Pvar Var                  -- { x }
+  | Pprod [Pat]               -- { (p1,p2,p3) }
+  | Paspat Var Pat            -- { x @ p }
+  | Pwild                     -- { _ }
+  | Pcon Con [Pat]            -- C x y (z,a)
+
+
+data Exp
+  = Var Name                   -- { x  or  Nil }
+  | Lit Lit                   -- { 5 or 'c'  or  5.6 }
+  | Prod [Exp]                -- { (e1,e2,e3) }
+  | App Exp Exp               -- { f x }
+  | Lam [Pat] Exp             -- { \ p1 p2 -> e }
+  | Let [Dec] Exp             -- { let { x=e1;   y=e2 } in e3 }
+  | Case Exp [Match Pat Exp Dec]    -- { case e of { m1; m2 }}
+  | Do [Stmt Pat Exp Dec]           -- { do { p <- e1; e2 } }
+
+-- Let, Case, Do, all use layout
+
+type Match p e d = (SourcePos,p,Body e,[d]) -- case e of { p -> b where decs }
+
+data Body e
+  = Guarded [(e,e)]           -- f p { | e1 = e2 | e3 = e4 } where ds
+  | Normal e                  -- f p = { e } where ds
+                              -- Where uses layout
+
+data Stmt p e d
+  = BindSt SourcePos p e
+  | LetSt SourcePos [d]
+  | NoBindSt SourcePos e
+
+data Dec
+  = Fun SourcePos Var [Match [Pat] Exp Dec]   -- { f p1 p2 = b where decs }
+  | Val SourcePos Pat (Body Exp) [Dec]        -- { p = b where decs }
+</PRE>
+
+Here is what I expect.
+
+<ol>
+
+<li>  Download the necessary files.
+<li> Rename "HW4Template.html"  to  "hw4.hs".
+<li> make additions to "hw4.hs" so that it does the following
+<ol> <li> parses a sequence of Haskell declarations.
+     <li> pretty prints the list of declarations
+     <li> contains both a "main" function and a "test" function
+</ol>
+<li> Write a Main function that tests your homework.
+  <ol> <li> Create a test file that has at least one example of every syntactic element.
+       <li> Parse from the test file to obtain [Dec]
+       <li> Pretty print the parsed data.
+       <li> write the pretty printed string to a file.
+       <li> show that this file can be parsed.
+       </ol>
+<li> Write a test function that
+  <ol> <li> Reads a string typed by the user.
+       <li> Parse the string as an Exp.
+       <li> Pretty prints the parsed string.
+       <li> reports useful errors when the parsing fails.
+       <li> and then repeats, getting another string fro the user.
+       </ol>
+<li> Zip everything up in a zip file and submit via D2L.
+</ol>

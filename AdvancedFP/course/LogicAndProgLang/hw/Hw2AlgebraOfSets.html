@@ -1,0 +1,131 @@
+<title> Homework 2: An Algebra of Sets </title>
+
+
+<CENTER>
+<BIG>  Homework 2: An Algebra of Sets.  </BIG>
+</CENTER>
+
+<p>
+<H2>Overview</H2>
+<p>
+This is a homework. It will be graded. It is due Wednesday, October 22, 2014.
+<p>
+In this homework you will  learn to use the FiniteSet library.
+FiniteSets are a data structure which have been designed as a mechanism
+for aggregating propositional formula. The operators in the library
+allow programmers to create large numbers of related formulae using
+a high level of abstraction. The abstraction is finite sets of tuples,
+or as the databses folk call such abstractions, relations. The library
+supports an interface very similar to the relational algebra, and this
+exercise schools you in using these operators to construct FiniteSets
+with interesting propoerties.
+
+
+<p>
+<H2>Learning Objectives</H2>
+<p>
+<ul>
+<li> Learn to create and initialize FiniteSets.
+<li> Learn to combine sets using the operators of the library.
+<li> Learn to state and test properties of sets.
+</ul>
+<p>
+<H2>Getting Started</H2>
+<p>
+You will need a few documents to get started.
+<ul>
+<li> Read the <A HREF="../notes/FiniteSets.pdf">notes</A> on finite sets.
+<li> Down load the <A HREF="FiniteSets/">FiniteSet</A> library and put in your code directory.
+<li> Study the <A HREF="FiniteSets/FiniteSetNotes.hs">examples</A> from the lecture notes.
+</ul>
+<p>
+Create a small file to start with that looks like this.
+Be sure you have the <B>Prop</B> and the <B>FiniteSet</B> modules where Ghci can find them.
+<p>
+
+<TABLE ALIGN="left" BORDER=2 CELLSPACING=0 CELLPADDING=0 WIDTH="100%">
+<TR ALIGN="left" VALIGN="middle">
+        <TH> Solution template </TH>
+<TR ALIGN="left" VALIGN=middle">
+        <TD>
+<PRE>
+-- Your name in a comment
+
+module Exercise5 where
+
+import Prop
+import FiniteSet
+</PRE>
+
+</TD>
+</TABLE><br><br><br>
+<p>
+
+
+<H2>What to do</H2>
+<p>
+<ul>
+<li> Create dimensions.
+  <ol> <li> Create a dimension for the set of strings {"Odd", "Even"}
+       <li> Create a dimension for the set of positive whole numbers less than 10.
+       <li> Create a dimension for the range Int range 5 to 10.
+       <li> Define an enumeration dataype for the days of the week. Create a dimension for it.
+       </ol>
+<li> Create sets with different kinds of associations.
+   <ol> <li> Define a set of pairs from the Odd-Even and the 5-10 range dimensions.
+             Associate a Bool with each pair such that the string describes the number.
+             For example ("Even",4)=True, ("Odd",4)=False, etc.
+        <li> Define a set of pairs, where each component
+             of the pair comes from positive whole numbers less than 10, and the value associated
+             with the pair is the sum of the two components.
+        <li> Define the set {(i,i+1) | i <- [0..4]}. Be sure tuples where the second component
+             isn't the successor of the first aren't in the set at all.
+        <li> Define a set of pairs, where each component
+             of the pair comes from the days of the week, and a pair (day1,day2) is associated
+             with True if day1 is the day before day2 in the time ordering.
+        </ol>
+<li> Study the Boolean class. Write 2 functions that are overloaded with types.
+     <ol>
+       <li> Boolean t => t -> t
+       <li> Boolean t => t -> t -> t
+     </ol>
+<li> Create a conditional set for a set of triples, where each component is drawn from 0-4.
+     For example {(0,0,0)=LetterP 0, (0,0,1)=LetterP 1, ... (4,4,4)=LetterP 124}
+
+<li> Use set operations. Form the complement of several sets. Form the union and intersection of several sets.
+     Note, that these operations only work if the set assoicates a Boolean operation with each tuple.
+     (Boolean t => FiniteSet t).
+
+<li> Use relational operations
+     <ol>
+       <li> Copy the the definition of the relation <B>p</B>, the set of pairs
+          of people from the file <A HREF="FiniteSets/FiniteSetNotes.hs">FiniteSetNotes.hs</A>.
+       <li> Create a set of quaduples by using join that has the following 4 generation
+            structure (great-grand-parent,grand-parent,parent,child).
+       <li> then create the binary (great-grand-parent,child) relation.
+       <li> Do the same thing by writing a function, step, that extends a
+            binary relation, extending the generation one step.
+            For example step<br> (parent,child) -> (grand-parent,child),<br> step(grand-parent,child) -> (great-grand-parent, child).<br>
+            You will have to apply this function twice.
+       </ol>
+<li> Write an iterate operation that applies a one step extend operation like you wrote
+     above n times. Could you use this to write a transitive closure operation over
+     a binary relation? How many times would you have to apply it? What else would
+     you have to do beside apply it n times?
+<li> <B>Extra Credit</B>
+   <ol>
+<li> Create the <I>addition</I> 3D relation such that (i,j,k) is in the relation if i+j=k for the range 0-10.
+<li> Create the <I>max</I> 3D relation such that (i,j,k) is in the relation if k=max i j for the range 0-10.
+<li> Given a (possibly cyclic) 3D relation <I>path</I>  (place1,place2,distance1-2), could you create
+     a shortest path 3D relation?
+    </ol>
+</ul>
+<p>
+<H2>What to turn in.</H2>
+<p>
+<ul>
+  <li> Drop it in the Hw2 folder in the class drop box
+<li> Be prepared to talk about your solution in class.
+</ul>
+
+<A HREF="../index.html">Back to the class web-page.</A> <BR>

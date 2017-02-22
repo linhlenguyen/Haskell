@@ -1,0 +1,219 @@
+--<PRE>
+
+import List(find)
+
+-----------------------------------------------
+-- A simple functional language
+
+type Var = String
+
+data Term0 =
+   Add0 Term0 Term0
+ | Const0 Int
+ | Lambda0 Var Term0
+ | App0 Term0 Term0
+ | Var0 Var
+ 
+data Value0 =
+   Int0 Int
+ | Fun0 Var Term0 Env0
+
+data Env0 = E0 [(Var,Value0)]
+
+------------------------------------------------
+-- A simple evaluator
+
+eval0 :: Env0 -> Term0 -> Value0
+eval0 (e @ (E0 xs)) t =
+  case t of
+   Add0 x y -> plus (eval0 e x) (eval0 e y)
+   Const0 n -> Int0 n
+   Var0 s -> look xs s
+   Lambda0 s t -> Fun0 s t e
+   App0 f x -> apply (eval0 e f) (eval0 e x)
+   
+ where plus (Int0 x) (Int0 y) = Int0 (x+y)
+       look ((x,v):xs) s = if s==x then v else look xs s
+       apply (Fun0 v t e) x = eval0 (extend e v x) t 
+       extend (E0 xs) v x = (E0((v,x):xs))
+-------------------------------------------------------------
+-- Now let's try and make the environment abstract
+
+data Term1 =
+   Add1 Term1 Term1
+ | Const1 Int
+ | Lambda1 Var Term1
+ | App1 Term1 Term1
+ | Var1 Var
+ 
+data Value1 e =
+   Int1 Int
+ | Fun1 Var Term1 e
+ 
+------------------------------------------------
+-- A simple evaluator abstract on the environment type
+
+eval1 :: e -> (e -> Var -> Value1 e) -> (e -> Var -> Value1 e -> e) ->
+         Term1 -> Value1 e
+eval1 e look extend t =
+  case t of
+   Add1 x y -> plus (eval e x) (eval e  y)
+   Const1 n -> Int1 n
+   Var1 s -> look e s
+   Lambda1 s t -> Fun1 s t e
+   App1 f x -> apply (eval e f) (eval e x)
+  
+ where plus (Int1 x) (Int1 y) = Int1 (x+y)
+       apply (Fun1 v t e) x = eval (extend e v x) t
+       eval e x = eval1 e look extend x 
+   
+--------------------------------------------------------
+-- Now supose we want to add pairs, or some other new type
+
+data Term2 =
+   Add2 Term2 Term2
+ | Const2 Int
+ | Lambda2 Var Term2
+ | App2 Term2 Term2
+ | Var2 Var
+ | Pair2 Term2 Term2       -- (3, 4+5)
+ | Let2 Pat Term2 Term2   -- let (x,y) = f x in x+y
+ 
+data Value2 e =
+   Int2 Int
+ | Fun2 Var Term2 e
+ | Prod2 (Value2 e) (Value2 e)
+
+data Pat = Pat Var Var
+
+-----------------------------------------------------------
+-- Now inorder to maintain the abstraction of enviroments
+-- the number of operators passed as parameters is getting
+-- out of hand 
+ 
+eval2 :: e -> (e -> Var -> Value2 e) -> 
+              (e -> Var -> Value2 e -> e) ->
+              (e -> Pat -> Value2 e -> e) ->
+         Term2 -> Value2 e
+eval2 e look extend extpat t =
+  case t of
+   Add2 x y -> plus (eval e x) (eval e  y)
+   Const2 n -> Int2 n
+   Var2 s -> look e s
+   Lambda2 s t -> Fun2 s t e
+   App2 f x -> apply (eval e f) (eval e x)
+   Pair2 x y -> Prod2 (eval e x) (eval e y)
+   Let2 p x y -> eval (extpat e p (eval e x)) y
+   
+  
+ where plus (Int2 x) (Int2 y) = Int2 (x+y)
+       apply (Fun2 v t e) x = eval (extend e v x) t
+       eval e x = eval2 e look extend extpat x 
+   
+-----------------------------------------------------------
+-- Lets capture the set of operators on the abstract environments
+-- as a type class
+
+class Environment e where
+  look :: e -> Var -> Value2 e
+  extend:: e -> Var -> Value2 e -> e
+  extpat :: e -> Pat -> Value2 e -> e
+  
+ 
+eval3 :: Environment e => e -> Term2 -> Value2 e
+eval3 e t =
+  case t of
+   Add2 x y -> plus (eval3 e x) (eval3 e  y)
+   Const2 n -> Int2 n
+   Var2 s -> look e s
+   Lambda2 s t -> Fun2 s t e
+   App2 f x -> apply (eval3 e f) (eval3 e x)
+   Pair2 x y -> Prod2 (eval3 e x) (eval3 e y)
+   Let2 p x y -> eval3 (extpat e p (eval3 e x)) y
+   
+ where plus (Int2 x) (Int2 y) = Int2 (x+y)
+       apply (Fun2 v t e) x = eval3 (extend e v x) t
+       
+-------------------------------------------------------------
+-- Lets try instantiating the Environment type class at
+-- several different types
+
+data Env3 = E3 [(Var,Value2 Env3)]
+
+instance Environment Env3 where
+  look (E3((x,y):xs)) v = if x==v then y else look (E3 xs) v
+  extend (E3 xs) v x = E3 ((v,x):xs)
+  extpat (E3 xs) (Pat x y) (Prod2 a b) = E3 ((x,a):(y,b):xs)
+  
+data Env4 = E4 (Var -> Value2 Env4)
+
+instance Environment Env4 where
+  look (E4 f) v = f v
+  extend (E4 f) v x = E4(\ y -> if y==v then x else f y)
+  extpat (E4 f) (Pat x y) (Prod2 a b) =
+    E4(\ z -> if x==z then a else if y==z then b else f z)
+
+--------------------------------------------------------------
+
+
+-- let (f,g) = (\ x -> x+1, \ y -> y + 3)
+-- in f (g 5)
+
+prog =
+  Let2 (Pat "f" "g") 
+       (Pair2 (Lambda2 "x" (Add2 (Var2 "x") (Const2 1)))
+              (Lambda2 "y" (Add2 (Var2 "y") (Const2 3))))
+       (App2 (Var2 "f") (App2 (Var2 "g") (Const2 5)))
+
+ans = eval3 (E3 []) prog
+ans2 = eval3 (E4 (\ x -> error "no such name")) prog
+
+--------------------------------------------------------
+
+data EnvironmentC e = 
+  EnvC {lookM :: e -> Var -> Value2 e,
+        extendM :: e -> Var -> Value2 e -> e,
+        extpatM :: e -> Pat -> Value2 e -> e
+       }
+
+eval4 :: EnvironmentC a -> a -> Term2 -> Value2 a
+eval4 d e t =
+  case t of
+   Add2 x y -> plus (eval4 d e x) (eval4 d e  y)
+   Const2 n -> Int2 n
+   Var2 s -> lookM d e s
+   Lambda2 s t -> Fun2 s t e
+   App2 f x -> apply (eval4 d e f) (eval4 d e x)
+   Pair2 x y -> Prod2 (eval4 d e x) (eval4 d e y)
+   Let2 p x y -> eval4 d (extpatM d e p (eval4 d e x)) y
+   
+ where plus (Int2 x) (Int2 y) = Int2 (x+y)
+       apply (Fun2 v t e) x = eval4 d (extendM d e v x) t       
+
+-----------------------------------------------------
+
+
+e3Dict = EnvC 
+  { lookM = \ (E3((x,y):xs)) v -> 
+              if x==v then y else lookM e3Dict (E3 xs) v
+  , extendM = \ (E3 xs) v x -> E3((v,x):xs)
+  , extpatM = \ (E3 xs) (Pat x y) (Prod2 a b) ->
+                E3((x,a):(y,b):xs)
+  }
+
+e4Dict = EnvC
+  { lookM = \ (E4 f) v -> f v
+  , extendM = \ (E4 f) v x -> 
+                E4(\ y -> if y==v then x else f y)
+  , extpatM = \ (E4 f) (Pat x y) (Prod2 a b) ->
+               E4(\ z -> if x==z 
+                            then a 
+                            else if y==z 
+                                    then b 
+                                    else f z)
+  }
+
+ans3 = eval4 e3Dict (E3 []) prog
+ans4 = eval4 e4Dict (E4 (\ x -> error "no such name")) prog
+
+--</PRE>

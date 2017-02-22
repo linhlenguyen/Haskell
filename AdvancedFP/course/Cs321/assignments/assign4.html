@@ -1,0 +1,211 @@
+<PRE>
+CS321 Prog Lang & Compilers                  Assignment # 4
+Assigned: Jan 24, 2007               Due: Wed. Jan 29, 2007
+
+======================================================================
+1) for each of the functions "concat", "factors", and "allTrue",
+defined below write another version of the function that does not use
+a while loop, but instead uses a local function that uses an
+accumulating parameter. E.g. your answer will look something like:
+
+fun f x =
+  let fun help ....
+  in help ... end;
+
+------------------------------------------------------
+
+fun concat xs =
+let val xsRef = ref xs
+    val ansRef = ref []
+in while (not (null (!xsRef))) do
+     ( ansRef := !ansRef @  (hd (!xsRef))
+     ; xsRef := tl (!xsRef)
+     );
+  !ansRef
+end;
+
+fun divides x y = y mod x = 0;
+
+fun factors n =
+let val count = ref (n-1)
+    val ans = ref []
+in while (!count > 1) do
+     ( if divides (!count) n
+          then ans := !count :: !ans
+          else ()
+     ; count := !count - 1
+     );
+  !ans
+end;
+
+fun allTrue xs =
+let val xsRef = ref xs
+    val ansRef = ref true
+in while (not (null (!xsRef))) do
+     ( ansRef := ((!ansRef) andalso (hd (!xsRef)))
+     ; xsRef := tl (!xsRef)
+     );
+   !ansRef
+end;
+
+=====================================================================
+
+2) This problem is a guided description to defining the eclosure
+function for a second time. It has a number of steps. Follow each step
+carefully. Each step is used in the next step. Turn in all the functions
+you write (using the names I have indicated), and run some tests.
+
+a) First study the declarations of the data we will use. Cut
+and paste these into your solution file.
+
+datatype Label = Epsilon | Char of char;
+type Start = int;
+type Finish = int;
+datatype Edge = Edge of Start * Label * Finish;
+
+b) Cut and paste the following sample NFA into your solution file.
+It defines 4 variables "n1" the whole NFA. "s1" the start state (8),
+"f1" the final state (15), and "es1" the list of edges.
+
+val (n1 as (s1,f1,es1)) =
+  (8,15,
+   [Edge (9,Epsilon,10),Edge (8,Epsilon,0),Edge (8,Epsilon,6),
+    Edge (1,Epsilon,9),Edge (7,Epsilon,9),Edge (0,Char #"+",1),
+    Edge (6,Epsilon,2),Edge (6,Epsilon,4),Edge (3,Epsilon,7),
+    Edge (5,Epsilon,7),Edge (2,Char #"-",3),Edge (4,Epsilon,5),
+    Edge (11,Epsilon,14),Edge (10,Char #"D",11),Edge (14,Epsilon,12),
+    Edge (13,Epsilon,15),Edge (14,Epsilon,15),Edge (15,Epsilon,14),
+    Edge (12,Char #"D",13)]);
+
+c) Draw a picture of the NFA. This will help you visualize what's
+going on. Hand in the picture with your homework.
+
+d) Write three functions. Each will have a single clause that
+pattern matches over the single constructor "Edge". Test your
+functions (start (hd es1)) --->  9
+          (final (hd es1)) --->  10
+          (label (hd es1)) ---> Epsilon
+
+start:: Edge -> int
+final:: Edge -> int
+label:: Edge -> Label
+
+e) Once we have the three functions above, we can use the filter
+function to answer a number of questions. To find what edges
+have transitions on label (Char #"D") we type:
+
+filter (fn x => label x = Char #"D") es1;
+
+
+Recall that (fn x => label x = Char #"D") is an anonymous function.
+We could have written    -- fun f1 x = (label x) = (Char #"D");
+Then typed (filter f1 es1), to get the same effect.
+Type one of these in and see for yourself. There should be two edges
+with start states of 10 and 12.  Now, using the example above
+as a pattern write two functions
+
+startsOn :: int -> Edge list -> Edge list
+endsOn::    int -> Edge list -> Edge list
+
+(startsOn n) returns all the edges whose start state is n. endOn is
+similar. Once you've written these functions try them out. See that you
+get the same answers I do.
+
+startsOn 14 es1;
+val it = [Edge (14,Epsilon,12),Edge (14,Epsilon,15)] : Edge list
+
+f) Now write a fancier function that returns all the edges
+that start at "n" and have label "Epsilon". This will require
+and "andalso" in the (fn x => ....) given as a argument to "filter";
+
+fun epsilonEdgesFrom n edges = ...
+
+Test your function to see you get the same answers I do.
+
+- epsilonEdgesFrom 15 es1;
+val it = [Edge (15,Epsilon,14)] : Edge list
+
+g) The "map" function can be used to apply a function to every element
+in a list. Try this out
+
+map final [Edge(1,Epsilon,3),Edge(3,Char #"A",5)];
+
+You should get [3,5]. Note how (final (Edge(1,Epsilon,3))) ---> 3
+and (final (Edge(3,Char #"A",5))) ---> 5,  and map lets us do
+all this in 1 step.  Try the following (map start es1). What
+do you think you will get?  Now write a function "epsilonNodesFrom"
+which has type epsilonNodesFrom:: int -> Edge list -> int list,
+(epsilonNodesFrom n es) returns all the nodes reachable from a single
+Epsilon edge "n" in "es".  You should write this function
+using "map" and "epsilonEdgesFrom". Do you get the same answer I do?
+
+- epsilonNodesFrom 14 es1;
+val it = [12,15] : Finish list
+
+h) The details of this step you should work out yourself. Write the
+function whose type is listed below.
+
+epsilonNodesFromMany:: int list -> Edge list -> int list
+
+It should get all the nodes reachable from any one of A LIST OF NODES
+using a single Epsilon edge. There are many ways to do this. If you
+don't use epsilonNodesFrom in your solution, you've wasted all the work
+we did above. Test your function to see if you get the same answers I
+do.
+
+- epsilonNodesFromMany [8] es1;
+val it = [0,6] : Finish list
+- epsilonNodesFromMany [1,7] es1;
+val it = [9,9] : Finish list
+
+i) Recall, that the nodes reachable by Epsilon transitions in one
+step should include the nodes started from. This suggests we should
+append the input to the output of "epsilonNodesFromMany".
+
+If we do this and some node has a self-loop (Edge(2,Epsilon,2)) or two
+different nodes in the input have edges to the same node we will get
+duplicate states in the list of final states.
+
+This step requires you to write a function "oneStep". For reasons that
+will become clear in a moment, You must write a function that takes its
+arguments in the reverse order from "epsilonNodesFromMany". "oneStep"
+computes the final list (reachable using "epsilonNodesFromMany"), adds
+the original list to the final list, and then normalizes this result.
+Normalization removes duplicates, and sorts the result. Compare the
+types of the two functions to be sure you get the arguments in the right
+order.
+
+oneStep:              Edge list  -> Start list -> Finish list
+epsilonNodesFromMany: Start list -> Edge list  -> Finish list
+
+To make your job easier, I have written a function "norm:: int list ->
+int list" which removes duplicates and places the elements in the list
+in ascending order. You can find this function, and the other pieces you
+need on the Assignments web page. Use this function to write a version
+of "epsilonNodesFromMany", which performs input addition and
+normalization, called "oneStep".
+
+j) Now compute the following progression, using the test data.
+
+val e1 = oneStep es1 [8];
+val e2 = oneStep es1 e1;
+val e3 = oneStep es1 e2;
+...
+
+Continue this process until the input is identical to the output. What
+does this mean?  This will always eventually terminate. Can you make an
+argument why?
+
+You should write a function that repeatably applies "oneStep" until the
+output is equal to the input. You may use recursion or a while loop when
+you write your function
+
+repeatTilSame: Edge list -> int list -> int list
+
+Congratulations, you have written the eclosure function! Turn in an
+explanation why this computes the eclosure.
+
+</PRE>
+
+<HR ALIGN="center" WIDTH="100%">
+<A HREF="index.html"> Back</A> to CS 321, Languages and Compiler Design, Assignment Page

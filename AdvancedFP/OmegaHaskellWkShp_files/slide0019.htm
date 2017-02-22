@@ -1,0 +1,130 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 10">
+<link id=Main-File rel=Main-File href="../OmegaHaskellWkShp.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>Generalizing Algebraic Datatypes in Wmega</title>
+<meta name=Description
+content="9/23/2004: Equality constraints are maintained by the type checker">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="21"/>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#FFFFFF,#000000,#808080,#000000,#BBE0E3,#333399,#009999,#99CC00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><![endif]><p:shaperange
+  href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s21506" type="#_x0000_m1026"
+  style='position:absolute;left:36pt;top:21.625pt;width:9in;height:42pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s21507" type="#_x0000_m1027"
+  style='position:absolute;left:66pt;top:132pt;width:612pt;height:384pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape>
+ <div v:shape="_x0000_s21506" class=T><span style='position:absolute;
+ top:-.5%;left:-1.87%;width:103.93%;height:8.5%'><span style='font-size:91%'>Equality
+ constraints are maintained </span></span><span style='position:absolute;
+ top:8.5%;left:5.99%;width:88.2%;height:8.5%'><span style='font-size:91%'>by
+ the type checker</span></span></div>
+ <div v:shape="_x0000_s21507">
+ <div class=B style='mso-line-spacing:"90 20 0";position:absolute;top:25.0%;
+ left:10.11%;width:83.14%;height:3.5%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:50%'><b>Cons
+ :: (n=(S m)) =&gt;a -&gt; (Seq a m) -&gt; (Seq a n)&#13;</b></span></div>
+ <div class=B style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:29.25%;left:10.11%;width:88.95%;height:5.25%'><span style='mso-special-format:
+ nobullet;display:none'>•</span><span style='font-size:75%'>When applying a
+ constructor, the equality must be </span></span><span style='position:absolute;
+ top:34.0%;left:13.85%;width:79.4%;height:5.25%'><span style='font-size:75%'>satisfied
+ from a set of known </span><span style='font-size:75%'><i>facts&#13;</i></span></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:39.5%;
+ left:15.16%;width:78.08%;height:4.75%'><span style='mso-special-format:nobullet;
+ display:none'>–</span><span style='font-size:71%'><i>Given<span
+ style='mso-spacerun:yes'>   </span></i></span><span style='font-family:"Courier New";
+ font-size:71%'><b>x : a, &#13;</b></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:44.5%;
+ left:15.16%;width:78.08%;height:4.5%'><span style='mso-special-format:nobullet;
+ display:none'>–</span><span style='font-family:"Courier New";font-size:71%'><b><span
+ style='mso-spacerun:yes'>      </span>y : Seq a m&#13;</b></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:49.5%;
+ left:15.16%;width:78.08%;height:4.5%'><span style='mso-special-format:nobullet;
+ display:none'>–</span><span style='font-family:"Courier New";font-size:71%'><b><span
+ style='mso-spacerun:yes'>      </span>Cons x y :: Seq a n&#13;</b></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:54.25%;
+ left:15.16%;width:78.08%;height:4.75%'><span style='mso-special-format:nobullet;
+ display:none'>–</span><span style='font-size:71%'><i>Provided we can prove the
+ obligation:<span style='mso-spacerun:yes'>  </span></i></span><span
+ style='font-family:"Courier New";font-size:71%'><b>n=S m&#13;</b></span></div>
+ <div class=B style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:59.5%;left:10.11%;width:98.68%;height:5.25%'><span style='mso-special-format:
+ nobullet;display:none'>•</span><span style='font-size:75%'>New known facts are
+ introduced when pattern matching </span></span><span style='position:absolute;
+ top:64.25%;left:13.85%;width:79.4%;height:5.25%'><span style='font-size:75%'>against
+ a qualified constructor&#13;</span></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:69.75%;
+ left:15.16%;width:84.26%;height:4.75%'><span style='mso-special-format:nobullet;
+ display:none'>–</span><span style='font-size:71%'>The defintion:<span
+ style='mso-spacerun:yes'>  </span></span><span style='font-family:"Courier New";
+ font-size:71%'><b>f ((Cons x y)::Seq a n) = . . .&#13;</b></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:74.5%;
+ left:15.16%;width:78.08%;height:4.75%'><span style='mso-special-format:nobullet;
+ display:none'>–</span><span style='font-family:"Courier New";font-size:71%'><b>x::a,<span
+ style='mso-spacerun:yes'>  </span>y::Seq a m</b></span><span style='font-size:
+ 71%'><span style='mso-spacerun:yes'>  </span>and the fact that<span
+ style='mso-spacerun:yes'>  </span></span><span style='font-family:"Courier New";
+ font-size:71%'><b>n=S m&#13;</b></span></div>
+ <div class=B style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:79.75%;left:10.11%;width:97.19%;height:5.25%'><span style='mso-special-format:
+ nobullet;display:none'>•</span><span style='font-size:75%'>Equalities in
+ obligations are solved using the facts by a </span></span><span
+ style='position:absolute;top:84.75%;left:13.85%;width:79.4%;height:5.25%'><span
+ style='font-size:75%'>decision procedure</span></span></div>
+ </div>
+</p:slide></div>
+
+</body>
+
+</html>

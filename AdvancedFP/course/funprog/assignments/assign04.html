@@ -1,0 +1,48 @@
+<PRE>
+
+CSE536  Functional Programming                       Assignment # 4
+Assigned: October 20, 2004    Due, in class: Friday, Oct. 29, 2004
+
+
+1) HigherOrder functions:
+   Exercise 5.9 page 73 of the text
+
+   Suppose you are given a non-negative integer "amt" representing a sum
+   of money, and a list of coin denominations "[v1, v2, ..., vn]", each
+   being a positive integer.  Your job is to make change for "amt" using
+   the coins in the coin supply.  Define a function "makeChange" to solve
+   this problem.  For example, your function may behave like this:
+
+       makeChange 99 [5, 1]  =>  [19, 4]
+
+   where 99 in the amount and [5, 1] represents the types of coins (say,
+   nickels and pennies in US currency) that we have.  The answer [19, 4]
+   means that we can make the exact change with 19 5-unit coins and 4
+   single-unit coins; this is the best (in terms of the total number of
+   coins) possible pollution.
+
+   To make things slightly easier, you may assume that the list
+   representing the coin denominations is given in descending order, and
+   that the single-unit coin is always one of the coin types.
+
+
+2) Trees:
+   Consider the data definition:
+
+data Tree a
+ = Zero
+ | One a (Tree a)
+ | Two a (Tree a) (Tree a)
+
+   A) Write the fold function for it.
+      (hint: it has four parameters, one constant, two functions, and one Tree)
+   B) Use it to define a function that sums all the objects
+      in a (Tree a) object.
+
+3) Exercise 7.4  page 86 of the text
+   (Tree versions of zip and zipWith)
+
+4) Exercise 7.5  page 86 of the text
+   (Expr's with variables and "let". )
+
+</PRE>

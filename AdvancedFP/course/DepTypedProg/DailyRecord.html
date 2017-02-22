@@ -1,0 +1,380 @@
+<title> CS 410/520 Dependently Typed Programming </title>
+
+
+<CENTER>
+<BIG> CS 410/520 Dependently Typed Programming, Daily Record, Spring Term 2010 </BIG>
+</CENTER>
+
+<A HREF="index.html">Back to the class web-page.</A><br>
+
+
+<OL>
+<HR ALIGN="center" WIDTH="100%">
+<B>Introduction To Omega</B>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>   <comment> <A NAME="Today"></A> </comment>
+<PRE>
+Monday <B>March 29</B>, 2009
+Due Today:
+	Bring your laptop to classs!
+Announcments:
+Class Topic:
+	Downloading <A HREF="http://web.cecs.pdx.edu/~sheard/Omega/Omega1-4-4.zip">Omega</A>. See the <A HREF="http://web.cecs.pdx.edu/~sheard/Omega/index.html">Omega page</A> for some simple directions.
+	Summer School Notes <A HREF="Notes/Sheard1.pdf">part 1</A>.
+	Some sources of information about Omega<
+		<A HREF="OmegaManual.ps">Omega users manual</A>
+		<A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>
+		<A HREF="http://web.cecs.pdx.edu/~sheard/papers/GenericNotes.ps">Generic Programming in Omega</A>.
+	The <A HREF="Code/Intro.prg">program</A> we wrote in class with LTE and cdStar
+Assigned today:
+	Get Omega working on your computer
+	Download <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>.
+	Read pages 1-7
+	Do exercises 1 & 2 (page 3), 3 (page 6), and 4, 5, & 6 (page 7).
+	Be prepared to discuss your solutions in class on Wednesday.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>March 31</B>, 2009
+Due Today:
+	exercises 1 & 2 (page 3), 3 (page 6), and 4, 5, & 6 (page 7) from <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A> due today.
+Announcements:
+Class Topic:
+	Go over homework.
+	The <A HREF="Code/TreeShape.prg">TreeShape</A> examples.
+	Continue with Summer School Notes <A HREF="Notes/Sheard1.pdf">part 1</A>.
+		Witness types
+		The <A HREF="Code/NatWitness.prg">examples</A> with Proof, LE, Plus, Even, etc.
+Assigned today:
+	Read pages 8-12 of <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>.
+	Do exercises 8 & 9 (page 9), 10 & 11 (page 11), and 12 (page 12).
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Monday <B>April 5</B>, 2009
+Due Today:
+	Exercises 8 & 9 (page 9), 10 & 11 (page 11), and 12 (page 12) from <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A> due today.
+Announcments:
+Class Topic:
+	Some <A HREF="Code/PlusCommutes.prg">code</A> we discussed last time about plus commuting and a function with
+		multiply in its type. Also two different ways to encode a less-than-or-equal
+		predicate, and relationships between them. The repEQ function and Liebniz equality.
+	Continue with Summer School Notes <A HREF="Notes/Sheard1.pdf">part 1</A>.
+		Singleton types, Nat', Liebniz equality, computing values and proofs.
+
+Assigned today:
+    Read pages 13-17 of <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>.
+	Do exercises 13, 14, 15 (page 14), exercise 16 (page 15), exercise 17 (page 16).
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>April 7</B>, 2009
+Due Today:
+	exercises 13, 14, 15 (page 14), exercise 16 (page 15), exercise 17 (page 16)from <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A> due today.
+Announcements:
+Class Topic:
+	Go over <A HREF="Code/Homework3.prg">homework</A>.
+		13 - same:: Nat' n -> LE n n;  predLE:: Nat' n -> LE n (S n).
+		14 - trans:: LE a b -> LE b c -> LE a c
+		15 - f:: Nat' b -> Plus b c -> LE b c
+		16 - sameNat:: Nat' a -> Nat' b -> Maybe(Equal a b)
+		17 - filter (a -> Bool) -> Seq a n -> exists m .(Nat' m,Seq a m)
+	Summer School Notes <A HREF="Notes/Sheard2.pdf">part 2</A>.
+		pages 1-10, Libniz equality, and putting witnesses to work by
+			storing witness in data to enforce invariants.
+		pages 25-36, Interpreters.
+	Untyped Interpreters. See example <A HREF="Code/UntypedInterp.prg">code</A>.
+		extend this in class using GADTs to encode typed object language representations.
+Assigned today:
+	Read Section 5, pages 31-38 of <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>.
+	Do exercise 23, pages 37-38.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Monday <B>April 12</B>, 2009
+Due Today:
+Announcments:
+Class Topic:
+	Tom's exercise 17 <A HREF="Code/TomHarkeEx17.prg">code</A>.
+	Summer School Notes <A HREF="Notes/Sheard2.pdf">part 2</A>.
+		Staging the typed interpretor. <A HREF="Code/StagedTypedInterp.prg">Code</A> to work on in class.
+	The <A HREF="Code/TypedInterpWithVars.prg">code</A> for a typed interpretor with variables.
+	Tags and Labels, reflecting names into the type-name-space. <A HREF="Code/SimpleTags.prg">First Try</A>.
+	Binding constructs using deBruin indices.
+Assigned today:
+	Read <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A> .
+		Section 3.11, pages 17-28, Sections 5.4-5.6 pages 34-36, Section 5.8 pages 38-39,  on staging.
+		Section 3.14, pages 21-23 on Tags and Labels.
+	Do exercise 25 page 39. Use the staged <A HREF="Code/StagedTypedInterp.prg">interpretor</A> and the
+		<A HREF="Code/TypedInterpWithVars.prg">interpretor</A> with variables we developed in class as
+		the base for your example. Implement as many 'optimizations' as you
+		can think of.
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>April 14</B>, 2009
+Due Today:
+	Exercise 25 page 39 of <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A> due today.
+Announcements:
+Class Topic:
+	After our discussion last time, I have thought of more ways to
+		view Tags and Labels as object language variables.
+		<A HREF="Code/FiniteTags.html">view1</A> - A language with a fixed number of variables, and a fixed number of variables.
+		<A HREF="Code/SimpleTags.prg">view2</A> - Infinite number of positions by using natural numbers, but still a fixed number of variables.
+		<A HREF="Code/UnboundedTags.html">view3</A> - Using built in Tags and Labels for infinite positions and variables.
+		<A HREF="Code/DeBruijn.html">view4</A> - Using position only. This is called De Bruijn indices.
+Assigned today:
+	Read <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>
+		Section 5.1-5.11, Omega as a meta language, pages 31-42.
+		Pay particular attention to Section 5.9
+		Do exercise 24, page 38 for next time.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+
+<PRE>
+Monday <B>April 19</B>, 2009
+Due Today:
+	Do exercise 24, page 38 from <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A> due today.
+Announcments:
+Class Topic:
+	Talk about <A HREF="Code/Ex24TypedEval.prg">homework</A>. Evaluation using DeBruijn indices.
+	Finish our discussion about <A HREF="Code/SubstInDeBruijn.html">substitution</A> in a system using De Bruijn indices.
+	Meta theory, reasoning about programs. <A HREF="Code/WrightFelleisen.html">Subject Reduction</A>.
+		A helpful notes: <A HREF="http://web.cecs.pdx.edu/~sheard/papers/PlayingWithTypes2.ps">Playing with Types</A>.
+Assigned today:
+	Read <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>
+		Section 5.12- 5.14, pages 42-50.
+	Using the dataypes from the <A HREF="Code/WrightFelleisen.html">Subject Reduction</A> program
+	write a function bump:: E mode env t -> E mode env t
+	that pushes every 'Shift' so that it applies only to variables
+	(or other Shifts applied to variables).
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>April 21</B>, 2009
+Due Today:
+	Write a function <A HREF="Code/PushShiftDown.html">bump</A>:: E mode env t -> E mode env t, due today (see April 21 assignment).
+Announcements:
+Class Topic:
+	Balanced Trees
+	<A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>
+		Section 4, pp 23-31, AVL Trees (<A HREF="Code/avl.prg">code</A>)
+		Appendix A, pp 64-67, Red Black Trees (<A HREF="Code/RedBlackTree.prg">code</A>)
+	<A HREF="http://web.cecs.pdx.edu/~sheard/papers/ProgStaticInv.ps">Programming with Static Invariants in Omega</A>
+		Section 4, pp 5-10, Binomial Heaps
+Assigned today:
+	Implement 2-3 Trees. see <A HREF="Notes/TwoThreeTreeAssignment.html">directions</A>.
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Monday <B>April 26</B>, 2009
+Due Today:
+	<A HREF="Notes/TwoThreeTreeAssignment.html">2-3 Trees</A> due today.
+Announcments:
+Class Topic:
+	2-3 tree <A HREF="Code/2-3-Tree.html">discussion</A>
+	Read <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>
+		Section 6 pages 50-52.
+	Some <A HREF="Code/Nat.html">example</A> proofs to work on.
+
+Assigned today:
+	<A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>. Exercise 27, page 55
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>April 28</B>, 2009
+Due Today:
+	<A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>. Exercise 27, page 55, due today.
+Announcements:
+Class Topic:
+	Read <A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>
+		Sections 6.1, 6.2, and 6.3, pages 55-63.
+	The <A HREF="Code/adderWork.Html">working example</A> we developed in class.
+		This imports our definition of value carrying <A HREF="Code/Bits.html">Bits</A>.
+	The <A HREF="Code/adder.prg">code</A> for a correct by typing bit adder.
+Assigned today:
+	<A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>. Exercises 32 and 33, page 62.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>May 3</B>, 2009
+Due Today:
+	<A HREF="http://web.cecs.pdx.edu/~sheard/papers/SumSchNotes.ps">Programming in Omega</A>. Exercises 32 and 33 due tody.
+Announcments:
+Class Topic:
+	Go over homework.
+	More discussion about the adder. We'll continue to work on the
+	<A HREF="Code/adderWork.html">version</A> we derived in class.
+	This imports our definition of value carrying <A HREF="Code/Bits.html">Bits</A>.
+Assigned today:
+	Bring a list of 1-3 items you would be interested in working through
+	as a class. This will determine what we'll do for the next week or two
+	so put some thought into it.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>May 5</B>, 2009
+Due Today:
+Announcements:
+Class Topic:
+	In class we developed a framework for building
+	provably correct rewrite-systems over <A HREF="Code/Bits.html">value carrying bits</A>.
+	The code we <A HREF="Code/TypedRewriting.html">developed</A>.
+
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>May 10</B>, 2009
+Due Today:
+Announcments:
+Class Topic:
+	Tom suggested a way to describe correct compilers.
+		The <A HREF="Code/stack.prg">original</A> stack based compilation algorithm.
+		An <A HREF="Code/stack-indexed.prg">extended version</A> using type indexes to ensure correctness.
+Assigned today:
+	Extend the <A HREF="Code/stack-indexed.prg">extended version</A> above in some manner.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>May 12</B>, 2009
+Due Today:
+	Extensions to the <A HREF="Code/stack-indexed.prg">extended version</A> of the stack based compiler due today.
+Announcements:
+Class Topic:
+	We developed an <A HREF="Code/Rich-stack-indexed.prg">extension</A> to the compiler to stack code that
+	handles multi sorted expressions and conditions.
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Monday <B>May 17</B>, 2009
+Due Today:
+Announcments:
+Class Topic:
+	Jake suggested looking at evolutionary programming, encoded
+	by typed functions that evolve.
+	A generator of typed functions, see the <A HREF="Code/TreeGen.hs">code</A> using GADTs in Haskell.
+Assigned today:
+	Extend the work above by
+		Functions for crossover
+		Functions for mutation
+		Evaluation of Expressions into functions
+		Randomize expression generation
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>May 19</B>, 2009
+Due Today:
+Announcements:
+Class Topic:
+	Tim added some extensions to create real Haskell
+		functions from the generated functions: <A HREF="Code/TreeGen.hs">code</A>.
+	Tom added some functions to randomly create functions: <A HREF="Code/TreeGenByTom.hs">code</A>.
+	Jake added some functions to perform crossover: <A HREF="Code/TreeGenByJake.hs">code</A>.
+	Dominic added code for random mutation of a term: <A HREF="Code/TreeGenByDominic.hs">code</A>.
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Monday <B>May 24</B>, 2009
+Due Today:
+Announcments:
+Class Topic:
+	We started formalizing a cache coherency protocol suggested by Dominic.
+		<A HREF="Code/Cache.prg">code here</A>.
+Assigned today:
+	Think about additional constructors for the OK judgement.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>May 26</B>, 2009
+Due Today:
+Announcements:
+Class Topic:
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Monday <B>May 31</B>, 2009
+Memorial Day Holiday -- No Classes
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>June 2</B>, 2009
+Due Today:
+Announcements:
+Class Topic:
+	We discussed encoding a Learning Graph, where some
+	steps have prerequisites, can we enforce that prerequisites
+	always exist?  See our <A HREF="Code/LearningGraph.prg">code</A>.
+Assigned today:
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+?day <B>June 7,8,9,0r 10</B>, 2009
+Final Exam Block:
+
+End of Term Celebration.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+</OL>
+
+
+<A HREF="index.html">Back to the class web-page.</A>
+
+

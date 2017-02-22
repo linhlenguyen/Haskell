@@ -1,0 +1,177 @@
+<title> CS510 Section FSC - Staged Computation Lecture Notes </title>
+
+<CENTER>
+<BIG>CS510 Section FSC - Fundamentals of Staged Computation  - Winter 2004 - Lecture Notes</BIG>
+</CENTER>
+
+<P ALIGN=left>
+The following are powerpoint slides (and associated code) from the lectures.
+
+<OL>
+<LI> Lecture 1
+      <UL>
+          <LI> <A HREF="l01intro.ppt"> Slides: </A>
+               Acknowledgements, Course details, Academic Integrity,
+               Introduction to Staging, Meta-programs, Introduction to MetaML.
+      </UL>
+
+<LI> Lecture 2
+      <UL>
+          <LI> <A HREF="l02moreMetaML.ppt"> Slides: </A>
+               More details about MetaML and MetaOcaml. Lift, Cross stage persistence, New kinds
+               of errors caused by staging.
+      </UL>
+
+<LI> Lecture 3
+      <UL>
+          <LI> <A HREF="L03MoreExamples.ppt"> Slides: </A>
+               Transformers vs generators, Exponentially large generators,
+               staging the shortest path algorithm, Introducing let to "flatten"
+               generated code. The staged Merge program.
+               <A HREF="code04.txt">Code from the lecture.</A>
+
+      </UL>
+
+
+
+<LI> Lecture 4 <UL> <LI> <A HREF="L04StagedInterpreters.ppt"> Slides: </A> The
+ 	  calculator problem. Optimal generation vs post generation optimization.
+ 	  Staging interpreters. Binding time improvements. <A HREF="code05.txt">
+ 	  Code from the lecture.</A>
+
+      </UL>
+
+
+<LI> Lecture 5
+      <UL>
+          <LI> <A HREF="l05ReviewHW2.ppt"> Slides: </A>
+               Dot-product, use of list, special case static singleton lists,
+               staged arithmetic, safe beta, safe eta.
+               <A HREF="code03.txt">Code from the lecture.</A>
+      </UL>
+
+
+<LI> Lecture 6 <UL> <LI> <A HREF="L06Monads.ppt"> Slides: </A>
+     Monads. Three interpreter extensions: Print, Divide, Multiple Values.
+     Monads are patterns. Monads in MetaML. Higher order Type Constructors,
+     Rank-2 polymorphism in Recordes in MetaML. The Do-Return syntax
+     in MetaML. The final interpreter. <A HREF="code06.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+
+<LI> Lecture 7 <UL> <LI> <A HREF="L07MonadicStagedRElang.ppt"> Slides: </A>
+      Staging the RE language using Monads.
+      <A HREF="codeRE.txt">
+	  Code from the lecture.</A>
+     </UL>
+
+
+
+<LI> Lecture 8 <UL> <LI> <A HREF="L07OperSemantics.ppt"> Slides: </A>
+     An operational semnatics for MetaML subset. Interpreters for
+     the lambda calculus. Using constants to encode arithmetic, if-then-else,
+     and recursion. Adding staging. Using Covers.
+      <A HREF="code07.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+<LI> Lecture 9 <UL> <LI> <A HREF="MemoAndAbstInterpOpt.ppt"> Slides: </A>
+     Generating optimal code using monads and abstract code.
+      <A HREF="code09x.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+
+<LI> Lecture 10 <UL> <LI> <A HREF="MetaMLtypesInOmega.ppt"> Slides: </A>
+     A Type system for MetaML. Typing rules, contexts, judgements. DeBriujn Indices.
+     MetaML as a language with a sliding band of contexts. Omega as a tool
+     for experimenting with type systems. The Natural number example in Omega.
+     MetaML as an Generalized Algebraic Datatype in Omega. The eval
+     function, the build function. Example ill-typed programs.
+      <A HREF="MetaMLOmega.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+
+
+<LI> Lecture 11 <UL> <LI> <A HREF="L10StagedOperSemCMix.ppt"> Slides: </A>
+      Discussion about Homework 6. The CMix partial evaluator.
+      <A HREF="code10.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+
+<LI> Lecture 12 <UL> <LI> <A HREF="L13BTA.ppt"> Slides: </A>
+      Search Based Automatic Binding Time analysis. Binding time improvement.
+      <A HREF="code13.html">
+	  Code from the lecture.</A>
+
+      </UL>
+
+
+<LI> Lecture 13 <UL> <LI> <A HREF="L11RedSemantics.ppt"> Slides: </A>
+      Reduction semantics for MetaML. Reduction semantics,
+      Rewriting systems, Coherence, Confluence. Level annotated terms.
+      Big-step semantics.
+      </UL>
+
+
+<LI> Lecture 14 <UL> <LI> <A HREF="L09MetaMLHol.ppt"> Slides: </A>
+     Implementing an HOL like theorem prover in MetaML.
+      <A HREF="code09.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+<!--
+
+<LI> Lecture 8 <UL> <LI> <A HREF="L08PatternMatching.ppt"> Slides: </A>
+     Pattern matching. Using continuations as a binding time improvement.
+     Join-points and point-cut-descriptions as specifying debugging points.
+     Intro to offline partial evaluation.
+      <A HREF="code08.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+
+<LI> Lecture 12 <UL> <LI> <A HREF="L12TypeSafety.ppt"> Slides: </A>
+      Type Safety for MetaML. Subject Reduction. Problems with run.
+      </UL>
+
+
+<LI> Lecture 14 <UL> <LI> <A HREF="L14MonadTrans.ppt"> Slides: </A>
+      Staging Monad Transformers
+      <A HREF="code14.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+
+
+<LI> Lecture 15 <UL> <LI> <A HREF="L15AbstractInterpBTA.ppt"> Slides: </A>
+      BTA using abstract interpretation. First order functional language.
+      <A HREF="code15.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+
+
+
+<LI> Lecture 16 <UL> <LI> <A HREF="L16MoreBTA.ppt"> Slides: </A>
+      More on BTA
+      <A HREF="code16.txt">
+	  Code from the lecture.</A>
+
+      </UL>
+ -->
+
+</OL>
+<p>
+<A HREF="../index.html"> Back</A> to CSE583 Home Page

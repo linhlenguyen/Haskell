@@ -1,0 +1,197 @@
+<title>  CS 410/510 - Homework #1 </title>
+
+
+<CENTER>
+<BIG>  CS 410/510 - Homework #1 </BIG>
+</CENTER>
+
+Create a single Haskell file that contains solutions to the following programs.
+Be sure it compiles without errors, and submit it via D2L by class time on
+Wednesday January 13, 2016.  Start with the file <A HREF="HW1Template.html">HW1Template.html</A>
+which has all the boiler plate you will need.  <B>Be sure you put your name and email in a comment
+at the beginning of the file</B>. Without this you will not get any feedback.
+
+<ol>
+
+<li> <B>Standard Classes.</B>  Consider the Haskell data definition for a kind of binary tree.
+
+<PRE>
+data Tree a = Tip a | Fork (Tree a) (Tree a)
+</PRE>
+I have included one instance declaration for the Show class below. Note
+how the instance has a prerequisite Show instance for the type parameter 'a'.
+
+<PRE>
+instance Show a => Show (Tree a) where
+  show (Tip a) = "(Tip "++ show a ++ ")"
+  show (Fork x y) = "(Fork " ++ show x ++" "++ show y ++")"
+</PRE>
+
+Copy and paste these definition into your solution file (or start with the template above) and add
+the declarations for the following standard instances. Hint, you will need prerequisites
+for these as well. You may NOT use any deriving clauses in your solutions.
+
+<p>
+<ul>
+<li> Eq class
+<li> Ord class.  You might study the Ord class before writing your solution. It has many default definitions, so you only need write actual definitions for some of the methods. In fact there are
+several choices of what set of definitions you can make.
+<li> Functor class
+</ul>
+<BR>
+
+
+
+<li> <B>Multiparameter classes.</B>  Two types are convertible if there is a pair of
+functions that convert back and forth from one type to the other. It should be an invariant
+that these two functions are both left and right inverses. We can capture the structure
+ (but not the invariant) of this using a multiparameter type class.
+
+<PRE>
+class Convertible a b where
+  into:: a -> b
+  outof:: b -> a
+</PRE>
+
+An example of this that a pair of lists (of the same length) is convertible
+with a list of pairs. We express this with the following instance.
+
+<PRE>
+instance Convertible ([a],[b]) [(a,b)] where
+  into (x,y) = zip x y
+  outof xs = unzip xs
+</PRE>
+
+Write instance declarations that respect both the structure and the invariant for the following types.
+You may or may not need prerequisites instances.
+
+<p>
+<ul>
+<li> <PRE>
+Convertible Bool (Maybe ())
+</PRE>
+
+<li> <PRE>
+Convertible (a -> b -> c) ((a,b) -> c)
+</PRE>
+
+<li> <PRE>
+Convertible [a] (Int -> a)     -- you may assume that the list is infinite, and the Int is >= 0
+</PRE>
+
+</ul>
+<BR>
+
+
+
+
+
+
+<li> A tagged expression is a rich data structure that can be used to encode a rich variety of
+Haskell types.
+
+<PRE>
+data TagExp = I Int | C Char |  F (TagExp -> TagExp) | D String [TagExp]
+</PRE>
+
+One may think of the constructors,  I, C, F, and D as tags. The constructor tells
+what kind of data is stored inside. An example encoding is the embedding of a list of Int
+into a TagExp. This can be defined by the following function.
+
+<PRE>
+encodeL :: [Int] -> TagExp
+encodeL [] = D "[]" []
+encodeL (x:xs) = D ":" [I x,encodeL xs]
+</PRE>
+
+One can decode a list of integer using the following function.
+
+<PRE>
+decodeL:: TagExp -> [Int]
+decodeL (D "[]" []) = []
+decodeL (D ":" [I x,xs]) = x : decodeL xs
+decodeL other = error "Not a Tagged list"
+</PRE>
+
+First note that the decodeL is a partial function. There are plenty of TagExp that
+don't encode lists.
+These examples suggest a rich mechanism for creating Convertible instances. Write the
+following instances.
+
+<ul>
+<li>
+<PRE>
+Convertible Int TagExp
+</PRE>
+
+
+<li>
+<PRE>
+Convertibale Char TagExp
+</PRE>
+
+
+<Li>
+<PRE>
+Convertible a TagExp => Convertible [a] TagExp
+</PRE>
+
+
+<Li>
+<PRE>
+Convertible a TagExp => Convertible (Tree a) TagExp    -- this is the Tree from question 1
+</PRE>
+
+
+<li>
+<PRE>
+(Convertible a TagExp,Convertible b TagExp) => Convertible (a->b) TagExp
+</PRE>
+
+<li>
+<PRE>
+(Convertible a TagExp,Convertible b TagExp) => Convertible (a,b) TagExp
+</PRE>
+
+</ul>
+
+<li> <B>Generics.</B> Consider the following class definition.
+
+<PRE>
+class Convertible a TagExp => Generic a where
+  toString:: a -> String
+  equal:: a -> a -> Bool
+  flatten:: a -> [Int]
+  unflatten:: [Int] -> (a,[Int])
+</PRE>
+
+The basic idea is that we call any type that is Convertible to a TagExp, a Genric type.
+Generic types support a wide variety operations. Here is a partial instance for pairs
+
+<PRE>
+instance (Generic a,Generic b) => Generic (a,b) where
+  flatten (a,b) = flatten a ++ flatten b
+  unflatten xs = ((x,y), zs)
+    where (x,ys) = unflatten xs
+          (y,zs) = unflatten ys
+</PRE>
+
+write the following instances for Generic. You may have to add some Convertible instances
+to complete the Genric instances.
+
+<ul>
+<Li> Int
+<li> Char
+<LI> Bool
+<li> [a]
+<li> Tree a
+<li> and finish the missing methods for pairs.
+</ul>
+
+There are two ways to do this. The obvious way (but this requires lots of work) is to write an instance for
+every type (like we did for <B>Generic (a,b)</B> above). A better way is to add default
+definitions for each method to the class definition. These default definitions will exploit
+the operations of Convertible (into and outof). This way an instance
+definition need not write any code at all!
+
+</ol>

@@ -1,0 +1,196 @@
+-- <PRE>
+{-# Language DeriveFunctor, FlexibleInstances  #-}
+
+module HW5  where
+
+
+import Control.Arrow( Arrow, ArrowChoice, ArrowLoop, Kleisli(..)
+                    , arr, first, second, (***), (&&&)
+                    , left, right, (+++), (|||)
+                    , loop )
+import Control.Category(Category, (>>>), (.), id)
+import Control.Monad(liftM)
+import Prelude hiding((.), id)
+
+import Data.Char(ord,chr,digitToInt)
+
+-----------------------------------------------------
+-- Part 1. Programming with Arrows
+-----------------------------------------------------
+
+-- Arrow type signatures for reference.
+{-
+first :: Arrow a => a b c -> a (b, d) (c, d)
+second :: Arrow a => a b c -> a (d, b) (d, c)
+(***) :: Arrow a => a b c -> a b' c' -> a (b, b') (c, c')
+(&&&) :: Arrow a => a b c -> a b c' -> a b (c, c')
+
+
+left :: ArrowChoice a => a b c -> a (Either b d) (Either c d)
+right :: ArrowChoice a => a b c -> a (Either d b) (Either d c)
+(+++) :: ArrowChoice a => a b c -> a b' c' -> a (Either b b') (Either c c')
+(|||) :: ArrowChoice a => a b d -> a c d -> a (Either b c) d
+-}
+------------------------------------------------------
+
+-------------------------------------------------
+-- Question #1
+-- Write strToInteger using arrows
+-- test your code
+-- use the following guide
+--    "4385"::Int -->
+--    ([4,3,8,5],[0,1,2,3])::([Int],[Integer]) -->
+--    ([4,3,8,5],[0,1,2,3])::([Integer],[Integer])  -->
+--    ([5,8,3,4],[1,10,100,1000])::([Integer],[Integer]) -->
+--    [5,80,300,4000]::[Integer] -->
+--    4385::Integer
+
+strToInteger :: [Char] -> Integer
+strToInteger = undefined
+
+-------------------------------------------------------
+-- Question #2
+-- Write the function printFileInc using arrows
+-- I reads a string of digits from a file, and prints to the terminal
+-- the successor of the value of that string of digits as an Integer .
+-- Test your code.
+
+printFileInc :: Kleisli IO FilePath ()
+printFileInc = undefined
+
+-------------------------------------------------------
+-- Question #3
+-- Write the function incFile using arrows.
+-- It reads a string of digits from a file, and prints
+-- the successor of the value of that string of digits
+-- to another file.
+-- Test your code.
+
+
+incFile:: FilePath -> FilePath -> IO ()
+incFile s t = undefined
+
+--------------------------------------------------------
+-- Part 2, Programming with Algebras
+--------------------------------------------------------
+-- Some Functors
+
+data F1 x = Zero | One | Plus x x deriving Functor
+data ListF a x = Nil | Cons a x   deriving Functor
+data StreamF n x = C n x          deriving Functor
+data NatF x = Z | S x             deriving Functor
+
+-----------------------------------------
+-- Algebras and their duals co-Algebras
+
+data Algebra f c = Algebra (f c -> c)
+
+data CoAlgebra f c = CoAlgebra {unCoAlgebra:: c -> f c }
+
+--------------------------------------------
+-- Initial and Final Algebras
+
+data Initial f = Init (f (Initial f))
+
+data Final f = Final{ unFinal:: (f (Final f)) }
+
+--------------------------------------------
+-- Operations on Initial (cata) and Final (ana) algebras
+
+cata :: Functor f => (Algebra f b) -> Initial f -> b
+cata (Algebra phi) (Init x) = phi(fmap (cata (Algebra phi)) x)
+
+ana :: Functor f => (CoAlgebra f seed) -> seed -> (Final f)
+ana (CoAlgebra phi) seed = Final(fmap (ana (CoAlgebra phi)) (phi seed))
+
+-----------------------------------------------------------
+-- Stating Proofs about Algebras and thir operations
+
+data Arrow f a b = Arr (Algebra f a) (Algebra f b) (a->b)
+
+-- For every Arrow (Arr (Algebra f) (Algebra g) h) it must be the case that
+--
+--   F a ---- fmap h -----> F b
+--    |                      |
+--    | f                    | g
+--    |                      |
+--    V                      V
+--    a -------- h --------> b
+
+valid :: (Eq b, Functor f) => HW5.Arrow f a b -> f a -> Bool
+valid (Arr (Algebra f) (Algebra g) h) x =  h(f x) == g(fmap h x)
+
+data CoHom f a b = CoHom (CoAlgebra f a) (CoAlgebra f b) (a->b)
+
+-- For every arrow in the category
+-- (CoHom (CoAlgebra f) (CoAlgebra g) h) it must be the case that
+--
+--   F a ---- fmap h -----> F b
+--    ^                      ^
+--    |                      |
+--    | f                    | g
+--    |                      |
+--    a -------- h --------> b
+
+covalid :: (Eq (f b), Functor f) => CoHom f a b -> a -> Bool
+covalid (CoHom (CoAlgebra f) (CoAlgebra g) h) x =  fmap h (f x) == g(h x)
+
+--------------------------------------------------------------------
+
+-- Question #4
+
+data TreeF x = X x   -- Finsh these by replacing "X x" to the right of the =
+data LangF x = Y x
+
+-------------------------------------------
+-- Question #5
+
+n1 :: Initial NatF
+n1 = undefined
+
+l1 :: Initial (ListF Int)
+l1 = undefined
+
+t1 :: Initial TreeF
+t1 = undefined
+
+e1 :: Initial LangF
+e1 = undefined
+
+
+-----------------------------------------------------
+-- Question #6
+
+instance Show a => Show (Initial (ListF a)) where
+  show x = undefined
+
+instance Show (Initial LangF ) where
+  show x = undefined
+
+add :: Initial NatF -> Initial NatF -> Initial NatF
+add x = undefined
+
+
+data Store s x = St(s -> (x,s))
+type Map = [(String,Value)]
+type Value = Int
+
+eval5a :: Iniitia LangF -> Store Map Value
+eval5a x = undefined
+
+-------------------------------------------------------
+-- Question # 7
+
+infExp :: Final LangF
+infExp = undefined
+
+
+-------------------------------------------------------
+-- Question 8
+
+prefix:: Int -> Final LangF -> Initial LangF
+prefix n (Final x) = undefined
+
+
+-- </pre>
+

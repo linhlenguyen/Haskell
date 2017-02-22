@@ -1,0 +1,75 @@
+<title> Laziness Worksheet </title>
+
+<CENTER>
+<BIG> Laziness Worksheet </BIG>
+</CENTER>
+
+<p>
+<H3>Goals</H3>
+<p>
+The purpose of this worksheet is to practice using laziness, by
+creating some cyclic structures.
+<p>
+<H3>What to do</H3>
+<ul>
+<li> Cut and paste the template below
+<li> Fill in the undefined, so the structures have the
+<li> To test your code
+properties described in the comments.
+</ul>
+<p>
+<H3>Your code will start something like:</H3>
+<HR ALIGN="center" WIDTH="100%">
+
+<p>
+<PRE>
+module Lazy where
+import Test.QuickCheck
+import Data.Ratio
+
+-- ones is an infinite list of ones. i.e. [1,1,1,1,...]
+ones:: [Int]
+ones = undefined
+
+prop_ones n = all (==1) (take n ones)
+
+-- from n is an infinite list of ascending numbers starting at n
+from:: Int -> [Int]
+from n = undefined
+
+prop_from n m = ok (take n (from m))
+  where ok [] = True
+        ok [x] = True
+        ok (x:y:zs) = (x+1)==y && ok (y:zs)
+
+-- Another way to compute an infinite list of ascending unmbers
+from2 = 2 : (map (+1) from2)
+
+-- Define a property for quickcheck to test for from2
+prop_from2 = undefined
+
+-- Use the technique of from2 to create the list [1, 1/2, 1/4, 1/8, 1/16, ...]
+-- You will need to use the operator (%) that builds ratios.  (1 % 4) --> 1/4
+-- Two important ratios are:
+
+one :: Ratio Integer
+one = 1
+
+half :: Ratio Integer
+half = 1 % 2
+
+converge :: [Ratio Integer]
+converge = undefined
+
+-- write test that shows the sum of the first n terms of
+-- converge is always less than 2
+
+prop_converge n = undefined
+
+</PRE>
+
+<p>
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>
+

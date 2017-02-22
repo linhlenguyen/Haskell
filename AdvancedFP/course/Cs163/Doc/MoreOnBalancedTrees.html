@@ -1,0 +1,62 @@
+<title>More on balanced trees</title>
+
+<CENTER>
+<BIG>More on balanced trees</BIG>
+</CENTER>
+
+<p>
+Earlier we studied balanced binary search trees, such as <A HREF="AvlTrees.html">AVL</A> trees, that relied
+on <A HREF="Balancing Rotations.html">rotation</A> for balancing trees that were only one-level
+away from balance. An alternative method for balancing
+is to use multi-way branching trees like B-Trees or <A HREF="../Code/2-3Tree.hs">2-3 Trees</A>.
+<p>
+Key properties to multiway balanced trees are:
+<p>
+<ul>
+
+<li> Branching nodes in the same tree can have different
+branching factors. In a binary search tree every brancing
+node has a brancing factor of 2.
+
+<li> For a node with branching factor of n, there are (n-1)
+key values, and the values in nodes in sub trees obey
+invariants about which relate to the key values.
+
+<li> There is an upper bound to the branching factor. When the upper
+bound is reached, the node is split into 2-nodes each with roughly
+one half the branching factor.
+
+<li> Trees are balanced by adjusting the branching factor or some of the nodes
+in a tree that is only slightly out of balance.
+</ul>
+<p>
+A multi-way balance tree of order n has a maximum branching
+factor of n.
+<p>
+Two common kinds of multiway balanced trees are:
+<ul>
+<li> B-Trees.
+    <ol> <li> Often used in databases, where each node maps to a distinct disk page.
+         <li> Since Disk accesses take several orders of magnitude more time to access
+              than memory accesses, much time can be saved by making the nodes
+              have a high order, thus making the height of the tree very small.
+         <li> The shallower the tree, the fewer disk accesses necessary
+         and the faster the search.
+         <li> Disk drives often read a large amount of data at
+              a time so this correlates with a large Node size as well.
+         </ol>
+<li> 2-3 Trees are multi-way trees with order 3.
+	<ol> <li> Since the order is small and fixed, the code to
+	     implement them is often simpler.
+         <li> Intra-node search is quick since the node size is small.
+         <li> Often used for main memory data rather than
+              data stored on disks.
+         </ol>
+</ul>
+
+
+
+<p>
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

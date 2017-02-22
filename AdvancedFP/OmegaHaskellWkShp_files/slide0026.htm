@@ -1,0 +1,332 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 10">
+<link id=Main-File rel=Main-File href="../OmegaHaskellWkShp.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>Generalizing Algebraic Datatypes in Wmega</title>
+<meta name=Description content="9/23/2004">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="28"/>
+ <o:rules v:ext="edit">
+  <o:r id="V:Rule2" type="connector" idref="#_x0000_s28680">
+   <o:proxy start="" idref="#_x0000_s28677" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28676" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule4" type="connector" idref="#_x0000_s28681">
+   <o:proxy start="" idref="#_x0000_s28678" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28677" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule6" type="connector" idref="#_x0000_s28682">
+   <o:proxy start="" idref="#_x0000_s28679" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28678" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule7" type="connector" idref="#_x0000_s28687">
+   <o:proxy start="" idref="#_x0000_s28684" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28683" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule8" type="connector" idref="#_x0000_s28688">
+   <o:proxy start="" idref="#_x0000_s28685" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28684" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule9" type="connector" idref="#_x0000_s28689">
+   <o:proxy start="" idref="#_x0000_s28679" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28685" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule10" type="connector" idref="#_x0000_s28692">
+   <o:proxy start="" idref="#_x0000_s28691" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28690" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule12" type="connector" idref="#_x0000_s28693">
+   <o:proxy start="" idref="#_x0000_s28679" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28691" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule13" type="connector" idref="#_x0000_s28696">
+   <o:proxy start="" idref="#_x0000_s28695" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28694" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule14" type="connector" idref="#_x0000_s28699">
+   <o:proxy start="" idref="#_x0000_s28698" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28697" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule16" type="connector" idref="#_x0000_s28700">
+   <o:proxy start="" idref="#_x0000_s28679" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28698" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule18" type="connector" idref="#_x0000_s28701">
+   <o:proxy start="" idref="#_x0000_s28679" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28695" connectloc="0"/>
+  </o:r>
+  <o:r id="V:Rule20" type="connector" idref="#_x0000_s28703">
+   <o:proxy start="" idref="#_x0000_s28702" connectloc="2"/>
+   <o:proxy end="" idref="#_x0000_s28679" connectloc="0"/>
+  </o:r>
+ </o:rules>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#FFFFFF,#000000,#808080,#000000,#BBE0E3,#333399,#009999,#99CC00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><![endif]><v:shapetype id="_x0000_t202"
+  coordsize="21600,21600" o:spt="202" path="m,l,21600r21600,l21600,xe">
+  <v:stroke joinstyle="miter"/>
+  <v:path gradientshapeok="t" o:connecttype="rect"/>
+ </v:shapetype><v:shape id="_x0000_s28676" type="#_x0000_t202" style='position:absolute;
+  left:66pt;top:450pt;width:30pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28677" type="#_x0000_t202" style='position:absolute;
+  left:54pt;top:5in;width:60pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28678" type="#_x0000_t202" style='position:absolute;
+  left:66pt;top:246pt;width:30pt;height:45.625pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28679" type="#_x0000_t202" style='position:absolute;
+  left:222pt;top:96pt;width:48pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shapetype id="_x0000_t32" coordsize="21600,21600" o:spt="32"
+  o:oned="t" path="m,l21600,21600e" filled="f">
+  <v:path arrowok="t" fillok="f" o:connecttype="none"/>
+  <o:lock v:ext="edit" shapetype="t"/>
+ </v:shapetype><v:shape id="_x0000_s28680" type="#_x0000_t32" style='position:absolute;
+  left:81pt;top:396pt;width:3pt;height:54pt;flip:x' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28681" type="#_x0000_t32" style='position:absolute;
+  left:81pt;top:291.625pt;width:3pt;height:68.375pt' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><![if !vml]><img border=0 v:shapes="_x0000_s28680,_x0000_s28681"
+ src="slide0026_image004.gif" style='position:absolute;top:54.0%;left:10.67%;
+ width:1.68%;height:30.0%'><![endif]>
+ <div v:shape="_x0000_s28676" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:84.25%;left:10.11%;width:2.43%;height:5.25%'><span
+ style='font-size:133%'><b>5</b></span></div>
+ <div v:shape="_x0000_s28677" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:67.5%;left:8.42%;width:6.55%;height:5.25%'><span
+ style='font-size:133%'><b>Int</b></span></div>
+ <div v:shape="_x0000_s28678" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:46.5%;left:10.11%;width:2.24%;height:6.75%'><span
+ style='font-size:178%'><b>*</b></span></div>
+ <div v:shape="_x0000_s28679" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:18.75%;left:31.83%;width:4.86%;height:5.25%'><span
+ style='font-size:133%'><b>*1</b></span></div>
+ <v:shape id="_x0000_s28682" type="#_x0000_t32" style='position:absolute;
+  left:81pt;top:132pt;width:165pt;height:114pt;flip:x' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28683" type="#_x0000_t202" style='position:absolute;
+  left:168pt;top:450pt;width:54pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28684" type="#_x0000_t202" style='position:absolute;
+  left:156pt;top:5in;width:84pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28685" type="#_x0000_t202" style='position:absolute;
+  left:168pt;top:246pt;width:30pt;height:45.625pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><![if !vml]><img border=0 v:shapes="_x0000_s28682"
+ src="slide0026_image005.gif" style='position:absolute;top:24.5%;left:10.86%;
+ width:23.59%;height:22.25%'><![endif]>
+ <div v:shape="_x0000_s28683" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:84.25%;left:24.34%;width:5.61%;height:5.25%'><span
+ style='font-size:133%'><b>[5]</b></span></div>
+ <div v:shape="_x0000_s28684" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:67.5%;left:22.65%;width:9.92%;height:5.25%'><span
+ style='font-size:133%'><b>[ Int ]</b></span></div>
+ <div v:shape="_x0000_s28685" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:46.5%;left:24.34%;width:2.24%;height:6.75%'><span
+ style='font-size:178%'><b>*</b></span></div>
+ <v:shape id="_x0000_s28687" type="#_x0000_t32" style='position:absolute;
+  left:195pt;top:396pt;width:3pt;height:54pt;flip:x' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28688" type="#_x0000_t32" style='position:absolute;
+  left:183pt;top:291.625pt;width:15pt;height:68.375pt' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28689" type="#_x0000_t32" style='position:absolute;
+  left:183pt;top:132pt;width:63pt;height:114pt;flip:x' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28690" type="#_x0000_t202" style='position:absolute;
+  left:312pt;top:5in;width:42pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28691" type="#_x0000_t202" style='position:absolute;
+  left:282pt;top:246pt;width:108pt;height:45.625pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><![if !vml]><img border=0
+ v:shapes="_x0000_s28687,_x0000_s28688,_x0000_s28689"
+ src="slide0026_image006.gif" style='position:absolute;top:24.5%;left:24.9%;
+ width:9.55%;height:59.5%'><![endif]>
+ <div v:shape="_x0000_s28690" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:67.5%;left:44.38%;width:3.93%;height:5.25%'><span
+ style='font-size:133%'><b>[ ]</b></span></div>
+ <div v:shape="_x0000_s28691" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:46.5%;left:40.26%;width:13.1%;height:7.0%'><span
+ style='font-size:178%'><b>* </b></span><span style='font-family:"Courier New";
+ font-size:133%'><b>~&gt;</b></span><span style='font-size:178%'><b> *</b></span></div>
+ <v:shape id="_x0000_s28692" type="#_x0000_t32" style='position:absolute;
+  left:333pt;top:291.625pt;width:3pt;height:68.375pt;flip:x' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28693" type="#_x0000_t32" style='position:absolute;
+  left:246pt;top:132pt;width:90pt;height:114pt' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28694" type="#_x0000_t202" style='position:absolute;
+  left:570pt;top:366pt;width:78pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28695" type="#_x0000_t202" style='position:absolute;
+  left:540pt;top:252pt;width:132pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><![if !vml]><img border=0 v:shapes="_x0000_s28692,_x0000_s28693"
+ src="slide0026_image007.gif" style='position:absolute;top:24.5%;left:34.08%;
+ width:13.29%;height:42.75%'><![endif]>
+ <div v:shape="_x0000_s28694" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:68.75%;left:80.14%;width:9.73%;height:5.25%'><span
+ style='font-size:133%'><b>Succ</b></span></div>
+ <div v:shape="_x0000_s28695" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:47.5%;left:76.02%;width:18.91%;height:5.25%'><span
+ style='font-size:133%'><b>Nat </b></span><span style='font-family:"Courier New"'><b>~&gt;</b></span><span
+ style='font-size:133%'><b> Nat</b></span></div>
+ <v:shape id="_x0000_s28696" type="#_x0000_t32" style='position:absolute;
+  left:606pt;top:4in;width:3pt;height:78pt' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28697" type="#_x0000_t202" style='position:absolute;
+  left:414pt;top:5in;width:78pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28698" type="#_x0000_t202" style='position:absolute;
+  left:414pt;top:246pt;width:66pt;height:40.875pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><![if !vml]><img border=0 v:shapes="_x0000_s28696"
+ src="slide0026_image008.gif" style='position:absolute;top:53.25%;left:84.08%;
+ width:1.31%;height:15.0%'><![endif]>
+ <div v:shape="_x0000_s28697" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:67.5%;left:58.42%;width:8.98%;height:5.25%'><span
+ style='font-size:133%'><b>Zero</b></span></div>
+ <div v:shape="_x0000_s28698" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:46.5%;left:58.42%;width:7.67%;height:6.0%'><span
+ style='font-size:156%'><b>Nat</b></span></div>
+ <v:shape id="_x0000_s28699" type="#_x0000_t32" style='position:absolute;
+  left:447pt;top:286.875pt;width:6pt;height:73.125pt' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28700" type="#_x0000_t32" style='position:absolute;
+  left:246pt;top:132pt;width:201pt;height:114pt' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28701" type="#_x0000_t32" style='position:absolute;
+  left:246pt;top:132pt;width:5in;height:120pt' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s28702" type="#_x0000_t202" style='position:absolute;
+  left:252pt;top:18pt;width:48pt;height:36pt' filled="f" fillcolor="#bbe0e3 [4]"
+  stroked="f" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:shape id="_x0000_s28703" type="#_x0000_t32" style='position:absolute;
+  left:246pt;top:54pt;width:30pt;height:42pt;flip:x' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><![if !vml]><img border=0
+ v:shapes="_x0000_s28699,_x0000_s28700,_x0000_s28701,_x0000_s28703"
+ src="slide0026_image009.gif" style='position:absolute;top:10.0%;left:33.7%;
+ width:50.93%;height:57.25%'><![endif]>
+ <div v:shape="_x0000_s28702" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:4.25%;left:35.95%;width:4.86%;height:5.25%'><span
+ style='font-size:133%'><b>*2</b></span></div>
+</p:slide></div>
+
+</body>
+
+</html>

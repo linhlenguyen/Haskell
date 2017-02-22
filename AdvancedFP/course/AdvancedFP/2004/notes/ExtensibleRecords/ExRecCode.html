@@ -1,0 +1,125 @@
+-- <Pre>
+import Trex
+
+{-
+data Term e = Z (Rec (z :: Int | e) -> Int)
+            | W (Rec (w :: Int | e) -> Int)
+            | Int Int
+            | Plus (Term e ) (Term e)
+-}
+
+data Term e = Z (e -> Int)
+            | Int Int
+            | Plus (Term e ) (Term e)
+
+
+eval (Int n) env = n
+eval (Plus x y) env = (eval x env) + (eval y env)
+
+
+ex1 = ( a= 4, b= "z")
+
+ex2 = ( a = True, c = [1,2,3])
+
+ex3 = #a ex1
+
+ex4 = #a ex2
+
+{-
+Main> :t ex3
+ex3 :: Integer
+
+Main> :t ex4
+ex4 :: Bool
+
+Main> :t ex1
+ex1 :: Rec (a :: Integer, b :: [Char])
+
+Main> :t #a
+#a :: a\a => Rec (a :: b | a) -> b
+-}
+
+ex5 = ( name = "tim", age = 12 )
+ex6 = (age = 12, name = "tim")
+
+{-
+Main> show ex5
+"(age=12, name=\"tim\")"
+
+Main> show ex6
+"(age=12, name=\"tim\")"
+
+Main> ex5==ex6
+Bool_True
+-}
+
+------- Pattern matching
+
+f (name = x, age = y) = y +1
+
+g ( a = x ) = x
+
+{-
+Main> :t f
+f :: Num a => Rec (name :: b, age :: a) -> a
+Main> f ex5
+13
+Main> g ex1
+ERROR: Type error in application
+*** Expression     : g ex1
+*** Term           : ex1
+*** Type           : Rec (a :: Integer, b :: [Char])
+*** Does not match : Rec (a :: Integer)
+*** Because        : rows are not compatible
+-}
+
+--------------- Extensible records -----------
+
+h1 z = ( a = True | z )
+
+h2 z = ( c = 24, d= True | z )
+
+{-
+Main> show (h1 ex5)
+"(a=True, age=12, name=\"tim\")"
+Main> show (h2 ex1)
+"(a=4, b=\"z\", c=24, d=True)"
+
+Main> h1 ex1
+ERROR: Cannot satisfy constraint (a :: Integer, b :: [Char])\a
+
+Main> h2 (c=False)
+ERROR: Cannot satisfy constraint (c :: Bool)\c
+
+-}
+
+h3 (a = _ | z ) w = (b = True , red = w | z)
+
+{-
+Main> :t #a
+#a :: a\a => Rec (a :: b | a) -> b
+Main> :t h1
+h1 :: a\a => Rec a -> Rec (a :: Bool | a)
+h3 :: (a\a, a\b, a\red) => Rec (a :: b | a) -> c -> Rec (b :: Bool, red :: c | a)
+-}
+
+ex7 = (a = 1, b = True, c = [1], d ="z", e = 23.1 )
+
+removeac ( a = _, c = _ | z ) = z
+
+{-
+Main> show(removeac ex7)
+"(b=True, d=\"z\", e=23.1)"
+-}
+
+j (name=x, age = w | z ) = (w+1,(name = x |z));
+
+{-
+Main> :t j
+j :: (a\name, a\age, Num b) => Rec (name :: c, age :: b | a) -> (b,Rec (name :: c
+ | a))
+ -}
+
+
+
+-- </Pre>

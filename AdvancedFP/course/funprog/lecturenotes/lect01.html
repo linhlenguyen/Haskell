@@ -1,0 +1,50 @@
+-- <PRE>
+plusone x = x + 1
+
+lastone = head . reverse
+prefix = reverse . tail . reverse
+
+mymap f l = [ f x | x <- l]
+
+myfilter f l = [ x | x <- l, f x]
+
+absolute x | x < 0 = -x
+           | x >= 0 = x
+
+myand :: Bool -> Bool -> Bool
+myand True False = False
+myand True True = True
+myand False False = False
+myand False True = False
+
+myand2 True True = True
+myand2 x y = False
+
+hd (x:xs) = x
+tl (x:xs) = xs
+
+firstOfThree [x,y,z] = x
+
+plus :: Int -> Int -> Int
+plus x y = if x == 0 then y else 1 + (plus (x-1) y)
+
+len [] = 0
+len (x:xs) = 1 + (len xs)
+
+len2 [] = 0
+len2 (x:xs) = 1 + z where z = len2 xs
+
+choose x y z = if x then y else z
+difference x y = x - y
+
+k x y = x
+
+sort                :: Ord a => [a] -> [a]
+sort                 = foldr insert []
+
+insert              :: Ord a => a -> [a] -> [a]
+insert x []          = [x]
+insert x (y:ys)
+        | x <= y     = x:y:ys
+        | otherwise  = y:insert x ys
+-- </PRE>

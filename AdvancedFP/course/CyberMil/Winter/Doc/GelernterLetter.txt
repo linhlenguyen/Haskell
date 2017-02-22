@@ -1,0 +1,62 @@
+Source: http://www.cs.virginia.edu/cs201j/lectures/notes17.html
+
+Letter from the Unabomber to David Gelernter, April 1995 
+(two years after sending him a bomb)
+
+
+Dr. Gelernter:
+
+People with advanced degrees aren't as smart as they
+think they are. If you'd had any brains you would have
+realized that there are a lot of people out there who
+resent bitterly the way techno-nerds like you are
+changing the world and you wouldn't have been dumb enough
+to open an unexpected package from an unknown source.
+
+In the epilog of your book, "Mirror Worlds," you tried to
+justify your research by claiming that the developments
+you describe are inevitable, and that any college person
+can learn enough about computers to compete in a
+computer-dominated world. Apparently, people without a
+college degree don't count. In any case, being informed
+about computers won't enable anyone to prevent invasion
+of privacy (through computers), genetic engineering (to
+which computers make an important contribution),
+environmental degradation through excessive economic
+growth (computers make an important contribution to
+economic growth) and so forth.
+
+As for the inevitability argument, if the developments
+you describe are inevitable, they are not inevitable in
+the way that old age and bad weather are inevitable. They
+are inevitable only because techno-nerds like you make
+them inevitable. If there wereno computer scientists
+there would be no progress in computerscience. If you
+claim you are justified in pursuing your research because
+the developments involved are inevitable, then you may as
+well say that theft is inevitable, therefore we shouldn't
+blame thieves.
+
+But we do not believe that progress and growth are
+inevitable.
+
+We'll have more to say about that later.
+
+
+-------------------------------------------------------
+
+I couldn't care less what the man's views on technology
+are or what message he intended to deliver; the message I
+got was that in any society, no matter how rich, just and
+free, you can rely on there being a certain number of
+evil cowards. I thank him for passing it along, but I
+knew that anyway. ... The bright side, so to speak, of
+grave injury, discomfort and nearness to death is that
+you emerge with a clear fix on what the heart treasures.
+Mostly I didn't learn anything new but had the
+satisfaction of having my hunches confirmed. I emerged
+knowing that, as I had always suspected, the time I spend
+with my wife and boys is all that matters in the end.
+
+David Gelernter in Time magazine after Kaczynski's
+arrest, April 1996.

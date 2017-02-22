@@ -1,0 +1,268 @@
+<title> CS 321, Languages and Compiler Design, Lecture Notes </title>
+
+
+
+<P ALIGN=left>
+The following are powerpoint slides (and associated code) from the lectures.
+
+<OL>
+<LI> Lecture 1
+      <UL>
+         <LI> Lecture #1. Monday, Jan 9, 2007.
+         <LI> Introduction, class information, first problems.
+         <LI> <A HREF="S01IntroML.ppt">Power Point Slides</A>
+          <LI> <A HREF="S01code.html">Code from the notes</A>
+      </UL>
+
+<LI> Lecture 2
+      <UL>
+         <LI> Lecture #2. Wednesday, Jan 11, 2007.
+         <LI> More on ML, function definition and patterns
+         <LI> <A HREF="S02MoreML.ppt">Power Point Slides</A>
+         <LI> <A HREF="S02code.html">Code from the notes</A>
+      </UL>
+
+
+<LI> Lecture 3
+      <UL>
+         <LI> Lecture #3. Monday, Jan 22, 2007.
+         <LI> Answers to Assignment #2. Review pattern matching,
+              recursion, and use of let for local variables. Librearies,
+              References, While Loops, Accumulating parameter functions.
+              Regular Expressions as programs. RE to NFA.
+
+         <LI> <A HREF="S03bRegExp.ppt">Power Point Slides</A>
+         <LI> <A HREF="S03bcode.html">Code from the notes</A>
+      </UL>
+
+<LI> Lecture 4
+      <UL>
+         <LI> Lecture #4. Wednesday, Jan 24, 2007.
+         <LI> Representing sets as lists, the cross product of two sets,
+              epsilon transitions, epsilon - closure, Interpreting an NFA,
+              NFA to DFA.
+
+         <LI> <A HREF="S04Eclosure.ppt">Power Point Slides</A>
+         <LI> <A HREF="S04EclosCode.html">Code from the notes</A>
+      </UL>
+
+
+<LI> Lecture 5
+      <UL>
+         <LI> Lecture #5. Monday, Jan 29, 2007.
+         <LI> NFAs, NFAs to DFAs, the subsect construction, Lexical generators, SML-Lex.
+         <LI> <A HREF="S05Lexing.ppt">Power Point Slides</A>
+         <LI> <A HREF="S05code.html">Code from the notes</A>
+      </UL>
+
+
+
+<LI> Lecture 6
+      <UL>
+         <LI> Lecture #6. Wednesday, Jan 31, 2007.
+         <LI> More about SML-Lex, The compiler manager, More about library functions over lists (map,filter,find,exists,foldr).
+         <LI> <A HREF="S06MoreSmlLex.ppt">Power Point Slides</A>
+         <LI> <A HREF="S06code.html">Code from the notes</A>
+      </UL>
+
+<LI> Lecture 7
+      <UL>
+         <LI> Lecture #7. Monday, Feb 5, 2007.
+
+         <LI> Grammars, Top down parsing, Transition Diagrams, Ambiguity, Left recursion,
+              Refactoring by adding levels, Recursive descent parsing, Predictive Parsers,
+              First and Follow, Parsing tables.
+         <LI> <A HREF="S07Parsing1.ppt">Power Point Slides</A>
+         <LI> <A HREF="S07code.html">Code from the notes</A>
+      </UL>
+
+
+<LI> Lecture 8
+      <UL>
+         <LI> Lecture #8 Wednesday, Feb 7, 2007.
+         <LI> Shift-reduce parsing,
+              Shift-reduce and reduce-reduce conflicts,
+              Precedence parsing,
+              LR parsers,
+              LR parsers and FSAs,
+              LR parsing Tables,
+              Sets of Items construction.
+         <LI> <A HREF="S08Parsing2.ppt">Power Point Slides</A>
+      </UL>
+
+<LI> Lecture 9
+      <UL>
+         <LI> Lecture #9 Monday, Feb 12, 2007.
+         <LI> A data structure for grammars,
+              Computing Nullable and First in SML. Possoible Exam Questions.
+         <LI> <A HREF="S09Parsing3FirstFollow.ppt">Power Point Slides</A>
+         <LI> <A HREF="S09code.html">Code from the notes</A>
+      </UL>
+
+<LI> Lecture 10
+      <UL>
+         <LI> Lecture #10 Wednesday, Feb 14, 2007.
+         <LI> Modified sets of item construction,
+              Rules for building LR parse tables,
+              The Action rules,
+              The GOTO rules,
+              Conflicts and ambiguity,
+              Shift-reduce and reduce-reduce conflicts,
+              Parser generators and ambiguity,
+              Ambiguous expression grammar,
+              Ambiguous if-then-else grammar,
+              Ml-yacc.
+         <LI> <A HREF="S10LrTablesAmbiguity.ppt">Power Point Slides</A>
+         <LI> <A HREF="../LexYacc/AmbiguousExamples">A directory of Ambiguous Examples in ml-yacc.</A>
+      </UL>
+
+<LI> Lecture 11
+      <UL>
+         <LI> Lecture #11 Monday, Feb 19, 2007.
+         <LI> ml-Yacc, Actions when reducing, Making ml-yacc work with ml-lex,
+              Boiler plate.
+         <LI> <A HREF="S11Ml-Yacc.ppt">Power Point Slides</A>
+      </UL>
+
+
+<LI> Lecture 12
+      <UL>
+         <LI> Basic Types, Constructed Types, Representing types as data,
+              Describing type systems as rules, Type rules for ML, Type equality,
+              Type coercions, Sub typing.
+              Purpose of type systems, Kinds of type systems, Primitive types,
+               Constructed types, Type checking, Attribute grammars, Inherited attributes,
+              Synthesized attributes, Adding attributes to trees, Programs for computing attribute computations.
+         <LI> <A HREF="S12IntroTypes.ppt">Power Point Slides</A>
+      </UL>
+
+<LI> Lecture 13
+     <UL>
+         <LI> Finish the discussion of Lecture 12 slides.
+         <LI> <A HREF="S12IntroTypes.ppt">Power Point Slides</A>
+      </UL>
+
+<LI> Lecture 14 (Guest Lecturer by Jim Hook, Feb 28, 2007)
+      <UL>
+
+         <LI>  Writing type-checkers in ML,
+               Role of type rules,
+               Representing types,
+               Representing programs,
+               Handling errors,
+               Guessing types,
+               Declarations,
+               Let expressions.
+
+         <LI> <A HREF="S14MLTypeCheckers.ppt">Power Point Slides</A>
+         <LI> <A HREF="S14code.html">Code from the notes.</A>
+      </UL>
+
+<LI> Lecture 15
+      <UL>
+         <LI> Judgments for mini-Java,
+              Multiple type environments,
+              Class Hierarchy,
+              Setting up an ML typechecker for mini-Java,
+              Subtyping,
+              Rules for Java,
+              Declarations as functions over environments.
+         <LI> <A HREF="S15MiniJavaTypes.ppt">Power Point Slides</A>
+      </UL>
+
+
+<LI> Lecture 16
+      <UL>
+         <LI> Mutual Recursion,
+              Symbol Tables,
+              Class Hierarchies,
+              Type checkers that rebuild code.
+         <LI> <A HREF="S16MutRecSymTabClassHier.ppt">Power Point Slides</A>
+         <LI> <A HREF="S16code.html">Code from the notes for mini-ML examples.</A>
+         <LI> <A HREF="S16ClassCode.html">Code from the notes fro mini-Java examples.</A>
+      </UL>
+
+<LI> Lecture 17
+      <UL>
+         <LI> Procedure Abstraction,
+              Name Spaces,
+              Scoping Rules,
+              Activation Records,
+              Object Oriented Languages,
+              Parameter Passing,
+              Returning Values.
+         <LI> <A HREF="S17ProcedureAbstraction.ppt">Power Point Slides</A>
+
+      </UL>
+
+<LI> Lecture 18
+      <UL>
+         <LI> Syntax directed translations,
+              Meanings of programs,
+              Rules for writing a compiler,
+              Intermediate code
+              Pascal-like language
+              Run-time environments
+              Calling sequence
+              Variable references.
+         <LI> <A HREF="S18SyntaxDirTrans.ppt">Power Point Slides</A>
+         <LI> <A HREF="S18code.html">Code from the notes.</A>
+      </UL>
+
+</OL>
+<HR ALIGN="center" WIDTH="100%">
+<LI> Additional notes to be posted here as lectures are given.
+<COMMENT>
+
+
+<LI> Lecture 19
+      <UL>
+         <LI> Pascal-like language
+              Run-time environments
+              Calling sequence
+              Variable references.
+         <LI> <A HREF="S19TranslatingMiniPascal.ppt">Power Point Slides</A>
+         <LI> <A HREF="S19code.html">Code from the notes.</A>
+      </UL>
+
+
+
+<LI> Lecture 13
+      <UL>
+         <LI>
+         <LI> <A HREF="S12AttrGramComp.ppt">Power Point Slides</A>
+      </UL>
+
+
+
+
+<LI> Lecture 18
+      <UL>
+         <LI> Reference Interpreters,
+              The while language,
+              Using the meta-language state,
+              The miniJava values,
+              MiniJava interpreter,
+              Creating Objects,
+              Flattening classes.
+         <LI> <A HREF="S17ReferenceInterp.ppt">Power Point Slides</A>
+         <LI> <A HREF="S17code.html">Code from the notes.</A>
+         <LI> <A HREF="../project/interp.sml">The mini Java Interpreter.</A>
+      </UL>
+
+
+
+<LI> Lecture 20
+      <UL>
+         <LI> Displays, Memory Layout, Heap Allocation, Garbage Collection,
+              Translating Mini Java.
+         <LI> <A HREF="S19TranslatingMiniJava.ppt">Power Point Slides</A>
+
+      </UL>
+
+</OL>
+</COMMENT>
+
+
+<p>
+<A HREF="../index.html"> Back</A> to CS 321, Languages and Compiler Design, Home Page

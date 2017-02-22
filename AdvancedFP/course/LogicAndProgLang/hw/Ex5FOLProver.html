@@ -1,0 +1,68 @@
+<title>Exercise 5: FOL Prover</title>
+
+
+<CENTER>
+  <h1><BIG>  Exercise 5:  A simple FOL, Sequent Based, prover</BIG>
+  </h1>
+</CENTER>
+
+<p>
+<H2>Overview</H2>
+<p>Play with a backwards prover implementing FOL in LK. This prover uses explicit terms for all on the left and exists on the right.<H2>Learning Objectives</H2>
+<p>
+<ul>
+<li>Learn about FOL</ul>
+<p>
+<H2>Getting Started</H2>
+<p> Code is <A HREF="../hw/FOL/">here</A>.
+<p>Alternate resource: Check out Larry Paulson's FOL theorem prover linked from this page: <a href="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/">http://www.cl.cam.ac.uk/teaching/1011/LogicProof/ </a>
+<h2>A short demo:</h2>
+<p>Fire up ghci; load FOL/LK.hs</p>
+<p>We prove example formula <B>(forall x. P(x)) --> (forall y. P(F(y)))</B> as follows:</p>
+
+<PRE>
+m1 = (replayM s1 [impliesR 1, allR 1, allL (toTerm "F(?b)") 1, axiom 1 1])
+</PRE>
+<p>As in the other backwards provers, the list is a list of rules. We begin with implies on the right <B>(impliesR 1)</B>:
+This turns the sequent with only an implication
+<PRE>
+|- ((ALL x. P(x)) --> (ALL y. P(F(y))))
+</PRE>
+into one with terms on both sides of the turnstile.
+<PRE>
+(ALL x. P(x)) |- (ALL y. P(F(y)))
+</PRE>
+
+<p>We continue with all on the right <B>(allR 1)</B>, which introduces a new variable ?b, that is fresh:
+<PRE>
+(ALL x. P(x)) |- P(F(?b)), (ALL y. P(F(y)))
+</PRE>
+Note how it also duplicates the for all, a specialized instance (with the fresh varaibale) and the old quantified instance.
+<p>Next we apply exists on the right, providing a term as required by the rule:
+
+<PRE>
+P(F(?b)) |- P(F(?b)), (ALL y. P(F(y)))
+</PRE>
+
+<p>This is followed with all on the left <B>(allL (toTerm "F(?b)") 1)</B>,
+which also requires a term. We choose "F(?b)" .
+<p>We complete the proof with the axiom rule <B>(axiom 1 1)</B>, which leaves us with:
+<pre>QED</pre>
+
+<h2>What to do</h2>
+<p>
+<ol>
+  <li>Work some examples (at least 3). You can find some in Smullyan or in Coble, or make up your own.</li>
+  <li>Study the rules al,ar,ol,ar,il,ir, etc. (lines 198-225) that add some search.
+  <li> convince your self that they will work
+  <li> then redo at least 2 of your examples.
+  </li>
+</ol>
+<p>
+<H2>What to turn in.</H2>
+<ul>
+  <li> Create a file (that imports LK.hs) with your examples, and submit it to D2l
+  <li> Be prepared to talk about your solution in class.
+</ul>
+
+<A HREF="../index.html">Back to the class web-page.</A> <BR>

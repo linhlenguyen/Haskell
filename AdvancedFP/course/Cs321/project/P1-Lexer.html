@@ -1,0 +1,171 @@
+<PRE>
+CS321 Prog Lang & Compilers                                Project #1
+Assigned: Jan 31, 2006                       Due: Wed. Feb. 14th, 2006
+
+Lexical Analysis (Scanning)
+
+In this assignment you will use ML-Lex, a lexical analysis tool, to
+automate the process of scanning a MINI program. You will turn in a
+ML-Lex specification file and a driver program (containing at a
+minimum "testLexer", "printResult", a datatype declaration for "token",
+and an exception declaration for "Error").
+
+*** Overview:
+
+ML-Lex takes a language specification as input and returns
+an ML program that can be used to conduct the lexical
+analysis step.  The basic functionality of the driver
+program will be to open a file, containing a MINI program
+(or attempt at a MINI program, in the case of an incorrect
+syntax), and return a list of tokens.  The driver program
+will use the ML program that was output by ML-Lex.
+
+*** General Process Steps:
+
+1. Download and read the MINI specification:
+http://www.cs.pdx.edu/~sheard/course/Cs321/project/mini-manual.pdf
+A REVISED VERSION has now been posted, so please get the newest
+version before you begin.
+
+2. If have not already done so, either install SML on your own machine
+or add sml package (#58) to your Unix environment (any machine
+belonging to cs.pdx.edu).  Make sure that your path is correctly
+configured following the directions given earlier. If it is you should
+be able to invoke ML-Lex by typing "ml-lex filename.lex"
+
+3. Read the ML-Lex manual, which can be found at:
+http://www.smlnj.org/doc/ML-Lex/manual.html
+
+4. There are three components to the ML-Lex specification: user
+declarations, ML-Lex definitions, and rules.  In the specification,
+these sections appear in the order listed and are separated by double
+percent signs: %%.  The ML-Lex manual describes how to construct these
+sections.  Make sure to include the two required user declarations.
+
+5. Once your specification file is ready, run ML-Lex: ml-lex p1.lex.
+This will produce an output file called pl.lex.ml.
+
+
+6. Write a driver (in ML) that takes a file as input and returns a
+list of tokens.  The driver should be in the form of 2 functions
+"testLexer" with type testLexer : string -> (int*token) list,
+
+i.e. something like  [(1,KW_boolean),(1,Integer "2"),(4,KW_int) ...]
+
+and "printResult" with type printResult : (int*token) list -> unit
+"printResult" should output the results in the following format:
+linenumber token syntatic-category.  For the purpose of assignment
+submission, "printResult" should write to the "stdout".  The
+syntatic-category for each valid token will be the datatype "token".
+The lexer must return EOF on end of file. You must also
+devise a way to print values of this datatype, for use in your
+function "printResult". The output should look like:
+
+-------------------
+line 1 KW_boolean
+line 1 Integer 2
+line 4 KW_int
+...
+-------------------
+
+*** Error-Reporting Requirements:
+
+For the MINI language, there are four possible lexical errors:
+
+1. Illegal character: one not in MINI.s vocabulary (e.ge #)
+2. Integer over limit: an integer over the limit (2^31- 1)
+3. ID over limit: an ID whose length is greater than 255
+4. String over limit: a string whose length is over 255
+  (not counting the quotes)
+
+You need to detect all four kinds of lexical errors.  However, it is
+only necessary to detect and report only the first error in a given
+program and then terminate.  The error reporting should take the form
+of a raised exception and it should contain the nature of the error
+(which kind) and the location (line and column number) where it
+occurred. You must define your own exception.
+
+Your driver programs should catch any exceptions raised, and die
+gracefully by printing out an error message describing the exception.
+
+*** Additional Resources:
+
+1.  Text book Chapter 2.
+2.  Some MINI programs can be found in the directory:
+       www.cs.pdx.edu/~sheard/course/Cs321/project/Lex/tests
+    You should use these to test your specification and driver.
+    However, we will use a larger set of test files for grading,
+    including programs with syntax errors.
+
+*** What and How to Turn in Your Program:
+
+1. submit your ML-Lex specification and driver program electronically
+   to: sheard@cs.pdx.edu
+
+   a) The subjectline should be P1Last-name, so if your last name is
+      "Jones" the subject line should only contain "P1Jones"
+
+   b) The 2 files should be attachments, and they should be named
+      LexLast-name.lex  and  DriverLast-name.sml, using the same
+      convention used for the subject line.
+
+   c) We should be able to run ML-Lex on LexLast-name.lex and SML on
+      DriverLast-name.sml, and then call the functions "testLexer"
+      without any other intervening input from the testers.
+
+   d) PLEASE! Only submit a solution once. So be sure you have
+      everything the way you want it before you submit.
+
+*** Datatype for Tokens
+
+datatype Token =
+            EOF
+          | Identifier of string
+          | String of string
+          | Integer of string
+          | Real of string
+          | KW_boolean
+          | KW_class
+          | KW_double
+          | KW_else
+          | KW_extends
+          | KW_false
+          | KW_if
+          | KW_int
+          | KW_length
+          | KW_main
+          | KW_new
+          | KW_public
+          | KW_return
+          | KW_static
+          | KW_String
+          | KW_println
+          | KW_this
+          | KW_true
+          | KW_void
+          | KW_while
+          | D_semicolon
+          | D_comma
+          | D_dot
+          | D_lparen
+          | D_rparen
+          | D_lbracket
+          | D_rbracket
+          | D_lbrace
+          | D_rbrace
+          | OP_assign
+          | OP_plus
+          | OP_minus
+          | OP_times
+          | OP_div
+          | OP_and
+          | OP_or
+          | OP_not
+          | OP_eq
+          | OP_neq
+          | OP_le
+          | OP_leq
+          | OP_ge
+          | OP_geq
+
+</PRE>

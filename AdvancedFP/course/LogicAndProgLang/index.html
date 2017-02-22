@@ -1,0 +1,398 @@
+<title> CS 410/510  - Mathematical Logic and Programming Languages - Daily Record - Fall Term 2014 </title>
+
+
+<CENTER>
+<BIG> CS 410/510 - Mathematical Logic and Programming Languages - Fall Term 2014 </BIG>
+</CENTER>
+
+<PRE>
+CRN:         14605 (undergrad) / 14606 (grad)
+Course No.   CS 410 (undergrad) / 510 (grad)
+Course Name. Mathematical Logic and Programming Languages (4/3 cr)
+Times:       Monday and Wednesday  14:00-15:50
+Place:       FAB 150
+Professor:   Tim Sheard
+Office:      FAB 120-04
+Phone        503-725-2410
+</PRE>
+
+<p>
+Preliminaries
+<ul>
+<li> <A HREF="syllabusFall2014.html">Syllabus</A>.
+<li> Tools
+   <ol>
+     <li> About the <A HREF="http://djvu.org/">DJVU</A> format for viewing digital books.
+     <li> Get a free DJVU viewer <A HREF="http://sourceforge.net/projects/windjview/files/">here</A>.
+     <li> The <A HREF="https://www.haskell.org/platform/">Haskell Platform</A>.
+     <li> <A HREF="http://web.cecs.pdx.edu/~sheard/course/CS457-557/Haskell/HaskellLinks.html">The Haskell Resource Page.</A>
+   </ol>
+<li> Readings
+        <ol> <li> <A HREF="http://bookzz.org/g/Raymond%20M.%20Smullyan">First Order Logic</A> by Raymond M. Smullyan (needs the DJVU viewer).
+             <li>  <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Lecture notes</A> of the course Logic and Proof by Aaron Coble.
+             <li> <A HREF="http://web.cecs.pdx.edu/~hook/logicw11/lectures/FiniteSets.pdf">Notes</A> on the Finite Set module by Tim Sheard.
+             <li> <A HREF="http://web.cecs.pdx.edu/~hook/logicw11/pdf/outline.pdf">Notes</A> from "Logic via Foundational Algorithms" by James Hook.
+        </ol>
+</ul>
+
+<OL>
+<HR ALIGN="center" WIDTH="100%">
+
+<A NAME="Today"></A>
+<LI> Week 1
+<PRE>
+Monday <B>Sept. 29</B>, 2014
+Due Today:
+Announcements:
+Class Topic: Propositional Logic: Syntax, Semantics, Formula, Relations between formula, Truth, validity, satisfiability, tautology, Proofs.
+        <A HREF="notes/L01PropositionalLogic.pdf">Notes</A> on Logic
+        <A HREF="notes/02InductiveSets.pdf">Notes</A> on Inductive Sets.
+Readings:
+        <A HREF="http://bookzz.org/g/Raymond%20M.%20Smullyan">Smullyan</A>. Chapter I: "Preliminaries". pp 3-14.
+Assigned today:
+        <A HREF="hw/Ex1.html">Exercise 1</A>. Due by 2:00 PM, Wednesday Oct. 1, 2014, turned in on D2L.
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 1</B>, 2014
+Due Today:
+         <A HREF="hw/Ex1.html">Exercise 1</A> due today by class time, turned into D2L.
+         Student solutions are <A HREF="studentEx/Ex1">here</A>. My Solution is <A HREF="hw/Ex1Sol.hs">here</A>.
+Announcements:
+Class Topic:
+        Prop Logic: Equivalences, Normal Forms.
+        <A HREF="notes/L02EquivalenceAndNormalForms.pdf">Notes</A> on the topics above.
+        <A HREF="notes/Lecture2.hs">Haskell code</A> that appears in the notes.
+                uses <A HREF="notes/LazySmallCheck.hs">LazySmallCheck.hs</A> and a new version of <A HREF="notes/SimpleProp.hs">SimpleProp.hs</A>.
+Readings:
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Sections 2.1 - 2.4 : "Propositional Logic". pp 3 - 8.
+Assigned today:
+        <A HREF="hw/Ex2.html">Exercise 2</A>, due Monday October 6, 2014. Submit to D2L by 1:45 PM.
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>  Week 2
+<PRE>
+Monday <B>October 6</B>, 2014
+Due Today:
+        <A HREF="hw/Ex2.html">Exercise 2</A>, due today by 1:45 PM.
+        Student solutions are <A HREF="studentEx/Ex2">here</A>. My Solution is <A HREF="hw/Ex2Sol.hs">here</A>.
+Announcements:
+Announcements:
+Class Topic:
+        Prop logic: soundness, Natural deduction, gentzen style proofs, Sequent Calculus.
+        <A HREF="notes/L03ProofSystems.pdf">Notes</A> on Proof Systems.
+        <A HREF="hw/NaturalDeduction/NatDed.hs">Haskell code</A> for the natural deduction checker from the lecture.
+                You will also need the files <A HREF="hw/NaturalDeduction/SimpleProp.hs">SimpleProp.hs</A> and <A HREF="hw/NaturalDeduction/Blocks.hs">Blocks.hs</A>.
+Readings:
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Section 3 : "Proof Systems for Propositional Logic". pp 13 - 20.
+        <A HREF="http://bookzz.org/g/Raymond%20M.%20Smullyan">Smullyan</A>. Chapter XI: "Gentzen Systems". pp 101-110..
+Assigned today:
+        <A HREF="hw/Hw1.html">Homework #1</A>. Due Wednesday October 8, 2014, turned into D2L by 2:00 PM.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 8</B>, 2014
+Due Today:
+        <A HREF="hw/Hw1.html">Homework #1</A>. Due today by 2:00 PM
+Announcements:
+Class Topic:
+         Go over homework.
+         Tableau style proofs.
+Readings:
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Section 12: "Tableaux Based Methods". pp 78 - 84.
+        <A HREF="http://bookzz.org/g/Raymond%20M.%20Smullyan">Smullyan</A>. Chapter II: "Analytic Tableau". pp 15-24.
+Assigned today:
+        <A HREF="hw/Ex3.html">Exercise 3</A>, due Monday October 13, 2014. Submit to D2L by 1:45 PM.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI> Week 3
+<PRE>
+Monday <B>October 13</B>, 2014
+Due Today:
+        <A HREF="hw/Ex3.html">Exercise 3</A>, due today.
+        Student solutions are <A HREF="studentEx/Ex3">here</A>. My Solution is <A HREF="hw/Tableau/Tableau2.hs">here</A>.
+Announcements:
+Class Topic:
+        Prop logic: completeness, decidng truth, normal forms.
+                <A HREF="notes/L05ConsistencyCompletenessOfTableau.pdf">Notes</A> on consistency and completeness.
+Readings:
+        <A HREF="http://bookzz.org/g/Raymond%20M.%20Smullyan">Smullyan</A>. Chapter II.2: "Consistency and Completeness of the System". pp 25-30.
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Sections 2.5 - 2.7 : "Propositional Logic". pp 8 - 13.
+Assigned today:
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 15</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        SAT solvers. exponential solvers, efficient solvers, applications of solvers.
+                <A HREF="hw/Tableau/sat.hs">Haskell code</A> of two simple SAT solvers.
+        Representing and asking questions about finite sets.
+                The <A HREF="hw/FiniteSets/FiniteSetNotes.hs">examples</A> from the notes by Sheard <A HREF="notes/FiniteSets.pdf">below</A>.
+                To run this example code you will need the files in this <A HREF="hw/FiniteSets">directory</A>.
+Readings:
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Section 6 : "Clausal Methods for Propositional Logic". pp 37 - 42.
+        <A HREF="notes/FiniteSets.pdf">Sheard</A>. Section 1 - "Finite Sets" pp 1-24.
+Assigned today:
+        <A HREF="hw/Hw2AlgebraOfSets.html">Home work 2</A>. An algebra of finite sets. Due Wednesday October 22, 2014 at 2:00 PM. Submit to D2L.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI> Week 4
+<PRE>
+Monday <B>October 20</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        The Soduku problem in FiniteSet (an exercise to do as a class. <A HREF="hw/FiniteSets/soduko.hs">Here</A> is the code we wrote.).
+        Using a SAT solver.
+        Internals of SAT solvers.
+                <A HREF="http://satsmt2014.forsyte.at/files/2014/07/SAT-introduction.pdf">An introduction to SAT</A> by Daniel Le Berre
+Readings:
+        <A HREF="http://poincare.matf.bg.ac.rs/~filip/phd/sat-tutorial.pdf">Formalization and Implementation of Modern SAT Solvers</A> by Filip Maric.
+        <A HREF="http://www.cse.chalmers.se/edu/year/2012/course/TDA956/Papers/satFinal.pdf">Sat-solving in practice</A> by Claessen, Een, Sheeran, and Sorensson.
+Assigned today:
+        <A HREF="hw/Ex4Minisat.html">Exercise 4</A>. Using a the Minisat SAT solver. Due Wednesday.
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 22</B>, 2014
+Due Today:
+        <A HREF="hw/Hw2AlgebraOfSets.html">Home work 2</A> due today by 2:00 PM, submit to D2L.
+                My <A HREF="hw/FiniteSets/Hw2Sol.hs">solution</A> to home work 2.
+        <A HREF="hw/Ex4Minisat.html">Exercise 4</A> due today.
+Announcements:
+        Class will only last til 3:00 PM today.
+Class Topic:
+        Predicate (first order) Logic: introduction, syntax, substitution, semantics
+                The <A HREF="notes/FirstOrderLogic.pdf">notes</A> from the lecture.
+                The <A HREF="hw/FOL">code</A> discussed in the notes
+Readings:
+        <A HREF="http://bookzz.org/g/Raymond%20M.%20Smullyan">Smullyan</A>. Chapter IV: "First Order Logic - Preliminaries". pp 43-52.
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Section 4 : "First Order Logic". pp 23 - 30.
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Section 5 : "Formal Reasoning in First-Order Logic". pp 30 - 34.
+Assigned today:
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI> Week 5
+<PRE>
+Monday <B>October 27</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        Predicate Logic: Tableuax proofs, Herbrand models, Model existence theorem.
+                Some <A HREF="notes/ModelsOfFirstOrderLogic.pdf">notes</A> on models and sequent calculus in FO logic
+Readings:
+        <A HREF="http://bookzz.org/g/Raymond%20M.%20Smullyan">Smullyan</A>. Chapter V: "First Order Analytic Tableau". pp 52-65.
+Assigned today:
+        <A HREF="hw/Ex5FOLProver.html">Exercise 5</A>, a sequent style prover for FOL. Due Wednesday 10 29, 2014. Submit to D2L by 1:45.
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI>
+<PRE>
+Wednesday <B>October 29</B>, 2014
+Due Today:
+        <A HREF="hw/Ex5FOLProver.html">Exercise 5</A> due today.
+                Student solutions <A HREF="studentEx/Ex5/">here</A>.
+Announcements:
+Class Topic:
+        Tableau proof systems for FOL
+        <A HREF="notes/TableauForFOL.pdf">Notes</A> on tableaus.
+        <A HREF="hw/FOL/">Code</A> discussed in the notes. Mostly the file <A HREF="hw/FOL/Tableau.hs">Tableau.hs</A>.
+Readings:
+        Read sections 7,8,9, & 10 (pp 43-69) from Jim Hooks <A HREF="http://web.cecs.pdx.edu/~hook/logicw11/pdf/outline.pdf">notes</A>.
+Assigned today:
+        <A HREF="hw/Ex6.html">Exercise 6</A>. Testing if all paths are closed. Due Monday November 3, 2014 at 1:45 PM.
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI> Week 6
+<PRE>
+Monday <B>November 3</B>, 2014
+Due Today:
+        <A HREF="hw/Ex6.html">Exercise 6</A> due today.
+                Student solutions <A HREF="studentEx/Ex6/">here</A>. My partial solution <A HREF="hw/FOL/Ex6Sol.hs">here</A>.
+Announcements:
+Class Topic:
+        The Funlog language. Embedding provers in a functional language.
+                <A HREF="notes/FunLog.pdf">notes</A> on Funlog.
+Readings:
+        Read the paper <A HREF="notes/PainlessProg.pdf">Painless Programming Combining Reduction and Search</A>
+Assigned today:
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Wednesday <B>November 5</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        <A HREF="notes/7Steps4AddingSolvers.pdf">Notes</A> on adding a new solver to the Funlog programming language.
+        The <A HREF="hw/funlog">full code</A> for the Funlog language.
+Readings:
+Assigned today:
+        <A HREF="hw/Hw3.html">Homework #3</A>, Project description. Due Wednesday Novemeber 12, turn into D2L.
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI> Week 7
+<PRE>
+Monday <B>November 10</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        <A HREF="notes/SMT.html">SMT solvers</A>.
+        Applications of SMT solvers:  Path coverage.
+        A cool example of a simple <A HREF="http://www.well-typed.com/blog/103/">SMT solver in haskell</A>.
+
+Readings:
+Assigned today:
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Wednesday <B>November 12</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        Running the Yices SMT solver
+        Binary Decision Diagrams.
+                <A HREF="hw/BDD/">Code</A> from the lecture.
+Readings:
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Section 10 : "BDDs, or Binbary Decision Diagrams". pp 69 - 72.
+Assigned today:
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI> Week 8
+<PRE>
+Monday <B>November 17</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        Temporal logics. <A HREF="http://en.wikipedia.org/wiki/Linear_temporal_logic">LTL</A> and <A HREF="http://en.wikipedia.org/wiki/Computation_tree_logic">CTL</A>
+        Some <A HREF="http://www.cs.cmu.edu/~emc/15817-f09/lecture2.pdf">notes</A> by <A HREF="http://www.cs.cmu.edu/~emc/15-820A/reading/lecture_1.pdf">Edmund Clarke</A>.
+        Symbolic Model checking with BDDs by <A HREF="http://www.eecs.berkeley.edu/~sseshia/219c/spr11/lectures/MC-Lec4.pdf">Sanjit A. Seshia</A> and by <A HREF="http://www.cs.cmu.edu/~emc/15-820A/reading/lecture_1.pdf">Edmund Clarke</A>.
+Readings:
+        <A HREF="http://www.cl.cam.ac.uk/teaching/1011/LogicProof/notes.pdf">Coble</A>. Section 11 : "Modal Logics". pp 72 - 84.
+Assigned today:
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Wednesday <B>November 19</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        <A HREF="notes/ModelCheckingWithBDD.pdf">Notes</A> on implementating model checking.
+        <A HREF="hw/BDD/FastBDD.hs">Code</A> from the lecture.
+Readings:
+Assigned today:
+
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+<LI> Week 9
+<PRE>
+Monday <B>November 24</B>, 2014
+Work on project week.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Wednesday <B>November 26</B>, 2014
+Work on project week.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI> Week 10
+<PRE>
+Monday <B>December 1</B>, 2014
+Due Today:
+Announcements:
+Class Topic:
+        Model checking with BDDs, taking fixpoints of the transition relation.
+        <A HREF="notes/ModelCheckingWithBDD.pdf">Notes</A> from the lecture
+        <A HREF="hw/BDD/LectureBDD.hs">Code</A> from the lecture.
+Readings:
+Assigned today:
+
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI>
+<PRE>
+Wednesday <B>December 3</B>, 2014
+Due Today:
+        Projects due today
+Announcements:
+Class Topic:
+        Project presentations today.
+Readings:
+Assigned today:
+
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+
+<LI> Finals Week
+<PRE>
+Wednesday <B>December 10</B>, 2014
+Final exam period: <I><STRONG>1230 -> 1420</STRONG></I>
+<BIG><B>Note this is different from our class schedule!</B></BIG>
+See 2014 <A HREF="http://www.pdx.edu/registration/final-exams-fall-2014#/?section=dayclassesmeetingbefore1600">final exam schedule</A>
+Student projects <A HREF="studentEx/Project">here</A>.
+</PRE>
+<HR ALIGN="center" WIDTH="100%">
+
+</OL>
+
+
+<A HREF="index.html">Back to the class web-page.</A>
+
+

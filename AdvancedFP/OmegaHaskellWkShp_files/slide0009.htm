@@ -1,0 +1,212 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 10">
+<link id=Main-File rel=Main-File href="../OmegaHaskellWkShp.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>Generalizing Algebraic Datatypes in Wmega</title>
+<meta name=Description content="9/23/2004: Type Checking">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="10"/>
+ <o:rules v:ext="edit">
+  <o:r id="V:Rule2" type="connector" idref="#_x0000_s10248">
+   <o:proxy start="" idref="#_x0000_s10247" connectloc="1"/>
+   <o:proxy end="" idref="#_x0000_s10246" connectloc="1"/>
+  </o:r>
+ </o:rules>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#FFFFFF,#000000,#808080,#000000,#BBE0E3,#333399,#009999,#99CC00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><![endif]><p:shaperange
+  href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s10242" type="#_x0000_m1026"
+  style='position:absolute;left:36pt;top:21.625pt;width:9in;height:90pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s10243" type="#_x0000_m1027"
+  style='position:absolute;left:24pt;top:126pt;width:684pt;height:396pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape>
+ <div v:shape="_x0000_s10242" class=T style='position:absolute;top:8.0%;
+ left:5.99%;width:88.2%;height:9.25%'>Type Checking</div>
+ <div v:shape="_x0000_s10243" class=B>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:23.75%;
+ left:4.3%;width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>eval
+ :: Term a<span style='mso-spacerun:yes'>  </span>-&gt;<span
+ style='mso-spacerun:yes'>       </span>a&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:30.75%;
+ left:4.3%;width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%;
+ display:none'><b>&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:37.5%;left:4.3%;
+ width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>eval
+ (Less x y) = eval x &lt; eval y&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:44.5%;left:4.3%;
+ width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:88%;display:
+ none'><b>&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:51.25%;
+ left:4.3%;width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%;
+ display:none'><b>&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:57.75%;
+ left:4.3%;width:98.12%;height:4.5%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:63%'><b>Less::(a=Bool)=&gt;Term
+ Int -&gt; Term Int -&gt; Term Bool&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:62.5%;left:4.3%;
+ width:93.07%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%;display:
+ none'><b>&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:67.0%;left:4.3%;
+ width:93.07%;height:4.5%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:63%'><b> x<span
+ style='mso-spacerun:yes'>     </span>:: Term Int&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:72.0%;left:4.3%;
+ width:93.07%;height:4.5%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:63%'><b> y<span
+ style='mso-spacerun:yes'>                 </span>:: Term Int&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:76.75%;
+ left:4.3%;width:93.07%;height:4.5%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:63%'><b>
+ (eval x)<span style='mso-spacerun:yes'>          </span>:: Int&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:81.75%;
+ left:4.3%;width:93.07%;height:4.5%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:63%'><b>
+ (eval y)<span style='mso-spacerun:yes'>          </span>:: Int&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:86.5%;left:4.3%;
+ width:93.07%;height:4.5%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:63%'><b> (eval
+ x &lt; eval y) :: Bool&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:91.5%;left:4.3%;
+ width:93.07%;height:4.5%'><span style='position:absolute;top:0%;left:4.02%;
+ width:95.97%;height:100.0%'><span style='font-family:"Courier New";font-size:
+ 63%;visibility:hidden'><span style='mso-special-format:bullet;position:absolute;
+ left:-4.19%'>•</span></span><span style='font-family:"Courier New";font-size:
+ 63%;mso-special-format:lastCR;display:none'><b>&#13;</b></span></span></div>
+ </div>
+ <v:shapetype id="_x0000_t87" coordsize="21600,21600" o:spt="87" adj="1800,10800"
+  path="m21600,qx10800@0l10800@2qy0@11,10800@3l10800@1qy21600,21600e" filled="f">
+  <v:formulas>
+   <v:f eqn="val #0"/>
+   <v:f eqn="sum 21600 0 #0"/>
+   <v:f eqn="sum #1 0 #0"/>
+   <v:f eqn="sum #1 #0 0"/>
+   <v:f eqn="prod #0 9598 32768"/>
+   <v:f eqn="sum 21600 0 @4"/>
+   <v:f eqn="sum 21600 0 #1"/>
+   <v:f eqn="min #1 @6"/>
+   <v:f eqn="prod @7 1 2"/>
+   <v:f eqn="prod #0 2 1"/>
+   <v:f eqn="sum 21600 0 @9"/>
+   <v:f eqn="val #1"/>
+  </v:formulas>
+  <v:path arrowok="t" o:connecttype="custom" o:connectlocs="21600,0;0,10800;21600,21600"
+   textboxrect="13963,@4,21600,@5"/>
+  <v:handles>
+   <v:h position="center,#0" yrange="0,@8"/>
+   <v:h position="topLeft,#1" yrange="@9,@10"/>
+  </v:handles>
+ </v:shapetype><v:shape id="_x0000_s10244" type="#_x0000_t87" style='position:absolute;
+  left:3in;top:96pt;width:36pt;height:168pt;rotation:90;mso-wrap-style:none;
+  v-text-anchor:middle' fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s10245" type="#_x0000_t87" style='position:absolute;
+  left:501pt;top:45pt;width:42pt;height:276pt;rotation:90;mso-wrap-style:none;
+  v-text-anchor:middle' fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s10246" type="#_x0000_t87" style='position:absolute;
+  left:506.875pt;top:99.125pt;width:36.25pt;height:318pt;rotation:270;
+  mso-wrap-style:none;v-text-anchor:middle' fillcolor="#bbe0e3 [4]"
+  strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shape id="_x0000_s10247" type="#_x0000_t87" style='position:absolute;
+  left:132pt;top:252pt;width:36pt;height:84pt;rotation:90;mso-wrap-style:none;
+  v-text-anchor:middle' fillcolor="#bbe0e3 [4]" strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shapetype id="_x0000_t32" coordsize="21600,21600" o:spt="32"
+  o:oned="t" path="m,l21600,21600e" filled="f">
+  <v:path arrowok="t" fillok="f" o:connecttype="none"/>
+  <o:lock v:ext="edit" shapetype="t"/>
+ </v:shapetype><v:shape id="_x0000_s10248" type="#_x0000_t32" style='position:absolute;
+  left:150pt;top:276pt;width:375pt;height:.125pt' o:connectortype="straight"
+  strokecolor="black [1]">
+  <v:stroke startarrow="block" endarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><v:shapetype id="_x0000_t202" coordsize="21600,21600" o:spt="202"
+  path="m,l,21600r21600,l21600,xe">
+  <v:stroke joinstyle="miter"/>
+  <v:path gradientshapeok="t" o:connecttype="rect"/>
+ </v:shapetype><v:shape id="_x0000_s10249" type="#_x0000_t202" style='position:absolute;
+  left:234pt;top:276.375pt;width:276pt;height:29.625pt' filled="f" fillcolor="#bbe0e3 [4]"
+  strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+  <v:textbox style='mso-fit-shape-to-text:t'/>
+ </v:shape><v:line id="_x0000_s10251" style='position:absolute;flip:y' from="246pt,336pt"
+  to="276pt,366pt" strokecolor="black [1]">
+  <v:stroke startarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:line><v:line id="_x0000_s10252" style='position:absolute;flip:y' from="390pt,336pt"
+  to="6in,384pt" strokecolor="black [1]">
+  <v:stroke startarrow="block"/>
+  <v:shadow color="gray [2]"/>
+ </v:line><![if !vml]><img border=0
+ v:shapes="_x0000_s10244,_x0000_s10245,_x0000_s10246,_x0000_s10247,_x0000_s10248,_x0000_s10249,_x0000_s10251,_x0000_s10252"
+ src="slide0009_image003.gif" style='position:absolute;top:30.0%;left:14.98%;
+ width:80.33%;height:42.0%'><![endif]>
+ <div v:shape="_x0000_s10249" class=O style='mso-line-spacing:"100 50 0";
+ position:absolute;top:52.25%;left:33.52%;width:40.44%;height:4.0%'><span
+ style='color:#FF3300'>Assume a=Bool in this context</span></div>
+</p:slide></div>
+
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<title> Music Composition Worksheet </title>
+
+<CENTER>
+<BIG> Music Composition Worksheet </BIG>
+</CENTER>
+
+<p>
+<H3>Goals</H3>
+<p>
+The purpose of this worksheet is to practice creating music using Haskeore.
+We will focus on transcribing small pieces of music from a written score
+(sheet music) into a Haskore program.
+<p>
+<H3>What to do</H3>
+<ul>
+<li> Get and install the Haskore Libraries from Hackage <A HREF="http://hackage.haskell.org/cgi-bin/hackage-scripts/package/haskore-vintage-0.1">haskore-vintage</A> using <A HREF="../Notes/Cabal.pdf">cabal</A>.
+
+<li> Understand written music notation (sheet music)
+<li> Transcribe "Row Your Boat" into Haskore
+    <ol>
+    <li> Use the guide below
+    <li> Think carefully about how to create a "triplet" for the
+         parts of the song with lyrics "mer-ri-ly"
+    <li> See some <A HREF="../Doc/SampleMusicCode.html">sample transcriptions</A> for a C-Scale.
+    </ol>
+<li> Modify the music to create a round.
+<li> Play your music at different tempos
+<li> Play your music so each part of the round uses a different instrument.
+  <ol>
+    <li> <A HREF="MidiInstrumentList.html">What instuments are there?</A>
+    </ol>
+<li> Find sheet music for a song of your choice from the internet, and transcribe
+a part of it.
+</ul>
+<p>
+<H3>Your code will start something like:</H3>
+<HR ALIGN="center" WIDTH="100%">
+
+<p>
+<PRE>
+module RowYourBoat where
+import Haskore
+import Data.Ratio((%))
+
+
+row:: Music
+row = undefined
+
+main = undefined
+</PRE>
+
+<p>
+<HR ALIGN="center" WIDTH="100%">
+
+<A HREF="TranscribeMusic.png"><IMG SRC="TranscribeMusic.png" ALT="?" BORDER=0></A>

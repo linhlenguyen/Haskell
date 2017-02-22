@@ -1,0 +1,174 @@
+<title>Deleting from Binary Search Tree and Sequentional Hash</title>
+
+<CENTER>
+<BIG>Deleting from Binary Search Tree and Sequentional Hash</BIG>
+</CENTER>
+
+<p>
+In this homework you will write two functions.
+The first implements a deleting function over a binary search tree,
+and the second implements Hashing function stored in a array
+with sequential search to diambiguate collissions.
+<p>
+What to do
+<p>
+<ul>
+<li> Cut and pase the program template between the
+solid horizontal rules, and create a file called
+HW05.hs
+<li> Study the functions and comments and assertions in the
+program template.
+<li> For each undefined, replace it with some Haskell
+code that makes sense.
+<li> Work from the top of the file to the bottom. Each function
+is designed to illustrate one concept. A comment tells what the function
+is supposed to do in words, and the assertions give examples
+that your solutions should adhere to.
+<li> Extend the functions testD and testH so that they exercise
+your code thoroughly.
+<li> Create a main function that illustrates that your code works.
+</ul>
+<p>
+Instructions
+<p>
+Start with deleteTree.
+<ul>
+<li> There are 4 interesting cases.
+(1) The the tree is empty.
+(2) The tree is a branch with empty left sub-tree.
+(3) The tree is a branch with empty right sub-tree
+(4) The tree is a branch
+with two non-empty subtrees. Fill in the undefined
+to reflect this structure.
+<li> Case (1) is simple fill it in
+<li> Case (2) and (3) have two sub-cases. Fill them in.
+<li> Case (4) also has 3 sub cases, depending upon the key.
+<li> Two of these are easy recursive calls.
+<li> The equality case is hard.
+<li> Use the function deleteMin to find the smallest
+element of the right sub-tree. Use this to complete the function.
+</ul>
+
+<p>
+deleteMin works by following the longest left chain without an empty.
+<ul>
+<li> There are 3 interesting cases.
+(1) The the tree is empty. (2) The tree is a branch with empty left sub-tree.
+(3) The tree is a branch with Branching left subtree
+Fill in the undefined
+to reflect this structure.
+<li> Now work out the rest for yourself.
+</ul>
+<p>
+Linear hashing works as follows.
+<ul>
+<li> Hash the key to find a slot in the array.
+<li> If the slot is filled with Nothing, the key is not in the table.
+<li> If the slot has (Maybe(k,v)) then test if key==v, if so the
+value is v.
+<li> If the key /= v, then repeatedly look in the next slot until a Nothing id found.
+<li> Things to worry about.
+	<ol> <li> What if the current slot is the last slot?
+	     <li> What if the array is filled, and no key is found?
+	     How can you tell if this happens? What answer would you return?
+	     </ol>
+</ul>
+<HR ALIGN="center" WIDTH="100%">
+<pre>
+-- Author : _________________
+
+module InsertAndHash where
+
+import ArrCommands
+import Test.HUnit(Test(TestCase,TestList),assertEqual,runTestTT)
+import HashFunction
+
+data BinSearchTree a
+   = Empty
+   | Branch (BinSearchTree a) a (BinSearchTree a)
+
+deleteTree :: (Ord key) => key -> BinSearchTree (key,value) ->  BinSearchTree (key,value)
+deleteTree key x = undefined
+
+deleteMin :: BinSearchTree a -> (a,BinSearchTree a)
+deleteMin tree = undefined
+
+testD = do { print testTree; putStrLn "\n"; print t1 }
+  where testTree:: BinSearchTree (Int,Int)
+        testTree = createTests [(7,1),(4,6),(9,2),(1,3),(6,5),(8,4)]
+        t1 = deleteTree  6 testTree
+
+------------------------------------------------------
+-- Linear hashing
+
+insertHash:: (String,value) -> Array (Maybe(String,value)) -> IO ()
+insertHash (key,value) arr =
+  do { (low,hi) <- boundsArr arr
+     ; let hashLoc = undefined
+     ; insert (low,hi) hashLoc hashLoc (key,value) arr
+     }
+
+
+insert:: (Int,Int) -> Int -> Int -> (String,value) -> Array (Maybe(String,value)) -> IO ()
+insert (low,hi) hashLoc current (k,v) arr = undefined
+
+
+testH =
+  do { table <- newArr (3,7) Nothing
+     ; printArr table
+     ; undefined -- include tests here
+     }
+
+
+findHash:: String -> Array (Maybe(String,value)) -> IO (Maybe value)
+findHash key arr = undefined
+
+
+findH:: (Int,Int) -> Int -> Int -> String -> Array (Maybe(String,value)) -> IO(Maybe value)
+findH (low,hi) hashLoc current k arr = undefined
+
+
+------------------------------------------------------------
+-- This section Included so you can use it to create test
+-- data easily, and print out Trees.
+
+insertTree :: (Ord key) => (key,value) -> BinSearchTree (key,value) ->  BinSearchTree (key,value)
+insertTree (k,v) Empty = Branch Empty (k,v) Empty
+insertTree (k,v) (Branch left (key,satelite) right)
+  | k>=key =  Branch left (key,satelite) (insertTree (k,v) right)
+  | k < key =  Branch (insertTree (k,v) left) (key,satelite) right
+
+createTests [] = Empty
+createTests ((k,v):more) = insertTree (k,v) (createTests more)
+
+showT n Empty = ""
+showT n (Branch left x right) = showT (n+3) right ++
+                                replicate n ' ' ++ show x ++ "\n" ++
+                                showT (n+3) left
+
+instance Show t => Show (BinSearchTree t) where
+  show x = showT 0 x
+
+-------------------------------------------------------
+
+main = undefined
+</pre>
+<p>
+<HR ALIGN="center" WIDTH="100%">
+<p>
+<H3>What to turn in.</H3>
+Create a file by cutting and pasting the template between
+the dark black horizontal lines.  Be sure you do the following
+<ul>
+<li> Include your name (as the author of the program) on the very first line
+<li> Replace the all "undefined" with haskell code.
+<li> Extend the testD and the testH functions to illustrate your code works
+<li> Uploaded the file to blackboard
+<li> Due before class on Thursday, November 5, 2009.
+</ul>
+
+
+<p>
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

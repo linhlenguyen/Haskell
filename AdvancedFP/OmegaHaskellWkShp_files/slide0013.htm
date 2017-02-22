@@ -1,0 +1,163 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 10">
+<link id=Main-File rel=Main-File href="../OmegaHaskellWkShp.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>Generalizing Algebraic Datatypes in Wmega</title>
+<meta name=Description
+content="9/23/2004: Typed lambda Calculus Exp with type t in environment s">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="14"/>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#FFFFFF,#000000,#808080,#000000,#BBE0E3,#333399,#009999,#99CC00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><![endif]><p:shaperange
+  href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s14338" type="#_x0000_m1026"
+  style='position:absolute;left:36pt;top:21.625pt;width:9in;height:90pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s14339" type="#_x0000_m1027"
+  style='position:absolute;left:36pt;top:126pt;width:9in;height:356.375pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape>
+ <div v:shape="_x0000_s14338" class=T><span style='position:absolute;
+ top:4.0%;left:5.99%;width:88.2%;height:8.5%'><span style='font-size:91%'>Typed
+ lambda Calculus<br>
+  </span></span><span style='position:absolute;top:12.25%;left:1.49%;
+ width:97.19%;height:9.25%'><span style='font-size:91%'>Exp with type </span><span
+ style='font-family:"Courier New";font-size:91%'>t</span><span
+ style='font-size:91%'> in environment </span><span style='font-family:"Courier New";
+ font-size:91%'>s</span></span></div>
+ <div v:shape="_x0000_s14339" class=B>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:23.5%;left:5.99%;
+ width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%'><b>data V
+ s t &#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:27.5%;left:5.99%;
+ width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>  </span>= ex m . Z </b></span><span
+ style='font-family:"Courier New";font-size:56%;color:#CC0000'><b>where s =
+ (t,m)</b></span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>                   </span>&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:31.5%;left:5.99%;
+ width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>  </span>| ex m x . S (V m t) </b></span><span
+ style='font-family:"Courier New";font-size:56%;color:#CC0000'><b>where s =
+ (x,m)</b></span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>         </span>&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:35.5%;left:5.99%;
+ width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>  </span>&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:39.5%;left:5.99%;
+ width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%'><b>data
+ Exp s t&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:43.5%;left:5.99%;
+ width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>  </span>= IntC Int </b></span><span
+ style='font-family:"Courier New";font-size:56%;color:#CC0000'><b>where t = Int
+ </b></span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>                    </span>&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:47.5%;left:5.99%;
+ width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>  </span>| BoolC Bool </b></span><span
+ style='font-family:"Courier New";font-size:56%;color:#CC0000'><b>where t =
+ Bool</b></span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>                  </span>&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:51.5%;left:5.99%;
+ width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>  </span>| </b></span><span style='font-family:"Courier New";
+ font-size:56%;color:#00CC00'><b>Plus</b></span><span style='font-family:"Courier New";
+ font-size:56%'><b> (Exp s Int) (Exp s Int) </b></span><span style='font-family:
+ "Courier New";font-size:56%;color:#CC0000'><b>where t = Int</b></span><span
+ style='font-family:"Courier New";font-size:56%'><b> &#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:55.75%;
+ left:5.99%;width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>  </span>| Lteq (Exp s Int) (Exp s Int) </b></span><span
+ style='font-family:"Courier New";font-size:56%;color:#CC0000'><b>where t =
+ Bool&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:59.75%;
+ left:5.99%;width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>  </span>| Var (V s t)&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:63.75%;
+ left:5.99%;width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:56%;
+ display:none'><b>&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:67.75%;
+ left:5.99%;width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:56%'><b>Example
+ Type:&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:71.75%;
+ left:5.99%;width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:56%;
+ display:none'><b>&#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:75.75%;
+ left:5.99%;width:88.2%;height:4.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:56%;
+ color:#00CC00'><b>Plus</b></span><span style='font-family:"Courier New";
+ font-size:56%'><b> :: forall s t . (</b></span><span style='font-family:"Courier New";
+ font-size:56%;color:#CC0000'><b>t=Int</b></span><span style='font-family:"Courier New";
+ font-size:56%'><b>) =&gt; &#13;</b></span></div>
+ <div style='mso-line-spacing:"80 20 0";position:absolute;top:79.75%;
+ left:5.99%;width:93.44%;height:4.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:56%'><b><span
+ style='mso-spacerun:yes'>                   </span>Exp s Int -&gt; Exp s Int
+ -&gt; Exp s t</b></span></div>
+ </div>
+</p:slide></div>
+
+</body>
+
+</html>

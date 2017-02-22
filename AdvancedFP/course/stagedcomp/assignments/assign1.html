@@ -1,0 +1,50 @@
+<PRE>
+CS510 FSC Staged Computation   Winter 2005                   Assignment #1
+Thurssday Jan 6. 2005                  Due in Class Thursday Jan. 13, 2005
+
+NOTE -- This is an HTML file and won't display properly as a text file.
+
+Reading assignment:
+
+	1) Read the paper: "Using MetaML: a staged Programming language." From the
+	Lecture notes of the Summer School on Advanced Functional Programming.
+	September 1998. Braga, Portugal
+
+
+Programming assignment:
+
+1) Find or install a copy of MetaML or MetaOcaml
+
+2) Declare a variable that contains code that when run would
+add the integers from 0 to 10.
+
+3) Write a function "three" that given an integer typed peice of
+code constructs a integer list piece of code with three
+elements each a copy of the argument.
+   e.g.  three &lt;2&gt;  -->  &lt;[2,2,2]&gt;
+
+4) The problem with "three" is that if its argument is a large
+piece of code, the result is 3 times as large, Write a function
+"threePrime" that avoids this by generating a piece of code which is a let
+expression.   e.g.
+ threePrime &lt;4+5&gt; --> &lt;let val temp = 4+5 in [temp,temp,temp] end&gt;
+
+5) Write a function "pre" that given an integer piece of code and an
+integer list piece of code, produces a new pieve of code which
+will prepend the value if the integer piece of code to the front
+of the integer list piece of code when the new piece of code is
+run.  pre &lt;3&gt; &lt;[]&gt;  --> &lt;3 :: []&gt;
+(Note, that list in MetaML are pretty printed. I.e. (3 :: 4 :: [])
+pretty prints as [3,4] so metaML might not print exactly as the
+example above illustrates.)
+
+6) Write a function "count" which given a positive (non-zero)
+integer "n" produces a pieceof code which is a list containing the
+list of integers from 0 to "n".  e.g. count 4 --> &lt;[0,1,2,3,4]&gt;
+(hint, the function lift might be usefull. e.g. lift 3 --> &lt;3&gt;.)
+
+
+</PRE>
+
+
+<A HREF="./index.html"> Back</A> to the Assignment Page

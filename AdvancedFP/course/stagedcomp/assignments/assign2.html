@@ -1,0 +1,55 @@
+<PRE>
+cs510 FSC Staged Computation          Assignment # 2                     Winter 2005
+assigned Tuesday Jan. 11, 2005                    due in class Tuesday Jan. 18, 2005
+
+fun add 0 y = y
+  | add n y = 1 + (add (n-1) y);
+
+fun mult 0 y = 0
+  | mult n y = y + (mult (n-1) y);
+
+fun member [] x = false
+  | member (y::ys) x = if x=y then true else member ys x;
+
+fun dotprod 0 x y = 1
+  | dotprod n (x::xs) (y::ys) = (x * y) + (dotprod (n-1) xs ys)
+
+fun nth 0 (x::xs) = x
+  | nth n (x::xs) = nth (n-1) xs;
+
+Consider the functions defined above. Whose types are listed below.
+
+    add : int -> int -> int
+    mult : int -> int -> int
+    member : ['a=].'a  list -> 'a  -> bool
+    dotprod : int -> int list -> int list -> int
+
+For each function write a staged function with the type given. Be sure and test your
+functions, and hand in the results of the tests as well as the function definitions.
+
+1) add' : int -> &lt;int&gt; -> &lt;int&gt;
+
+2) mult' : int -> &lt;int -> int&gt;
+
+3) member' : 'a list -> &lt;'a &gt;-> &lt;bool&gt;
+
+4) dotprod' : int -> int list -> &lt;int list -> int&gt;
+   hint: use the function "nth"
+
+
+5) The output of dotprod' should look something like this
+   dotprod 4 [1,3,0,4] --->
+      &lt;fn x => (1*(nth 0 x))+(3*(nth 1 x))+(0*(nth 2 x))+(4*(nth 3 x))+0&gt;
+
+write a new dotprod' that applies the theorems:
+
+       1*x = x
+       0*x = 0
+       x+0 = x
+
+the answer should now look like:
+
+&lt;fn x => (nth 0 x)+(3*(nth 1 x))+(4*(nth 3 x))&gt;
+
+
+</PRE>

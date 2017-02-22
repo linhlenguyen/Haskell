@@ -1,0 +1,6 @@
+Current work
+============
+
+Currently working on translating the propositions used in the game playing algorithms into forms that our FOL Tableau prover can analyse.
+
+

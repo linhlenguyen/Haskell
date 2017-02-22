@@ -1,0 +1,137 @@
+(* <Pre> *)
+
+exception Error of string;
+
+fun error s = (print s; raise (Error s));
+
+datatype Re =
+  empty of int
+| simple of string * int
+| concat of Re * Re
+| closure of Re
+| union of Re * Re;
+
+
+datatype token =
+  Done
+| Bar
+| Star
+| Hash
+| Leftparen
+| Rightparen
+| Single of string;
+
+fun tok2str Done = "Done"
+  | tok2str Bar = "|"
+  | tok2str Star = "*"
+  | tok2str Hash = "#"
+  | tok2str Leftparen = "("
+  | tok2str Rightparen = ")"
+  | tok2str (Single c) = c;
+
+val lookahead = ref Done;
+val input = ref [Done];
+val location = ref 0;
+
+fun nextloc () =
+ (location := (!location) + 1; !location)
+
+(* simple lexical analyser *)
+fun lexan s =
+let fun help [] = []
+      | help (#"|" :: xs) = Bar :: help xs
+      | help (#"*" :: xs) = Star :: help xs
+      | help (#"#" :: xs) = Hash :: help xs
+      | help (#"(" :: xs) = Leftparen :: help xs
+      | help (#")" :: xs) = Rightparen :: help xs
+      | help (x :: xs) = Single (String.implode [x]) :: help xs
+in help (String.explode s) end;
+
+fun init s = (location := 0;
+                    input := lexan s;
+              lookahead := hd(!input);
+              input := tl(!input));
+
+
+fun match t =
+if (!lookahead) = t
+   then (if null(!input)
+            then lookahead := Done
+            else (lookahead := hd(!input)
+                 ; input := tl(!input)))
+   else error ("looking for: "^(tok2str t)^
+               " found: "^(tok2str (!lookahead)));
+
+
+fun Alt () =
+  let val x = Concat ()
+      val y = moreAlt ()
+  in case y of
+       NONE => x
+     | SOME z => union(x,z)
+  end
+
+and moreAlt () =
+ case (!lookahead) of
+   Bar => let val _ = match Bar
+              val x = Alt()
+              val y = moreAlt ()
+          in case y of
+               NONE => SOME x
+             | (SOME z) => SOME(union(x,z))
+          end
+ | _ => NONE
+
+and Concat () =
+  let val x = Closure ()
+      val y = moreConcat ()
+  in case y of
+       NONE => x
+     | SOME z => concat(x,z)
+  end
+
+and Closure () =
+ let val x = Simple()
+ in case !lookahead of
+      Star => (match Star; closure x)
+    | other => x
+ end
+
+and moreConcat () =
+ case (!lookahead) of
+   (Single _ | Leftparen | Hash) =>
+     let val x = Closure()
+         val y = moreConcat()
+     in case y of
+          NONE => SOME x
+        | SOME z => SOME(concat(x,z))
+     end
+ | _ => NONE
+
+and Simple () =
+ case !lookahead of
+   Single c =>
+     let val _ = match (Single c)
+         val n = nextloc()
+     in simple(c,n) end
+ | Leftparen =>
+     let val _ = match Leftparen
+         val x = Alt();
+         val _ = match Rightparen
+     in x end
+ | Hash =>
+    let val _ = match Hash
+        val n = nextloc()
+    in empty n end
+ | x => error ("In Simple no match: "^(tok2str x));
+
+
+
+fun parse s =
+let val _ = init s
+    val ans = Alt()
+    val _ = match Done
+in ans end;
+
+
+(* </Pre>  *)

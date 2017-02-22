@@ -1,0 +1,73 @@
+--<PRE>
+
+import Memo
+
+data Stream a = a :^ Stream a
+
+twoz = 2 : twoz
+
+ex1 = head twos
+
+ignore a b = b
+
+fibA 0 = 1
+fibA 1 = 1
+fibA n = fibA(n-1) + fibA(n-2)
+
+fibs = 1 : 1 : (zipWith (+) fibs (tail fibs))
+
+--- Stream Diagram example:
+
+counter :: [ Bool ] -> [ Integer ]
+counter inp = out
+    where
+        out = ifx inp Then (lift 0) Else next
+        next = [0] `followedBy` map (+ 1) out
+
+data Then = Then
+data Else = Else
+
+ifx :: [Bool] -> Then -> [a] -> Else -> [a] -> [a]
+ifx (b:bs) Then (x:xs) Else (y:ys) =
+  (if b then x else y) : (ifx bs Then xs Else ys)
+  
+followedBy = (++)
+lift n = n : (lift n)
+
+--- Client Server Example ------
+
+type Response = Integer
+type Request = Integer
+
+client :: [Response] -> [Request]
+client ys = 1 : ys
+
+server :: [Request] -> [Response]
+server xs = map (+1) xs
+
+reqs = client resps
+resps = server reqs
+
+clientB (y : ys) = 
+   if ok y 
+      then 1 :(y:ys) 
+      else error "faulty server"
+   where ok x = True
+   
+clientC ys = 
+   1 : (if ok (head ys) then ys else error "faulty server")
+ where ok x = True
+
+clientD ~(y:ys) = 
+   1 : (if ok y then ys else error "faulty server")
+ where ok x = True
+
+---- Memoization ----
+
+fibsFn :: () -> [ Integer ]
+fibsFn () = 1 : 1 : (zipWith (+) (fibsFn ()) (tail (fibsFn ())))
+
+mfibsFn x = let mfibs = memo1 mfibsFn
+            in 1:1:zipWith(+)(mfibs()) (tail (mfibs()))
+
+--</PRE>

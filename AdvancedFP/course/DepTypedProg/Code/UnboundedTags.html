@@ -1,0 +1,38 @@
+-- <PRE>
+-- This file was inspired from our development of
+-- <A HREF="SimpleTags.prg">SimpleTags.prg</A>. We replace
+-- Tag' and Label' by the builtin Tag and Label type.
+
+
+-- A Shape is a list or record structure in which
+-- we use the built in Tag as labels.
+-- The built in Tag types are constructed by using
+-- the backquote on a variable like `a
+
+data Shape:: *1 where
+  E :: Shape
+  P :: Tag ~> *0 ~> Shape ~> Shape
+    deriving Record(s)
+
+
+-- A count is a natural number, which is indexed
+-- by shapes and types.
+
+data Count:: Shape ~> Tag ~> *0 ~> *0 where
+  Zero:: Count (P a t b) a t
+  Succ:: Count sh nm ty -> (Count (P a ty2 sh)) nm ty
+    deriving Nat(c)
+
+-- A Term is indexed by a Shape which determines what
+-- variables are used in the term, and what type those
+-- variables have.
+
+data Term:: Shape ~> *0 ~> *0 where
+  Iconst :: Int -> Term sh Int
+  Var:: Label a -> Count i a ty -> Term i ty
+  Pair:: Term sh a -> Term sh b -> Term sh (a,b)
+  Let:: Label a -> Term sh x -> Term (P a x sh) s -> Term sh s
+
+
+
+

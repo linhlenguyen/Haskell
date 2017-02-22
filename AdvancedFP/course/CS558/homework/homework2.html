@@ -1,0 +1,294 @@
+
+<title> CS558 Homework #2 </title>
+
+
+<CENTER>
+<BIG> CS558 Homework #2 </BIG> <BR>
+ Due Due 8:00 AM, Monday, Jan 18, 2016 <BR>
+</CENTER>
+
+<p>
+
+Homework must be submitted via D2L. All submitted files (four for this assignment
+sol2A.e2, sol2B.py, sol2B.hs, sol2C.txt) must be
+submitted in the appropriate D2L directory in the drop box HW2.
+It is your responsibility to submit the homework in the proper
+format with the proper names. For example.
+<PRE>
+-- Homework 2  Tom Smith   tom_smith@gmail.com
+</PRE>
+
+<p>
+All programs mentioned can be downloaded from the this document
+<ul>
+<li> <A HREF="../code/hw2/Hw2.py">Hw2.py</A>.  A python interpreter.
+<li> <A HREF="../code/hw2/Hw2.hs">Hw2.hs</A>. A Haskell interpreter.
+<li> <A HREF="../code/hw2/count.e2">count.e2</A>.  A simple sample .e2 file.
+<li> <A HREF="../code/hw2/primes.e2">primes.e2</A>. A more complex sample .e2 file.
+
+</ul>
+
+<H1>Imperative Language interpretor.</H1>
+
+Consider a simple language of imperative expressions, which we'll
+call E2. We will store programs in this language in files with extension *.e2.
+It's concretized abstract syntax is given by the following extended
+grammar:
+
+
+<PRE>
+prog := exp
+exp := var
+| int
+| '(' ':=' var exp ')'
+| '(' 'while' exp exp ')'
+| '(' 'if' exp exp exp ')'
+| '(' 'write' exp ')'
+| '(' 'block' { exp } ')'
+| '(' '+' exp exp ')'
+| '(' '-' exp exp ')'
+| '(' '*' exp exp ')'
+| '(' '/' exp exp ')'
+| '(' '<=' exp exp ')'
+var := <I>string of letters</I>
+</PRE
+
+<p>
+As before, comments may be included by enclosing them between
+comment braces '{-' and '-}' and they may be nested.
+<p>
+
+An informal semantics for E2 is as follows. The evaluation of each
+expression (and hence of a program) yields a single integer result.
+
+<ul>
+
+<Li>A variable <B>x </B>yields its current value. Every variable is
+implicitly initialized to 0 at the beginning of program evaluation. <p>
+
+<li>An integer <B>i</B> (like 5 or 782) yields itself. <p>
+
+
+<li> Evaluating the assignment expression <B>(:= x e)</B> evaluates e ,
+assigns the resulting value into variable x, and yields that value. <p>
+
+<li> Evaluating <B>(while e1 e2)</B> repeatedly performs the following
+steps: e 1 is evaluated; if the result is non-zero e 2 is evaluated;
+otherwise, the evaluation of the while is complete. A while
+expression always yields the value 0. <p>
+
+<li> Evaluating <B>(if e1 e2 e3)</B> evaluates e1; if the result is
+non-zero, then e2 is evaluated and resulting value is yielded as the
+value of the if expression; otherwise, e3 is evaluated and the
+resulting value is yielded as the value of the if expression. <p>
+
+
+<li> Evaluating <B>(write e)</B> evaluates e, prints the resulting value
+(following by a newline) to standard output, and yields that value. <p>
+
+
+<li> Evaluating <B>(block e1 e2 ... en)</B> evaluates e1 , e2 ,. . . , en
+in that order, and yields the value of en . If n = 0, the block
+expression yields 0. <p>
+
+<li> Evaluating <B>(+ e1 e2)</B> evaluates e1 and e2 and yields the sum
+of their values. The other arithmetic operations are similar. <p>
+
+<li> Evaluating <B>(<= e1 e2)</B> evaluates e1 and e2 , and compares
+their values. If the first is less than or equal to the second, the
+expression yields 1; otherwise it yields 0. <p>
+
+</ul>
+<p>
+
+An example program
+<A HREF="../code/hw2/primes.e2">primes.e2</A>
+written in this language is available for you to view.
+
+<p> Two E2 interpreters have been provided, one in Python ( <A HREF="../code/hw2/Hw2.py">Hw2.py</A> )
+and the other in Haskell ( <A HREF="../code/hw2/Hw2.hs">Hw2.hs</A> ).
+
+
+<p>
+Each interpreter reads a file containing an E2 program in the syntax described
+above, echoes the program (to confirm correct parsing), evaluates the program (possibly
+producing output from
+write
+expressions), and displays the evaluation result.
+<p>
+The Python
+program interprets the abstract syntax directly. The Haskell program first translates it into
+stack machine code (for an extended and somewhat different version of the stack machine
+from Homework 1), prints out the stack code (for debugging purposes), and then executes
+it.  For example, here is a trace from inside GHCI on the file <A HREF="../code/hw2/count.e2">count.e2</A>
+
+<PRE>
+*Main> interp "count.e2"
+Expression:
+(block (:= n 1)
+       (while (<= n 2) (block (write n) (:= n (+ n 1)) ))
+       )
+Compiles to:
+[Const 1, Dup, Store n, Pop, Label 0:, Const 2, Load n, Swap, Leq,
+ Branchz 1, Load n, Dup, Print, Pop, Const 1, Load n, Plus, Dup,
+ Store n, Pop, Branch 0, Label 1:, Const 0]
+Executing:
+
+1
+2
+
+Evaluates to: 0
+</PRE>
+
+
+<p> For more debugging help, you can trace the behavior of the stack
+machine by typing "<B>trace</B>" at the GHCI prompt, This commnad
+flips the state of the tracing flag. <A HREF="hw2Trace.txt">Here</A> is a transcript of
+turing the trace on and reexecuting <A HREF="../code/hw2/count.e2">count.e2</A>.
+One should do this before executing the Haskell function <B>interp</B> to
+start the read-eval-print function.
+<p>
+
+One can also control
+tracing programatically by using the IO action
+<B>writeIORef trace_on True</B> inside a Haskell function with type
+IO.
+<p>
+<H3>What you need to do.</H3>
+<ol>
+<li>One of the interpreters evaluates the operands to binary
+operators ( + , - , * , / , and <= ) from left-to-right; the other from
+right-to-left. Write an example E2 program, not involving write
+statements, that produces diffierent answers depending on the order of
+evaluation of these operands, and hence diffierent for the two
+interpreters. Put your program in file sol2A.e2 and and submit this
+file. Your program must include a comment stating: which interpreter has
+which behavior; and based on this program, what (if anything) can be
+deduced about the order of evaluation of operands in the Python and
+Haskell languages themselves. (20 points)
+
+
+<p>
+
+<li>
+
+Modify
+each
+interpreter to support a new kind of expression, as specified below. Some of the code for
+parsing these expressions is already present; what you need to do is extend the abstract
+syntax, add printing code, and add evaluation code (in Python) or compilation code (in
+Haskell). When modifying the Haskell version don't change or add to the stack machine.
+
+<p>
+The
+for
+expression has the following syntax:
+exp := '(' 'for' var exp exp exp ')'
+
+<p> Evaluating (for x e1 e2 e3 ) first evaluates e1 to a value v1
+and stores v1 into x . It then repeats the following steps: evaluate e2
+to a value v2 ; fetch x ; if x > v2 then terminate
+evaluation of the for, yielding the value 0; otherwise, evaluate e3 and
+discard the yielded result, fetch x , add one to it, store back into x ,
+and repeat.
+
+<p>
+When modifying the code, study carefully how the "while" statement is implemented.
+Look for how "while" statements are parsed, how they are evaluated (in python) and how they are
+translated to stack machine code (in Haskell). This will be a good guide for modifying
+the code to add "for" statements.  Searching for "while" and 'While' in the source will help identify
+places in the code where things neeed to be added or modified.
+
+<p>
+For example,
+<p>
+(for i 1 10 (write i))
+
+<p> prints the numbers from 1 to 10, and yields the value 0. Make sure
+you get the order of evaluation right. For example, the bizarre program
+<p>
+<B>(for i i (block (:= i (+ i 2)) 10) (block (write i) (:= i (+ i 3))))</B>
+
+<p>
+prints out the numbers 2,8 and yields the value 0. Hints: Model your code
+on the existing code for while. The Haskell version may require some
+tricky stack manipulation to get the order of evaluation right; once
+again, you may find the SWAP instruction useful.
+
+<p> Put your revised Python interpreter in sol2B.py (30 points), and your revised
+Haskell interpreter in sol2B.hs (30 points), and submit both these files.
+
+
+<H1>Axiomatic Semantics</H1>
+
+
+
+Consider the very simple language used to illustrate axiomatic semantics
+in lecture. Suppose we add a non-deterministic guarded if statement to
+our language. The syntax of this statement is
+
+
+<PRE>
+gif E1 -> S1
+| E2 -> S2
+...
+| En -> Sn
+end
+</PRE>
+
+<p> where the Ei are boolean expressions. This statement is executed by
+non-deterministically choosing any one i such that Ei evaluates to true,
+and executing the corresponding Si . Among other things, this statement
+gives an elegant, symmetric way to express functions like max , e.g.
+
+<PRE>
+gif x1 >= x2 -> max := x1
+|   x2 >= x1 -> max := x2
+end
+</PRE>
+
+<p> Note that if x1 = x2 then either branch might be chosen
+non-deterministically. In this example, the resulting value of max will be
+the same either way, but we can also write guarded <B>gif</B>'s that are
+intentionally non-determinstic, e.g., to simulate a coin toss:
+
+
+<PRE>
+gif true -> coin := 0
+| true -> coin := 1
+end  { coin }
+</PRE>
+
+
+This question has two parts. Type your answers to both parts into a file
+sol2C.txt, and submit this file.
+
+<ol>
+
+<li> Extend the axiomatic semantics given in lecture by writing down an appropriate rule of
+inference (GIF) for
+gif
+statements. (5 points)
+
+<li> Derive the following triple, by presenting a formal proof tree for it (as shown in lecture).
+
+<PRE>
+{ z < 0 }
+while (x > -5) do
+gif x <= 0 -> y := -x
+| x >= 0 -> y := x
+end;
+z := z - y
+end
+{ z < 0 }
+</PRE>
+(15 points)
+</ol>
+
+<p> Remember to label each node in the tree with the appropriate axiom or
+rule of inference. You'll need one (WHILE), one (COMP), one (GIF), three
+(ASSIGN), and four (CONSEQ) steps. Don't worry about formatting your
+answer beautifully, so long as it is clear.
+
+
+

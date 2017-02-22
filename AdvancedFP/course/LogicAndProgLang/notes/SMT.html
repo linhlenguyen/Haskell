@@ -1,0 +1,155 @@
+<title> SMT Provers </title>
+
+
+<CENTER>
+<BIG> Satisfiability Modulo Theorys - SMT Provers </BIG>
+</CENTER>
+<p>
+An important type class of theorem provers are called
+SMT provers. A SMT prover combines satifiability (over boolean
+formulas) with other theories (such as theories of linear arithmetic,
+arrays, lists, etc.). These have many applications in areas such has
+hardware design and software verification.
+
+<p>
+<H3>Overview</H3>
+In this lecture we will do three things
+<ol>
+
+<li> Get an overview of how SMT provers work. Using the <A HREF="http://www.open-do.org/wp-content/uploads/2010/06/SMT_provers.pdf">notes</A>
+of Johannes Kanig.
+
+<li> Get an introduction to using a real SMT solver <A HREF=" http://yices.csl.sri.com/">Yices</A>.
+
+<li> Apply Yices to a real problem,  test generation, in a
+toy domain (a while language), that illustrates
+how SMT provers are used to analyze software.
+</ol>
+<p>
+http://yices.csl.sri.com/language.shtml
+
+<H3>Basic Skills</H3>
+
+In order to use a SMT-prover, you will need to
+understand how to do the following basic tasks:
+<p>
+<ul>
+<li> Inrtroduce variables and function symbols
+<li> Assert formulae
+<li> Check for satisfiability
+<li> Extract assingments and counter examples.
+</ul>
+<p>
+In my experience there were two invaluable resources for learning to do this.
+<ul>
+ <li> The yices 2 <A HREF="http://yices.csl.sri.com/papers/manual.pdf">manual</A>.
+ <li> The Yices library of <A HREF="http://yices.csl.sri.com/examples.shtml">small examples</A>.
+ <li> The Yices "input language" <A HREF="http://yices.csl.sri.com/language.shtml">help pages</A>.
+</ul>
+<p> I suggest you study these, and the <A HREF="yices/queens.ys">example</A> we will look at in the lecture.
+
+<H3>Installing and using Yices.</H3>
+We will be using <A HREF=" http://yices.csl.sri.com/">Yices</A> as our SMT-prover.
+Basic tasks and skills you will need to accompish.
+
+<ul>
+<li> Download and install Yices on your machine.
+  <ol> <li> Go to the <A HREF="http://yices.csl.sri.com/index.shtml">download page</A> and follow the instructions for your type of machine.
+       <li> On windows, I simply downloaded the standalone distribution (no cygwin required, with the statically linked GMP).
+       I unzipped it and used a command line argument to start execution of the yices.exe in the bin directory. You may want to
+       add yices to your path.
+       <li> If you have problems, or wish to add notes about installing on other
+            kinds of machines, let me know, and I will add directions here.
+       </ol>
+
+<li> Learn the basic modes of using Yices.
+  <ol> <li> Interactive use
+<PRE>
+$ /cygdrive/d/FreyaDownloads/yices/yices-2.2.2/bin/yices
+yices> (include "queens.ys")
+yices> (check)
+sat
+yices> (show-model)
+(= Bx 3)
+(= Cy 1)
+(= Dy 3)
+(= Cx 2)
+(= Dx 1)
+(= By 4)
+(= Ax 4)
+(= Ay 2)
+yices>
+</PRE>
+       <li> Batch use.  Include <B>(check)</B> and <B>(show-model)</B> commands in the file and then redirect output to a file.
+<PRE>
+$ rm sol.sol
+$ /cygdrive/d/FreyaDownloads/yices/yices-2.2.2/bin/yices queens.ys >> sol.sol
+$ more sol.sol
+sat
+(= Bx 3)
+(= Cy 1)
+(= Dy 3)
+(= Cx 2)
+(= Dx 1)
+(= By 4)
+(= Ax 4)
+(= Ay 2)
+</PRE>
+ <li> <A HREF="http://hackage.haskell.org/package/yices">Cabal package</A> for embedding Yices SMT-Lib calls in Haskell.
+       </ol>
+<p>
+<li> Resources I found helpful
+  <ol> <li> The Yices <A HREF="http://yices-wiki.csl.sri.com/index.php/Main_Page">wiki page</A>.
+
+       <li> The Yices <A HREF="http://yices.csl.sri.com/slides-afm-tutorial.pdf">tutorial</A>.
+       </ol>
+
+</ul>
+
+<H3>Generating input parameters to increase test coverage.</H3>
+
+
+The Problem: (summarized from a <A HREF="http://research.microsoft.com/en-us/um/redmond/projects/z3/SMT@MS.pdf">talk</A> by Leonardo de Moura and Nikolaj Bjørner.
+<p>
+
+<ul>
+<li> Given program with a set of input parameters.
+<li> Generate inputs that maximize code coverage.
+<li> Example
+<PRE>
+Input x, y;
+{z = x + y;
+ If z > x - y Then
+    <FONT COLOR="#008000">Return z</FONT>
+ Else
+    <FONT COLOR="#FF0000">Error "bad"</FONT>
+}
+</PRE>
+<li> What inputs must I choose to guarantee that I test a path
+that executes the <FONT COLOR="#008000">Return z</FONT>? or the <FONT COLOR="#FF0000">Error</FONT>
+<li> For <FONT COLOR="#008000">Return z</FONT> Solve:  z = x + y  /\  z > x - y
+<li> solution:  <FONT COLOR="#008000">x = 1, y = 1</Font>
+<li> For <FONT COLOR="#FF0000">Error "bad"</FONT> Solve:  z = x + y  /\  ¬(z > x - y)
+<li> solution:  <FONT COLOR="#FF0000">x = 1, y = -1</Font>
+<li>
+</ul>
+
+<p>
+<H3>SMT-Lib</H3>
+
+<A HREF="http://www.smtcomp.org/2011/">SMT-COMP</A> is an annual competition
+that challenges the developers of SMT solvers to improve their solvers. In
+order to allow multiple solvers to solve a common set of problems, a standard
+language, <A HREF="http://www.smtlib.org/">SMT-LIB</A>, has
+been developed that competing solvers must support.
+The input and output to SMT solvers usually conforms to this standard.
+A reference for users who wish to learn how to format SMT input in the SMT-LIB
+format is the
+<A HREF="http://www.grammatech.com/resources/smt/SMTLIBTutorial.pdf">SMT-LIB tutorial</A>.
+More information about resources available for SMT-LIB can be found
+<A HREF="http://www.grammatech.com/resources/smt/">here</A>.
+<p>
+<p>
+
+<A HREF="../index.html">Back to the class web-page.</A> <BR>
+

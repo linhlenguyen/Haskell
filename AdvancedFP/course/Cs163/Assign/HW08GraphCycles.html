@@ -1,0 +1,63 @@
+<title>Detecting Cycles in Graphs</title>
+
+<CENTER>
+<BIG>Detecting Cycles in Graphs</BIG>
+</CENTER>
+
+<p>
+In this homework you will write a program to detect cycles in a graph.
+<ul>
+<li> Study the <A HREF="../Doc/Graphs.html">notes</A> on graphs, especially the <A HREF="../Code/Graph.hs">Graph.hs</A>
+we wrote in class.
+<li> Use the graphs as array representation.
+<li> Create 3 graphs using this represntation with at least
+10 vertices. One should be acyclic. The other two should be cyclic.
+One should have a cycle with length less than 4, and the other
+should have a cycle with length greater than 8.
+<li> Write a program hasCycle with the following contract.
+<pre>
+hasCycle:: ArrayGraph Int -> IO(Bool)
+</pre>
+<li> Create test harnesses to show that your program works.
+</ul>
+
+<p>
+What to do
+<p>
+<ul>
+<li> Cut and paste the program pieces from the file
+<A HREF="../Code/Graph.hs">Graph.hs</A> to get started
+including the definition for the type <B>ArrayGraph</B>
+and code for creating grpahs as arrays, and programs
+that manipulate graphs as starting points.
+.
+<li> Alter the functions that you have cut and pasted so that they
+implement hasCycle as described above.
+<li> Be sure and rename functions so that names of the altered functions describe
+what the functions do. I will assign points according to how well
+you name your functions.
+<li> I suggest you work in stages, cutting and pasting only a few pieces of a time.
+<li> Be sure and create test harnesses that test your code. Test it as
+you proceed, so that you know each piece works, before you
+alter new pieces that depend upon previously altered pieces,
+<li> Create a main function that illustrates that your code works.
+</ul>
+<p>
+<p>
+<HR ALIGN="center" WIDTH="100%">
+<p>
+<H3>What to turn in.</H3>
+<ul>
+<li> A file by containing the working code of hasCycle.
+<li> Include your name (as the author of the program) on the very first line
+<li> At least 3 graphs as described above.
+<li> Be sure you include tests
+<li> Uploaded the file to blackboard
+<li> Due on final exam day Tuesday, December 8, 2009.
+</ul>
+
+
+<p>
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

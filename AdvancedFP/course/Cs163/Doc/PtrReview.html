@@ -1,0 +1,71 @@
+<title>Review of Pointers in Haskell</title>
+
+<CENTER>
+<BIG>Review of Pointers in Haskell</BIG>
+</CENTER>
+<p>
+In this document we review the important ideas behind
+<ol>
+<li> Pointers in Haskell
+<li> Using pointers to build linked structures with mutable links.
+</ol>
+<p>
+<HR ALIGN="center" WIDTH="100%">
+<H3>Pointers in Haskell</H3>
+<p>
+<ul>
+<li> Pointers are references to memory locations.
+<li> A pointer never changes, but the memory location it points to
+can be observed and changed using commands.
+<li> The pointer commands include:
+    <ol> <li> <pre> newPtr :: a -> IO (Ptr a) </pre>
+		<li> <PRE> readPtr :: Ptr a -> IO a </PRE>
+		<li> <PRE> writePtr:: Ptr a -> a -> IO () </PRE>
+		<li> <PRE> samePtr:: Ptr a -> Ptr a -> Bool </PRE>
+     </ol>
+<li> All of the operations have constant time costs.
+</ul>
+<p>
+We can envision a pointer as an arrow pointing to a blue box.
+The blue box represents the contents of the memory location. The data
+inside the blue box can be observed or altered.
+<p>
+<HR ALIGN="center" WIDTH="100%">
+<H4>To observe the contents</H4> use the readPtr command
+<p>
+<A HREF=""><IMG SRC="../Graphics/PointerRead.png" ALT="?" BORDER=0></A>
+<p>
+<HR ALIGN="center" WIDTH="100%">
+<H4>To change the contents</H4> of the blue box, use the writePtr command.
+<p>
+<A HREF=""><IMG SRC="../Graphics/PointerWrite.png" ALT="?" BORDER=0></A>
+<p>
+<HR ALIGN="center" WIDTH="100%">
+We can embed pointers in algebraic data structures, thus creating
+mutable structures. For example a mutable list, where both the
+elements in the list and the links in the list are mutable can be defined as follows:
+<p>
+<pre>
+data MutList a = Nil | Cons (Ptr a) (Ptr (MutList a))
+</pre>
+One might picture a mutable list as follows.
+<p>
+<A HREF=""><IMG SRC="../Graphics/mutableList.png" ALT="?" BORDER=0></A>
+
+<p>
+<HR ALIGN="center" WIDTH="100%">
+One can create Queue structure by combining
+a mutable list and a pair of pointers, one to the front,
+and one to the rear of the Queue.
+<p>
+
+<A HREF=""><IMG SRC="../Graphics/MutableQ.png" ALT="?" BORDER=0></A>
+<p>
+To enqueue an element requires changing a few pointers
+<p>
+<A HREF=""><IMG SRC="../Graphics/MutableQ2.png" ALT="?" BORDER=0></A>
+<p>
+
+<A HREF="../DailyRecord.html#Today">Back to the Daily Record.</A>
+<p>
+<A HREF="../index.html">Back to the class web-page.</A>

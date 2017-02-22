@@ -1,0 +1,204 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 10">
+<link id=Main-File rel=Main-File href="../OmegaHaskellWkShp.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>Generalizing Algebraic Datatypes in Wmega</title>
+<meta name=Description content="9/23/2004: Why remove the restriction?">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="5"/>
+ <o:rules v:ext="edit">
+  <o:r id="V:Rule2" type="callout" idref="#_x0000_s5124"/>
+ </o:rules>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#FFFFFF,#000000,#808080,#000000,#BBE0E3,#333399,#009999,#99CC00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><![endif]><p:shaperange
+  href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s5122" type="#_x0000_m1026"
+  style='position:absolute;left:36pt;top:21.625pt;width:9in;height:90pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s5123" type="#_x0000_m1027"
+  style='position:absolute;left:36pt;top:126pt;width:9in;height:356.375pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape>
+ <div v:shape="_x0000_s5122" class=T style='position:absolute;top:8.0%;
+ left:4.3%;width:91.57%;height:9.25%'>Why remove the restriction?</div>
+ <div v:shape="_x0000_s5123">
+ <div class=B style='mso-line-spacing:"80 20 0"'><span style='position:absolute;
+ top:23.5%;left:9.73%;width:97.37%;height:5.25%'><span style='font-size:75%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.84%'>•</span></span><span
+ style='font-size:75%'>We would like the parameter of a type constructor (e.g. </span></span><span
+ style='position:absolute;top:27.75%;left:9.73%;width:97.0%;height:5.25%'><span
+ style='font-size:75%'>the “a” in “T a”) to say something about the values with
+ </span></span><span style='position:absolute;top:32.0%;left:9.73%;width:84.45%;
+ height:5.25%'><span style='font-size:75%'>type “T a”&#13;</span></span></div>
+ <div class=B1 style='mso-line-spacing:"80 20 0";position:absolute;top:37.25%;
+ left:11.04%;width:83.14%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='font-size:71%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.74%'>–</span></span><span
+ style='font-size:71%'>phantom types&#13;</span></span></div>
+ <div class=B1 style='mso-line-spacing:"80 20 0";position:absolute;top:41.75%;
+ left:11.04%;width:83.14%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='font-size:71%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.74%'>–</span></span><span
+ style='font-size:71%'>indexed types&#13;</span></span></div>
+ <div class=B style='mso-line-spacing:"80 20 0";position:absolute;top:46.25%;
+ left:5.99%;width:88.2%;height:5.25%'><span style='position:absolute;
+ top:0%;left:4.24%;width:95.75%;height:100.0%'><span style='font-size:75%;
+ visibility:hidden'><span style='mso-special-format:bullet;position:absolute;
+ left:-4.43%'>•</span></span><span style='font-size:75%;display:none'>&#13;</span></span></div>
+ <div class=B style='mso-line-spacing:"80 20 0";position:absolute;top:51.5%;
+ left:5.99%;width:88.2%;height:5.25%'><span style='position:absolute;
+ top:0%;left:4.24%;width:95.75%;height:100.0%'><span style='font-size:75%'><span
+ style='mso-special-format:bullet;position:absolute;left:-4.43%'>•</span></span><span
+ style='font-size:75%'>Imagine a type-indexed Term datatype&#13;</span></span></div>
+ <div class=B style='mso-line-spacing:"80 20 0";position:absolute;top:56.75%;
+ left:5.99%;width:88.2%;height:5.25%'><span style='position:absolute;
+ top:0%;left:4.24%;width:95.75%;height:100.0%'><span style='font-size:75%;
+ visibility:hidden'><span style='mso-special-format:bullet;position:absolute;
+ left:-4.43%'>•</span></span><span style='font-size:75%;display:none'>&#13;</span></span></div>
+ <div class=B1 style='mso-line-spacing:"80 20 0";position:absolute;top:62.0%;
+ left:11.04%;width:83.14%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:71%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.74%'>–</span></span><span style='font-family:"Courier New";font-size:
+ 71%'><b>Int :: Int -&gt; </b></span><span style='font-family:"Courier New";
+ font-size:71%;color:#FF3300'><b>Term Int&#13;</b></span></span></div>
+ <div class=B1 style='mso-line-spacing:"80 20 0";position:absolute;top:66.5%;
+ left:11.04%;width:83.14%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:71%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.74%'>–</span></span><span style='font-family:"Courier New";font-size:
+ 71%'><b>Bool :: Bool -&gt; </b></span><span style='font-family:"Courier New";
+ font-size:71%;color:#FF3300'><b>Term Bool&#13;</b></span></span></div>
+ <div class=B1 style='mso-line-spacing:"80 20 0";position:absolute;top:71.0%;
+ left:11.04%;width:83.33%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.59%;width:96.17%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:71%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.73%'>–</span></span><span style='font-family:"Courier New";font-size:
+ 71%'><b>Plus :: Term Int -&gt; Term Int -&gt; </b></span><span
+ style='font-family:"Courier New";font-size:71%;color:#FF3300'><b>Term Int&#13;</b></span></span></div>
+ <div class=B1 style='mso-line-spacing:"80 20 0";position:absolute;top:75.5%;
+ left:11.04%;width:85.39%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.5%;width:96.27%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:71%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.64%'>–</span></span><span style='font-family:"Courier New";font-size:
+ 71%'><b>Less :: Term Int -&gt; Term Int -&gt; Term </b></span><span
+ style='font-family:"Courier New";font-size:71%;color:#FF3300'><b>Bool&#13;</b></span></span></div>
+ <div class=B1 style='mso-line-spacing:"80 20 0";position:absolute;top:79.75%;
+ left:11.04%;width:93.25%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.21%;width:96.78%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:71%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.31%'>–</span></span><span style='font-family:"Courier New";font-size:
+ 71%'><b>If :: Term Bool -&gt; Term a -&gt; Term a -&gt; </b></span><span
+ style='font-family:"Courier New";font-size:71%;color:#FF3300'><b>Term a</b></span></span></div>
+ </div>
+ <v:shapetype id="_x0000_t62" coordsize="21600,21600" o:spt="62" adj="1350,25920"
+  path="m3600,qx,3600l0@8@12@24,0@9,,18000qy3600,21600l@6,21600@15@27@7,21600,18000,21600qx21600,18000l21600@9@18@30,21600@8,21600,3600qy18000,l@7,0@21@33@6,xe">
+  <v:stroke joinstyle="miter"/>
+  <v:formulas>
+   <v:f eqn="sum 10800 0 #0"/>
+   <v:f eqn="sum 10800 0 #1"/>
+   <v:f eqn="sum #0 0 #1"/>
+   <v:f eqn="sum @0 @1 0"/>
+   <v:f eqn="sum 21600 0 #0"/>
+   <v:f eqn="sum 21600 0 #1"/>
+   <v:f eqn="if @0 3600 12600"/>
+   <v:f eqn="if @0 9000 18000"/>
+   <v:f eqn="if @1 3600 12600"/>
+   <v:f eqn="if @1 9000 18000"/>
+   <v:f eqn="if @2 0 #0"/>
+   <v:f eqn="if @3 @10 0"/>
+   <v:f eqn="if #0 0 @11"/>
+   <v:f eqn="if @2 @6 #0"/>
+   <v:f eqn="if @3 @6 @13"/>
+   <v:f eqn="if @5 @6 @14"/>
+   <v:f eqn="if @2 #0 21600"/>
+   <v:f eqn="if @3 21600 @16"/>
+   <v:f eqn="if @4 21600 @17"/>
+   <v:f eqn="if @2 #0 @6"/>
+   <v:f eqn="if @3 @19 @6"/>
+   <v:f eqn="if #1 @6 @20"/>
+   <v:f eqn="if @2 @8 #1"/>
+   <v:f eqn="if @3 @22 @8"/>
+   <v:f eqn="if #0 @8 @23"/>
+   <v:f eqn="if @2 21600 #1"/>
+   <v:f eqn="if @3 21600 @25"/>
+   <v:f eqn="if @5 21600 @26"/>
+   <v:f eqn="if @2 #1 @8"/>
+   <v:f eqn="if @3 @8 @28"/>
+   <v:f eqn="if @4 @8 @29"/>
+   <v:f eqn="if @2 #1 0"/>
+   <v:f eqn="if @3 @31 0"/>
+   <v:f eqn="if #1 0 @32"/>
+   <v:f eqn="val #0"/>
+   <v:f eqn="val #1"/>
+  </v:formulas>
+  <v:path o:connecttype="custom" o:connectlocs="10800,0;0,10800;10800,21600;21600,10800;@34,@35"
+   textboxrect="791,791,20809,20809"/>
+  <v:handles>
+   <v:h position="#0,#1"/>
+  </v:handles>
+ </v:shapetype><v:shape id="_x0000_s5124" type="#_x0000_t62" style='position:absolute;
+  left:522pt;top:258pt;width:2in;height:78pt' adj=",29908" fillcolor="#bbe0e3 [4]"
+  strokecolor="black [1]">
+  <v:fill color2="white [0]"/>
+  <v:shadow color="gray [2]"/>
+ </v:shape><![if !vml]><img border=0 v:shapes="_x0000_s5124"
+ src="slide0004_image002.gif" style='position:absolute;top:47.75%;left:72.47%;
+ width:20.41%;height:20.5%'><![endif]>
+ <div v:shape="_x0000_s5124" class=O style='text-align:center'><span
+ style='position:absolute;top:49.25%;left:74.15%;width:16.66%;height:4.0%'>Note
+ the </span><span style='position:absolute;top:53.25%;left:72.84%;width:19.47%;
+ height:4.0%'>different range </span><span style='position:absolute;top:57.25%;
+ left:74.15%;width:16.66%;height:4.0%'>types!</span></div>
+</p:slide></div>
+
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<PRE>
+CS321 Prog Lang & Compilers                       Assignment #10
+Assigned: Feb. 28, 2007            Due: Wednesday. March 7, 2007
+
+1) The goal of this assignment is to extend the type checker
+discussed in lecture 13 to handle refereces and assinments.
+To do this you will need to
+
+A) Add a new constructed type to MLtype to represent reference types.
+Do this by adding a new type constructor to MLtype called "Ref".
+
+B) Add two new type constructors to "Exp" called "Init" and
+"Assign". They should coorespond to the underlined ML
+expressions in the examples below:
+
+val x = ref 5
+       -------
+
+val y = ( x := 6  ; print x)
+         --------
+
+C) Extend the function "typeeq" to handle the new "Ref" type.
+
+D) Extend the function "TCExp" to handle the two new kinds of
+expressions. The cases should coorespond to the type rules
+below.
+
+S |- x : t  ref     S |- y : t
+---------------------------------
+  S |-  x := y  : unit
+
+
+  S |- x : t
+------------------------
+  S |-  ref x  : t ref
+
+
+You may copy and paste the code from the lecture to get started.
+Test your code, and highlight all the additions to the lecture
+code you made in what you hand in.
+
+
+</Pre>
+
+<HR ALIGN="center" WIDTH="100%">
+<A HREF="index.html"> Back</A> to CS 321, Languages and Compiler Design, Assignment Page
+

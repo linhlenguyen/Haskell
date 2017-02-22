@@ -1,0 +1,130 @@
+When you prove things by induction, it is best to follow a few rules, and
+organize your proof. Here are a few rules to follow
+
+<UL>
+	<LI> Write down whatever definitions you will use.
+	<LI> State clearly what variable you are doing induction over.
+	<li> Write down the formula you are trying to prove, both as a
+	     sentence and as a formula of the induction variable.
+	<LI> Write down all the cases, be sure to include the induction
+	      hypotheses, if a case has induction hypotheses
+	<LI> Then write down all the steps for each case. Justify each step.
+</UL>
+
+Here is an example of a structural induction over lists.
+First note that every list has only one of two forms
+<ul>
+<li> It is the empty list:  <B>[]</B>
+<li> It was formed by <I>consing</I> an element <B>x</B> onto an existing list <B>xs</B>, so it looks like:  <B>(x : xs )</B>
+</ul>
+
+<PRE>
+Prove:  map id x = id x.
+
+Induction variable is: x.
+
+Formula: P(x) = map id x = id x
+
+-- List all the definitions and equations you use.
+-- label each with a name
+
+1 map f [] = []
+2 map f (x:xs) = (f x) : (map f xs)
+
+3 id x = x
+
+-- Set up the structure of the proof
+Prove 2 things
+
+1) P([])
+   map id [] = id []
+
+2) P(zs) => P(z:zs)
+   Assuming:    map id zs = id zs
+   Prove:       map id (z:zs)  = id (z:zs)
+
+-- label each step with the label of the definition
+-- or equation that justifes it.
+
+1) map id [] = id []
+Proceed by transforming LHS into RHS with meaning preserving steps
+
+ map id [] = []        -->    (By 1)
+ [] = id []            -->    (By 3, backwards)
+                QED
+
+2) Assuming:    map id zs = id zs
+   Prove:       map id (z:zs)  = id (z:zs)
+
+   Proceed by transforming LHS into RHS with meaning preserving steps
+
+map id (z:zs) = (id z): (map id zs)    --> (By 2)
+(id z):(map id z) = id z:(id zs)       --> (By induction hyp)
+id z:(id zs) = z : zs                  --> (By 3, used twice)
+z:zs = id (z:zs)                       --> (By 3 used backwards)
+
+--------------------------------------------------------
+</PRE>
+
+Proofs about strings have a lot in common with proofs about lists
+(they are both finite sequences). When we prove things about strings
+we sometimes have a choice about how we break the string into parts.
+
+<H4>Character on the Left</H4>
+First note that every string has only one of two forms
+<ul>
+<li> It is the empty string:  <B>""</B>
+<li> It was formed by adding a character <B>x</B> onto an existing string on the left <B>y</B>, so it looks like:  <B>(x y)</B>
+</ul>
+
+<H4>Character on the Right</H4>
+First note that every string has only one of two forms
+<ul>
+<li> It is the empty string:  <B>""</B>
+<li> It was formed by adding a character <B>x</B> onto an existing string on the right <B>y</B>, so it looks like:  <B>(y x)</B>
+</ul>
+
+Both of these are legitimate strategies. Sometimes one works better
+than the other.
+Example: Proove that string concatenation is associatve.
+
+<pre>
+Prove:  xs++(ys++zs) = (xs++ys)++zs
+Where ++ is string concatenation.
+
+-- List all the definitions and equations you use.
+-- label each with a name. Here we use the <STRONG>Character on the Left</STRONG> convention
+-- We also use two character names (ending in 's') to name strings, and one
+-- character names to name charaters
+
+1)  "" ++ ws = ws
+2) (x ys) ++ ws = x (ys ++ ws)
+
+Prove:  x++(y++z) = (x++y)++z
+By induction on: x
+Formula:  P(x) = x++(y++z) = (x++y)++z
+
+-- Set up the structure of the proof
+Prove 2 things
+
+A) P("")  = "" ++(ys++zs) = ("" ++ys)++zs
+
+B) P(ws) => P(w ws)
+
+Assume: ws++(ys++zs) = (ws++ys)++zs
+Prove:  (w ws)++(ys++zs) = ((w ws)++ys)++zs
+
+Step A
+"" ++(ys++zs) =  By rule (1)
+(ys++ zs)     =  By rule (1) backwards on ys
+("" ++ys)++zs
+
+Step B
+(w ws)++(ys++zs)   =   By rule (2)
+w (ws++(ys++zs))   = By assumption
+w ((ws++ys)++zs)   = By rule (2) backwards on (ws+zs)
+((w (ws++ys))++zs) = By rule (2) backwards on ws
+((w ws)++ys)++zs
+
+
+</pre>

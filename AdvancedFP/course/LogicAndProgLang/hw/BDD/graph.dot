@@ -1,0 +1,15 @@
+digraph tree {
+0 [label="F", color=red, shape=oval];
+1 [label="T", color=darkgreen, shape=oval];
+2 [label="x3", shape=oval];
+3 [label="x2", shape=oval];
+4 [label="x1", shape=oval];
+2 -> 0 [label="F", color=red];
+2 -> 1 [label="T", color=darkgreen];
+3 -> 0 [label="F", color=red];
+3 -> 2 [label="T", color=darkgreen];
+4 -> 3 [label="F", color=red];
+4 -> 2 [label="T", color=darkgreen];
+
+
+}

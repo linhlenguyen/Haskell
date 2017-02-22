@@ -1,0 +1,114 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 10">
+<link id=Main-File rel=Main-File href="../OmegaHaskellWkShp.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>Generalizing Algebraic Datatypes in Wmega</title>
+<meta name=Description content="9/23/2004: Programming">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="9"/>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#FFFFFF,#000000,#808080,#000000,#BBE0E3,#333399,#009999,#99CC00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><![endif]><p:shaperange
+  href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s9218" type="#_x0000_m1026"
+  style='position:absolute;left:36pt;top:21.625pt;width:9in;height:90pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s9219" type="#_x0000_m1027"
+  style='position:absolute;left:36pt;top:126pt;width:684pt;height:356.375pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape>
+ <div v:shape="_x0000_s9218" class=T style='position:absolute;top:8.0%;
+ left:5.99%;width:88.2%;height:9.25%'>Programming</div>
+ <div v:shape="_x0000_s9219" class=B>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:23.75%;
+ left:5.99%;width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>eval
+ :: Term a -&gt; a&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:30.75%;
+ left:5.99%;width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>eval
+ (Int n) = n&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:37.5%;left:5.99%;
+ width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>eval
+ (Bool b) = b&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:44.5%;left:5.99%;
+ width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>eval
+ (Plus x y) = eval x + eval y&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:51.25%;
+ left:5.99%;width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>eval
+ (Less x y) = eval x &lt; eval y&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:58.0%;left:5.99%;
+ width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>eval
+ (If x y z) = &#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:65.0%;left:5.99%;
+ width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:88%'><b><span
+ style='mso-spacerun:yes'>   </span>if (eval x) &#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:71.75%;
+ left:5.99%;width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%'><b><span
+ style='mso-spacerun:yes'>      </span>then (eval y) &#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:78.75%;
+ left:5.99%;width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%'><b><span
+ style='mso-spacerun:yes'>      </span>else (eval z)&#13;</b></span></div>
+ <div style='mso-line-spacing:"90 20 0";position:absolute;top:85.5%;left:5.99%;
+ width:93.07%;height:6.0%'><span style='mso-special-format:nobullet;display:
+ none'>•</span><span style='font-family:"Courier New";font-size:88%;mso-special-format:
+ lastCR;display:none'><b>&#13;</b></span></div>
+ </div>
+</p:slide></div>
+
+</body>
+
+</html>

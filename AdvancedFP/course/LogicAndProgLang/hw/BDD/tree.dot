@@ -1,0 +1,14 @@
+digraph tree {
+4 [label="x1"];
+4 -> 3 [color=red];
+4 -> 2 [color=green];
+3 [label="x2"];
+3 -> 0 [color=red];
+3 -> 2 [color=green];
+2 [label="x3"];
+2 -> 0 [color=red];
+2 -> 1 [color=green];
+1 [label=True];
+0 [label=False];
+
+}

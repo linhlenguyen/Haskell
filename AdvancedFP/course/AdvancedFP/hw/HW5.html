@@ -1,0 +1,137 @@
+<title>  CS 410/510 - Homework #5 </title>
+
+
+<CENTER>
+<BIG>  CS 410/510 - Homework #5 </BIG>
+</CENTER>
+
+Create a single Haskell file that contains solutions to the following problems.
+Be sure it compiles without errors, and submit it via D2L by class time on
+Wednesday February 10th, 2016.
+<p>
+Be sure you put your name and e-mail in a comment
+at the beginning of the file</B>. Without this you will not get any feedback.
+
+<p>
+
+In this homework you will do two kinds of things.
+<ul>
+  <li> Write a few functions using the Arrow package to structure your code.
+  <li> Write a few functions that consume or produce data (co-data) constructed
+       using Algebras.
+</ul>
+<p>
+
+Start with the file <A HREF="HW5Template.html">HW5Template.html</A>.
+It has all the boiler plate you will need.
+
+<p>
+<ol>
+
+<li> Write a function <B>strToInteger</B> with type <B>[Char] -> Integer</B> using arrows.
+Use the following as a guide. Each step consists of a single Arrow, and all the steps
+are glued together with arrow composition. Here is a visual representation of
+the steps on a sample string "4385".
+
+<PRE>
+    "4385"::Int -->
+    ([4,3,8,5],[0,1,2,3])::([Int],[Integer]) -->
+    ([4,3,8,5],[0,1,2,3])::([Integer],[Integer])  -->
+    ([5,8,3,4],[1,10,100,1000])::([Integer],[Integer]) -->
+    [5,80,300,4000]::[Integer] -->
+    4385::Integer
+</PRE>
+<p>
+Hint: Comment out the type of <B>strToInteger</B> and write it one step at
+a time. At each step test your code to see that it does what you expect. Then add
+another step. Replace the type when your through to check that you have indeed
+written a function with the right type.
+<p>
+Test your code.
+<p>
+
+
+
+<li> Write the function <B>printFileInc</B> with type <B>Kleisli IO FilePath ()</B> using arrows.
+It reads a string of digits from a file, and prints to the terminal
+the successor of the value of that string of digits as an Integer.
+<p>
+Test your code.
+<p>
+
+
+
+<li> Write the function <B>incFile</B> with type <B>FilePath -> FilePath -> IO ()</B>  using arrows.
+It reads a string of digits from a file, and prints
+the successor of the value of that string of digits to another file.
+<p>
+Test your code.
+<p>
+
+<li> <STRONG>Functors</STRONG>. Define two functors <B>TreeF</B> and <B>LangF</B>. The functor <B>TreeF</B> will be used as an initial
+algebra to represent binary search trees. Such trees have two types of nodes. Leaves
+(we will call "<B>Tip</B>") that store no data, and internal nodes (we will call "<B>Fork</B>") that store an Int and two
+sub trees. The functor <B>LangF</B> will be used as an initial algebra to represent the language
+T5 of <A HREF="hw3.html">homework 3</A>. We reproduce the data definition used in that
+homework here for reference.
+
+<PRE>
+data T5 = Add5 T5 T5
+        | Sub5 T5 T5
+        | Mult5 T5 T5
+        | Int5 Int
+        | Var5 String
+        | Assign5 String  T5
+</PRE>
+<p>
+Use the same constructor names in your function <B>LangF</B>, that are used in <B>T5</B> above.
+<p>
+
+<li> <STRONG>Initial Algebras</STRONG>. Use the functors defined above (TreeF and LangF) and those defined
+in <A HREF="HW5Template.html">HW5Template.html</A> (F1, NatF, ListF, StreamF) to define several
+values of the types listed below.
+
+<ul>
+<li> The natural number corresponding to 4, as an <B>(Initial NatF)</B>.
+<li> The list corresponding to [3,7,1,6] as an <B>(Initial (ListF Int))</B>.
+<li> A binary search tree (maintaining the search tree invariant) that stores
+the values 7,2,45, and 11, as an <B>(Initial TreeF)</B>.
+<li> The T5 program corresponding to  (y + (4 - (x := 8))) as an <B>(Initial LangF)</B>.
+</ul>
+
+<p>
+<li> <STRONG>Consuming Initial Algebras</STRONG>.
+
+<ul>
+<li> Write a function <B>toInt</B>, written as a catamorphism over <B>(Initial NatF)</B> that produces an equivalent Int.
+for example. <B>toInt (Init (S (Init Z))</B> --> <B>1</B>
+<p>
+<li> Make the types <B>(Initial (ListF Int))</B> and
+<B>(Initial LangF)</B> instances of the Show class, by writing the show functions
+as a catamorphism.
+<p>
+<li> Write the addition function over natural numbers as a function over <B>(Initial NatF)</B>
+as a catamorphism. Your catamorphism should consume an algebra with type
+<B>Algebra (NatF c -> c)</B>, where <B>c</B> = <B>(Initial NatF -> Initial NatF)</B>. That is the carrier is
+a function, not a piece of data.
+<p>
+<li> Finally, redo the function <B>eval5a :: T5 -> Store Map Value</B> from <A HREF="hw3.html">homework 3</A> as a catamorphism.
+Your function will have type <B>eval5a :: Iniitia LangF -> Store Map Value</B>.
+You will probably have to cut and paste some helper functions into your solution file from your
+homework 3 solution. You probably also want to make (Store m v) a monad instance.
+
+</ul>
+<p>
+<li> <STRONG>Final Algebras</STRONG>. Create an infinite program <B>infExp</B> as a <B>Final LangF</B> that represents
+the program (1 + (2 + (3 + (+ 4 ...)))).  Hint.  First write a function<B> f :: Int -> LangF (Final LangF)</B>,
+and then apply it to <B>1</B> to build your value.
+
+<p>
+<li> <B>Finite Observation of a Final Algebra</B>. Write a function prefix with type
+<B>Int -> Final LangF -> Initial LangF</B> that observes an infinite <B>Final LangF</B> structure to
+a fixed depth.  For example <B>prefix 6 infExp</B> produces the expression
+<B>(1 + (2 + (3 + (4 + (5 + (0 + 0))))))</B>.  Note that my function returns <B>(Init(Int5 0))</B> for all
+infinite structures deeper than the prefix.
+
+
+</ol>

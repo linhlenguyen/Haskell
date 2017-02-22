@@ -1,0 +1,134 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+xmlns:oa="urn:schemas-microsoft-com:office:activation"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 10">
+<link id=Main-File rel=Main-File href="../OmegaHaskellWkShp.htm">
+<link rel=Preview href=preview.wmf>
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+p\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+v\:textbox {display:none;}
+</style>
+<![endif]-->
+<title>Generalizing Algebraic Datatypes in Wmega</title>
+<meta name=Description content="9/23/2004: Generalization #2 New Kinds">
+<link rel=Stylesheet href="master03_stylesheet.css">
+<![if !ppt]>
+<style media=print>
+<!--.sld
+	{left:0px !important;
+	width:6.0in !important;
+	height:4.5in !important;
+	font-size:107% !important;}
+-->
+</style>
+<script src=script.js></script><script><!--
+if( !IsNts() ) Redirect( "PPTSld" );
+//--></script><!--[if vml]><script>g_vml = 1;
+</script><![endif]--><![endif]><o:shapelayout v:ext="edit">
+ <o:idmap v:ext="edit" data="12"/>
+</o:shapelayout>
+</head>
+
+<body lang=EN-US style='margin:0px;background-color:black'
+onclick="DocumentOnClick()" onresize="_RSW()" onload="LoadSld()"
+onkeypress="_KPH()">
+
+<div id=SlideObj class=sld style='position:absolute;top:0px;left:0px;
+width:534px;height:400px;font-size:16px;background-color:white;clip:rect(0%, 101%, 101%, 0%);
+visibility:hidden'><p:slide coordsize="720,540"
+ colors="#FFFFFF,#000000,#808080,#000000,#BBE0E3,#333399,#009999,#99CC00"
+ masterhref="master03.xml">
+ <p:shaperange href="master03.xml#_x0000_s1025"/><![if !ppt]><p:shaperange
+  href="master03.xml#_x0000_s1028"/><p:shaperange
+  href="master03.xml#_x0000_s1029"/><![endif]><p:shaperange
+  href="master03.xml#_x0000_m1026"/><v:shape id="_x0000_s12290" type="#_x0000_m1026"
+  style='position:absolute;left:36pt;top:21.625pt;width:9in;height:90pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="title"/></v:shape><p:shaperange
+  href="master03.xml#_x0000_m1027"/><v:shape id="_x0000_s12291" type="#_x0000_m1027"
+  style='position:absolute;left:36pt;top:126pt;width:9in;height:356.375pt'>
+  <v:fill o:detectmouseclick="f"/>
+  <v:stroke o:forcedash="f"/>
+  <o:lock v:ext="edit" text="f"/>
+  <p:placeholder type="body" position="1"/></v:shape>
+ <div v:shape="_x0000_s12290" class=T><span style='position:absolute;
+ top:4.0%;left:5.99%;width:88.2%;height:8.5%'><span style='font-size:91%'>Generalization
+ #2<br>
+  </span></span><span style='position:absolute;top:12.75%;left:5.99%;
+ width:88.2%;height:8.5%'><span style='font-size:91%'>New Kinds</span></span></div>
+ <div v:shape="_x0000_s12291">
+ <div class=B style='mso-line-spacing:"90 20 0"'><span style='position:absolute;
+ top:23.75%;left:9.73%;width:98.5%;height:6.0%'><span style='font-size:88%'><span
+ style='mso-special-format:bullet;position:absolute;left:-3.8%'>•</span></span><span
+ style='font-size:88%'>Allow algebraic definitions to define new “kinds” </span></span><span
+ style='position:absolute;top:29.5%;left:9.73%;width:84.45%;height:6.0%'><span
+ style='font-size:88%'>as well as new “types”&#13;</span></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:36.0%;
+ left:11.04%;width:83.14%;height:6.25%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='mso-special-format:
+ bullet;position:absolute;left:-3.74%'>–</span>The primitive kind:<span
+ style='font-family:"Courier New";font-size:86%'><b> *&#13;</b></span></span></div>
+ <div class=B2 style='mso-line-spacing:"90 20 0";position:absolute;top:42.75%;
+ left:15.91%;width:78.08%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.35%;width:96.88%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:83%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.46%'>•</span></span><span style='font-family:"Courier New";font-size:
+ 83%'><b>5 :: Int :: *&#13;</b></span></span></div>
+ <div class=B2 style='mso-line-spacing:"90 20 0";position:absolute;top:47.75%;
+ left:15.91%;width:78.08%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.35%;width:96.88%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:83%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.46%'>•</span></span><span style='font-family:"Courier New";font-size:
+ 83%'><b>[Int] :: *&#13;</b></span></span></div>
+ <div class=B2 style='mso-line-spacing:"90 20 0";position:absolute;top:52.5%;
+ left:15.91%;width:78.08%;height:4.5%'><span style='position:absolute;
+ top:0%;left:3.35%;width:96.88%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:83%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.46%'>•</span></span><span style='font-family:"Courier New";font-size:
+ 83%'><b>[] :: * ~&gt; *&#13;</b></span></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:57.5%;
+ left:11.04%;width:83.14%;height:5.25%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:86%;visibility:hidden'><span style='mso-special-format:bullet;
+ position:absolute;left:-3.74%'>–</span></span><span style='font-family:"Courier New";
+ font-size:86%;display:none'><b>&#13;</b></span></span></div>
+ <div class=B style='mso-line-spacing:"90 20 0";position:absolute;top:63.75%;
+ left:5.99%;width:88.2%;height:6.0%'><span style='mso-special-format:nobullet;
+ display:none'>•</span><span style='font-family:"Courier New";font-size:88%'><b>Kind
+ Nat = Zero | Succ Nat&#13;</b></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:70.25%;
+ left:11.04%;width:83.14%;height:5.25%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:86%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.74%'>–</span></span><span style='font-family:"Courier New";font-size:
+ 86%'><b>Zero :: Nat&#13;</b></span></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:76.25%;
+ left:11.04%;width:83.14%;height:5.25%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:86%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.74%'>–</span></span><span style='font-family:"Courier New";font-size:
+ 86%'><b>Succ :: Nat ~&gt; Nat&#13;</b></span></span></div>
+ <div class=B1 style='mso-line-spacing:"90 20 0";position:absolute;top:82.0%;
+ left:11.04%;width:83.14%;height:5.25%'><span style='position:absolute;
+ top:0%;left:3.6%;width:96.17%;height:100.0%'><span style='font-family:"Courier New";
+ font-size:86%'><span style='mso-special-format:bullet;position:absolute;
+ left:-3.74%'>–</span></span><span style='font-family:"Courier New";font-size:
+ 86%'><b>Succ Zero :: Nat</b></span></span></div>
+ </div>
+</p:slide></div>
+
+</body>
+
+</html>

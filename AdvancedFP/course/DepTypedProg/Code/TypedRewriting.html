@@ -1,0 +1,130 @@
+-- <pre>
+import "Bits.html"  -- see <A HREF="Bits.html">Bits.html</A> source here.
+
+------------------------------------
+-- Strategies
+
+data Rule = X (forall a . SymBit a -> Maybe(SymBit a))
+
+first:: [Rule] -> SymBit a -> Maybe (SymBit a)
+first [] x = Nothing
+first (X f:fs) x =
+   case f x of
+     Just t -> Just t
+     Nothing -> first fs x
+
+all:: [Rule] -> SymBit a -> [SymBit a]
+all [] x = []
+all (X f:fs) x =
+  case f x of
+    Just y -> y : all fs x
+    Nothing -> all fs x
+
+topDown:: [Rule] -> SymBit a -> Maybe (SymBit a)
+topDown rule x =
+  case first rule x of
+    Just t -> Just t
+    Nothing ->
+      case x of
+        And a b -> help rule And a b
+        Or a b -> help rule Or a b
+        Xor a b -> help rule Xor a b
+        Not a -> help rule g a a
+           where g a b = Not a
+        _ -> Nothing
+
+help:: [Rule] -> (SymBit a -> SymBit b -> c) -> SymBit a -> SymBit b -> Maybe c
+help rule f a b =
+  case (topDown rule a, topDown rule b) of
+    (Nothing,Nothing) -> Nothing
+    (Just m, Just n) -> Just(f m n)
+    (Nothing,Just n) -> Just(f a n)
+    (Just m,Nothing) -> Just(f m b)
+
+repeat:: [Rule] -> SymBit a -> SymBit a
+repeat rule x =
+  case first rule x of
+    Just y -> repeat rule y
+    Nothing -> x
+
+--------------------------------------
+-- rules
+
+rule1 = [X f,X g,X h,X simpXor]
+rule2 = [X (topDown rule1)]
+simp x = repeat rule2 x
+
+simpXor:: SymBit a -> Maybe(SymBit a)
+simpXor (Xor I x) = Just (Not x)
+  where theorem th = lemmaXor1 (eval x)
+simpXor (Xor x I) = Just (Not x)
+  where theorem th = lemmaXor2 (eval x)
+simpXor (Xor O x) = Just x
+  where theorem th = lemmaXor3 (eval x)
+simpXor (Xor x O) = Just x
+  where theorem th = lemmaXor4 (eval x)
+simpXor _ = Nothing
+
+lemmaXor1:: Bit c -> Equal {notB c} {xor 1t c}
+lemmaXor1 Zero = Eq
+lemmaXor1 One = Eq
+
+lemmaXor2:: Bit c -> Equal {notB c} {xor c 1t}
+lemmaXor2 Zero = Eq
+lemmaXor2 One = Eq
+
+lemmaXor3:: Bit c -> Equal {xor 0t c} c
+lemmaXor3 Zero = Eq
+lemmaXor3 One = Eq
+
+lemmaXor4:: Bit c -> Equal {xor c 0t} c
+lemmaXor4 Zero = Eq
+lemmaXor4 One = Eq
+
+g:: SymBit a -> Maybe(SymBit a)
+g (Not O) = Just I
+g (Not I) = Just O
+g _ = Nothing
+
+f:: SymBit a -> Maybe(SymBit a)
+f (Not(And x y)) = Just (Or (Not x) (Not y))
+  where theorem lemma2
+f x = Nothing
+
+
+h:: SymBit a -> Maybe(SymBit a)
+h (Or I x) = Just I
+h (Or x I) = Just I
+   where theorem hh = lemma3 (eval x)
+h (Or O x) = Just x
+   where theorem kk = lemma5 (eval x)
+h (Or x O) = Just x
+   where theorem jj = lemma4 (eval x)
+         theorem kk = lemma5 (eval x)
+h _ = Nothing
+
+lemma3:: Bit i -> Equal {or i (S j)} (S Z)
+lemma3 Zero = Eq
+lemma3 One = Eq
+
+lemma4:: Bit i -> Equal {or i Z} {or Z i}
+lemma4 Zero = Eq
+lemma4 One = Eq
+
+lemma5:: Bit c -> Equal {or Z c} c
+lemma5 Zero = Eq
+lemma5 One = Eq
+
+lemma2 :: Nat' a -> Nat' b -> Equal {notB {and a b}} {or {notB a} {notB b}}
+lemma2 Z Z = Eq
+lemma2 Z (S _) = Eq
+lemma2 (S _) Z = Eq
+lemma2 (S _) (S _) = Eq
+
+
+mapS :: (forall i . t i -> t i) -> Seq t n a -> Seq t n a
+mapS f Nil = Nil
+mapS f (Cons x xs) = Cons (f x) (mapS f xs)
+
+
+-- </pre>

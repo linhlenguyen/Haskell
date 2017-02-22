@@ -1,0 +1,102 @@
+-- <pre>
+-- This file declares two version of Bits. We use these
+-- defintions in two other examples:
+--  1)  <A HREF="adderWork.html">adderWork.html</A>
+--  2)  <A HREF="TypedRewriting.html">TypedRewriting.html</A>
+
+data Bit:: Nat ~> *0 where
+  One :: Bit (S Z)
+  Zero :: Bit Z
+
+data SymBit:: Nat ~> *0 where
+ O:: SymBit Z
+ I:: SymBit (S Z)
+ And:: SymBit i -> SymBit j -> SymBit {and i j}
+ Or:: SymBit i -> SymBit j -> SymBit {or i j}
+ Not:: SymBit i -> SymBit {notB i}
+ Xor:: SymBit i -> SymBit j -> SymBit {xor i j}
+ Var:: String -> SymBit i
+
+data Seq:: (Nat ~> *0) ~> Nat ~> Nat ~> *0 where
+   Nil:: Seq bit Z Z
+   Cons:: bit v -> Seq bit n u -> Seq bit (S n) {plus {plus u u} v}
+  deriving List(b)
+
+-- There are two approaches to semantically interpreting
+-- a  (Seq Bit n i)
+-- [0,0,1] -- least sig bit first = 4
+-- [0,0,1] -- most sig bit first  = 1
+-- Seq uses the least significant bit first approach.
+
+--------------------------------------------------
+-- addition of Nat
+
+plus :: Nat ~> Nat ~> Nat
+{plus Z n} = n
+{plus (S x) n} = S {plus x n}
+
+-------------------------------------------------
+-- Theroems about addition
+
+plusZ :: Nat' n -> Equal {plus n Z} n
+plusZ Z = Eq
+plusZ (x@(S m)) = Eq
+  where theorem indHyp = plusZ m
+
+plusS :: Nat' n -> Equal {plus n (S m)} (S{plus n m})
+plusS Z  = Eq
+plusS (S x)  = Eq
+  where theorem ih = plusS x
+
+plusCommutes :: Nat' n -> Nat' m -> Equal {plus n m} {plus m n}
+plusCommutes Z m = Eq
+   where theorem lemma = plusZ m
+plusCommutes (S x) m = Eq
+   where theorem plusS,
+                 indHyp = plusCommutes x m
+
+plusAssoc :: Nat' n -> Equal {plus {plus n b} c} {plus n {plus b c}}
+plusAssoc Z = Eq
+plusAssoc (S n) = Eq
+  where theorem ih = plusAssoc n
+
+plusNorm :: Nat' x -> Equal {plus x {plus y z}} {plus y {plus x z}}
+plusNorm Z = Eq
+plusNorm (S n) = Eq
+  where theorem plusS, ih = plusNorm n
+
+-------------------------------------------------------------
+-- Boolean operations when Booleans are encoded as Nat
+
+and:: Nat ~> Nat ~> Nat
+{and Z y} = Z
+{and (S x) Z} = Z
+{and (S x) (S y)} = S Z
+
+or:: Nat ~> Nat ~> Nat
+{or Z Z} = Z
+{or Z (S y)} = (S Z)
+{or (S x) y} = (S Z)
+
+xor:: Nat ~> Nat ~> Nat
+{xor Z Z} = Z
+{xor Z (S y)} = (S Z)
+{xor (S x) Z} = (S Z)
+{xor (S x) (S y)} = Z
+
+
+notB:: Nat ~> Nat
+{notB Z} = S Z
+{notB (S x)} = Z
+
+andX:: Bit i -> Bit j -> Bit {and i j}
+andX Zero Zero = Zero
+
+eval:: SymBit a -> Bit a
+eval O = Zero
+eval I = One
+eval (And x y) = andX (eval x) (eval y)
+
+
+-- </pre>
+
