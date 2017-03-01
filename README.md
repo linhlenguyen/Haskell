@@ -11,4 +11,4 @@ Learning Haskell notes and exercises
   * [Advanced Haskell](http://web.cecs.pdx.edu/~sheard/course/AdvancedFP/)
   * [Haskell Notes And Examples - Albert Y. C. Lai](http://www.vex.net/~trebla/haskell/index.xhtml)
   * [Monad notes](http://homepages.inf.ed.ac.uk/wadler/topics/monads.html#marktoberdorf)
-  
+  * [Haskell Compiler](http://www.stephendiehl.com/llvm/)
