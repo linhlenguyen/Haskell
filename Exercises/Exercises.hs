@@ -1,6 +1,6 @@
 import Data.Map
 import Data.Foldable
-import System.Random
+--import System.Random
 
 {-|
 type families and dependent types
@@ -245,3 +245,29 @@ findP' s (x:xs) = f s (reverse (x:xs))
 -- 4 -> 16 -> 64 -> 256
 -- 5 -> 25 -> 125 -> 625
 -- 6 -> 36 -> 216 -> 1296
+
+{-
+ranGen :: Int -> [(Int, Int)]
+ranGen n = Prelude.foldl (\ls@((x,y):(x',y'):xys) i -> (x + x', y + y'):ls) (stdMkGen 23,acc) [1..n]
+  where acc :: [(Int, Int)]
+        acc = [(x,y) | x <- [1..5], y <- [1..5]]
+        foldf :: (StdGen, [(Int, Int)]) -> a -> (StdGen ,[(Int, Int)])
+        foldf (gen,xs) a = let rans = take 2 $ randomRs (0,length xs) gen
+                               newTuple = Data.Foldable.foldl' (\(x, y) (x', y') -> (x + x', y + y') (0,0) (map (xs!!) rans)
+                               in (gen, newTuple:xs)
+-}
+
+fib :: [Int]
+fib = 0 : 1 : fibGen 0 1
+  where fibGen :: Int -> Int -> [Int]
+        fibGen x y = x + y : fibGen y (x + y)
+
+ranGen :: [(Int, Int)]
+ranGen = seed ++ generate seed
+  where seed :: [(Int, Int)]
+        seed = [(x,y) | x <- [1..5], y <- [1..5]]
+        generate :: [(Int, Int)] -> [(Int, Int)]
+        generate ls@((x, y):(x',y'):xys) = (x+x',y+y') : generate ((x+x', y+y'):ls)
+
+main :: IO ()
+main = undefined
