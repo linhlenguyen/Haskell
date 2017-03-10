@@ -24,3 +24,12 @@ module Reader(
               a <- first
               b <- second
               return (a ++ " " ++ b)
+
+-- Reader env a = Reader { runReader :: env -> a}
+--
+-- m a -> (a -> m b) -> m b
+-- (Reader env) a -> (a -> (Reader env) b) -> (Reader env) b
+--
+-- instance Monad (Reader env) where
+-- return x = Reader (\_ -> x)
+-- f >>= g = Reader (\env -> runReader (g (runReader f env)) env)

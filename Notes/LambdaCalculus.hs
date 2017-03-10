@@ -1,20 +1,36 @@
-module LambdaCalculus(
+import Control.Monad.Reader
 
-)
-where
-  import Data.Map
+data Term = Apply Term Term | Lambda String Term | Var String deriving (Show)
 
-  type Name = [Char]
+newtype Env = Env ([(String,Closure)]) deriving (Show)
+type Closure = (Term,Env)
 
-  data Expr = Name |
-              Lambda Name Expr |
-              Application Expr Expr
+data Value = Lam String Closure | Failure String deriving (Show)
 
-  type Environment = Map Name Result
-  type Result = (Expr, Environment)
-  type Value = L Name Result
+{--
+instance Show Value where
+  show (Failure _) = "Failure"
+  show (Lam s c) =
+--}
 
-  -- Expr
-  -- (Application (Lambda "x" (Lambda "y" Application "x" "y")) (Lambda "x" "x"))
+interp' :: Term -> Reader Env Value
+interp' (Lambda nv t)
+   = do env <- ask
+        return $ Lam nv (t,env)
+interp' (Var v)
+   = do (Env env) <- ask
+        case lookup (show v) env of
+          Nothing -> return . Failure $ "unbound variable: " ++ (show v)
+          Just (term,env) -> local (const env) $ interp' term
 
-  eval :: Expr -> Reader Environment Value
+interp' (Apply t1 t2)
+   = do v1 <- interp' t1
+        case v1 of
+           Failure s -> return (Failure s)
+           Lam nv clos -> local (\(Env ls) -> Env ((nv,clos):ls)) $ interp' t2
+
+interp :: Term -> Value
+interp term = runReader (interp' term) (Env [])
+
+sample :: Term
+sample = (Apply (Lambda "x" (Var "x + 1")) (Var "1"))

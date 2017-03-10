@@ -1,27 +1,26 @@
 -- Enter your code here. Read input from STDIN. Print output to STDOUT
 import Control.Monad
+import qualified Data.Vector as V
 
-splitN :: Int -> [a] -> ([a], [a])
-splitN n ls = (reverse $ take n ls, drop (n+1) ls)
-
-filterPrice :: Int -> Int -> [Int] -> [Int]
-filterPrice d m [] = []
-filterPrice d m (x:xs) = if (x <= (d + m) && x >= d) then x : (filterPrice d m xs) else []
+countN :: (Int -> Int) -> Int -> Int -> Int -> V.Vector Int -> Int
+countN f d m i v = if i < 0 || i >= (V.length v) then 0 else let x = (V.!) v i in if (x <= (d + m) && x >= d) then 1 + countN f d m (f i) v else 0
 
 main :: IO ()
 main = do
     getLine
     m <- getLine
-    let ls = map (read :: String -> Int) $ words m
+    let v = V.fromList $ map (read :: String -> Int) $ words m
     n <- getLine
     rs <- forM [1..(read :: String -> Int)n] (\x -> do
         input <- getLine
         let (i:m:_) = map (read :: String -> Int) $ words input
-        let d = ls!!i
-        let (before, after) = splitN i ls
+        let d = (V.!) v i
+        --let (before, after) = V.splitAt i v
         --putStrLn $ (show d ++ " " ++ show m)
         --putStrLn $ "lhs" ++ (show before)
         --putStrLn $ "rhs" ++ (show after)
-        let count = (length $ filterPrice d m before) + (length $ filterPrice d m after) + 1
+        let inc = (\x -> x + 1)
+        let dec = (\x -> x - 1)
+        let count = (countN dec d m (dec i) v) + (countN inc d m (inc i) v) + 1
         return count)
     mapM_ (\x -> do putStrLn (show x)) rs
