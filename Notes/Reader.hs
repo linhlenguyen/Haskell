@@ -10,18 +10,20 @@ module Reader(
     first :: Reader Context String
     first = do
       name <- ask
-      return (name!1)
+      local (\m -> insert 3 "!" m) $ return (name!1)
 
     second :: Reader Context String
     second = do
       anotherName <- ask
-      return (anotherName!2)
+      return ((anotherName!2) ++ (anotherName!3))
 
     main :: IO ()
     main = putStrLn $ runReader startReading (Data.Map.fromList [(1,"Hello"), (2, "World")])
       where startReading :: Reader Context String
             startReading = do
               a <- first
+              -- m a -> (a -> m b) -> m b
+              -- 
               b <- second
               return (a ++ " " ++ b)
 
