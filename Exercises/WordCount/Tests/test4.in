@@ -1,0 +1,322 @@
+
+lndevnotes
+ARCHIVE
+Reader Monad
+Don’t be scared! The reader monad is actually not so complicated, and has real easy-to-use utility.
+There are two ways of approaching a monad: we can ask
+What does the monad do? What operations is it equipped with? What is it good for?
+How is the monad implemented? From where does it arise?
+From the first approach, the reader monad is some abstract type
+data Reader env a
+such that
+-- Reader is a monad
+instance Monad (Reader env)
+
+-- and we have a function to get its environment
+ask :: Reader env env
+
+-- finally, we can run a Reader
+runReader :: Reader env a -> env -> a
+So how do we use this? Well, the reader monad is good for passing (implicit) configuration information through a computation.
+Any time you have a “constant” in a computation that you need at various points, but really you would like to be able to perform the same computation with different values, then you should use a reader monad.
+Reader monads are also used to do what the OO people call dependency injection. For example, the negamax algorithm is used frequently (in highly optimized forms) to compute the value of a position in a two player game. The algorithm itself though does not care what game you are playing, except that you need to be able to determine what the “next” positions are in the game, and you need to be able to tell if the current position is a victory position.
+ import Control.Monad.Reader
+
+ data GameState = NotOver | FirstPlayerWin | SecondPlayerWin | Tie
+
+ data Game position
+   = Game {
+           getNext :: position -> [position],
+           getState :: position -> GameState
+          }
+
+ getNext' :: position -> Reader (Game position) [position]
+ getNext' position
+   = do game <- ask
+        return $ getNext game position
+
+ getState' :: position -> Reader (Game position) GameState
+ getState' position
+   = do game <- ask
+        return $ getState game position
+
+
+ negamax :: Double -> position -> Reader (Game position) Double
+ negamax color position
+     = do state <- getState' position
+          case state of
+             FirstPlayerWin -> return color
+             SecondPlayerWin -> return $ negate color
+             Tie -> return 0
+             NotOver -> do possible <- getNext' position
+                           values <- mapM ((liftM negate) . negamax (negate color)) possible
+                           return $ maximum values
+This will then work with any finite, deterministic, two player game.
+This pattern is useful even for things that are not really dependency injection. Suppose you work in finance, you might design some complicated logic for pricing an asset (a derivative say), which is all well and good and you can do without any stinking monads. But then, you modify your program to deal with multiple currencies. You need to be able to convert between currencies at the fly. Your first attempt is to define a top level function
+type CurrencyDict = Map CurrencyName Dollars
+currencyDict :: CurrencyDict
+to get spot prices. You can then call this dictionary in your code….but wait! That won’t work! The currency dictionary is immutable and so has to be the same not only for the life of your program, but from the time it gets compiled! So what do you do? Well one option would be to use the Reader monad:
+ computePrice :: Reader CurrencyDict Dollars
+ computePrice
+    = do currencyDict <- ask
+         --insert computation here
+Perhaps the most classic use-case is in implementing interpreters. But, before we look at that, we need to introduce another function
+ local :: (env -> env) -> Reader env a -> Reader env a
+Okay, so Haskell and other functional languages are based on the lambda calculus. Lambda calculus has a syntax that looks like
+ data Term = Apply Term Term | Lambda String Term | Var Term deriving (Show)
+and we want to write an evaluator for this language. To do so, we will need to keep track of an environment, which is a list of bindings associated with terms (actually it will be closures because we want to do static scoping).
+ newtype Env = Env ([(String,Closure)])
+ type Closure = (Term,Env)
+When we are done we should get out a value (or an error):
+ data Value = Lam String Closure | Failure String
+So, lets write the interpreter:
+interp' :: Term -> Reader Env Value
+--when we have lambda term, we can just return it
+interp' (Lambda nv t)
+   = do env <- ask
+        return $ Lam nv (t,env)
+--when we run into a value we look it up in the environment
+interp' (Var v)
+   = do (Env env) <- ask
+        case lookup (show v) env of
+          -- if it is not in the environment we have a problem
+          Nothing -> return . Failure $ "unbound variable: " ++ (show v)
+          -- if it is in the environment, than we should interpret it
+          Just (term,env) -> local (const env) $ interp' term
+--the complicated case is an application
+interp' (Apply t1 t2)
+   = do v1 <- interp' t1
+        case v1 of
+           Failure s -> return (Failure s)
+           Lam nv clos -> local (\(Env ls) -> Env ((nv,clos):ls)) $ interp' t2
+--I guess not that complicated!
+Finally, we can use it by passing a trivial environment:
+interp :: Term -> Value
+interp term = runReader (interp' term) (Env [])
+And that is it. A fully functional interpreter for the lambda calculus.
+So, the other way to think about this is to ask: how is it implemented? Well the answer is that the reader monad is actually one of the simplest and most elegant of all monads.
+newtype Reader env a = Reader {runReader :: env -> a}
+Reader is just a fancy name for functions! We have already defined runReader so what about the other parts of the API? Well every Monad is also a Functor:
+instance Functor (Reader env) where
+   fmap f (Reader g) = Reader $ f . g
+Now, to get a monad:
+instance Monad (Reader env) where
+   return x = Reader (\_ -> x)
+   (Reader f) >>= g = Reader $ \x -> runReader (g (f x)) x
+which is not so scary. ask is really simple:
+ask = Reader $ \x -> x
+while local isn’t so bad.
+local f (Reader g) = Reader $ \x -> runReader g (f x)
+Okay, so the reader monad is just a function. Why have Reader at all? Good question. Actually, you don’t need it!
+instance Functor ((->) env) where
+   fmap = (.)
+
+ instance Monad ((->) env) where
+   return = const
+   f >>= g = \x -> g (f x) x
+These are even simpler. What is more, ask is just id and local is just function composition in the other order!
+http://stackoverflow.com/questions/14178889/what-is-the-purpose-of-the-reader-monad
+
+
+
+The State Monad: A Tutorial for the Confused?
+http://brandon.si/code/the-state-monad-a-tutorial-for-the-confused/
+I’ve written this brief tutorial on haskell’s State monad to help bridge some of the elusive gaps that I encountered in other explanations I’ve read, and to try to cut through all the sticky abstraction. This is written for someone who has a good understanding of the Maybe and Listmonads, but has gotten stuck trying to understand State. I hope it’s helpful!
+The Data Declaration:
+
+To understand a monad you look at it’s datatype and then at the definition for bind (>>=). Most monad tutorials start by showing you the data declaration of a State s a in passing, as if it needed no explanation:
+newtype State s a = State { runState :: s -> (a, s) }
+But this does need explanation! This is crazy stuff and nothing like what we’ve seen before in the list monad or the Maybe monad
+The constructor State holds a function, not just a simple value like Maybe’s Just. This looks weird.
+Furthermore there is an accessor function runState with a weirdly imperative-sounding name.
+Finally, there are two free variables on the left side, not just one.
+Yikes! Let’s try to get our head on straight and figure this out:
+First of all the State monad is just an abstraction for a function that takes a state and returns an intermediate value and some new state value. To formalize this abstraction in haskell, we wrap the function in the newtype State allowing us to define a Monad class instance.
+Stepping back from the abstract and conceptual, what we have is the State constructor acting as a container for a function :: s -> (a,s), while the definition for bind just provides a mechanism for “composing” a function state -> (val,state) within the State wrapper.
+Just as you can chain together functions using (.) as in (+1) . (*3) . head :: (Num a) => [a] -> a, the state monad gives you (>>=) to chain together functions that look essentially like :: a -> s -> (a,s)into a single function :: s -> (a,s).
+Let’s bring the discussion back to actual code and try to make sure we understand those three points of weirdness outlined above. Here’s a stupid example of a function that can be “contained” in our state type:
+-- look at our counter and return "foo" or "bar"
+-- along with the incremented counter:
+fromStoAandS :: Int -> (String,Int)
+fromStoAandS c | c `mod` 5 == 0 = ("foo",c+1)
+               | otherwise = ("bar",c+1)
+If we just wrap that in a State constructor, we’re in the State monad:
+stateIntString :: State Int String
+stateIntString = State fromStoAandS
+But what about runState? All that does of course is give us the “contents” of our State constructor: i.e. a single function :: s -> (a,s). It could have been named stateFunction but someone thought it would be really clever to be able to write things like:
+runState stateIntString 1
+See, all we’ve done there is used runState to take our function (fromStoAandS) out of the State wrapper; it is then applied to its initial state (1). We would do this runState business after building up our composed function with (>>=), mapM, etc.
+That leaves point 3 unanswered. Let’s start exploring the instance declaration for State.
+The Instance Declaration
+
+We’ll start with the first line:
+instance Monad (State s) where
+We create a Monad instance for (State s) not State. You can think of this as a partially-applied type, which is equivalent to a partially-applied function:
+(State)     <==> (+)
+(State s)   <==> (1+)
+(State s a) <==> (1+2)
+So (State s) is the m in our m a. This means the type of our state will remain the same as we compose our function with (>>=), whereas the intermediate values (the as) may well change type as they move through the chain.
+Before we move on to the meat of the instance declaration, I’d like to get your mind calibrated to look at the definitions for return and (>>=):
+Whenever you see m a, as in
+return :: (Monad m) => a -> m a
+…remember that m a is actually
+State s a
+…and when you remember (State s a), think
+(s -> (s,a))
+So in your mind, m a becomes function :: s -> (a,s) everywhere you see it. Just forget about the silly State wrapper (the compiler does)!
+The definition of return and Bind
+
+Let’s wet our feet with the definition for return:
+return a = State $ \s -> (a, s)
+All return does is take some value a and make a function that takes a state value and returns (value, state value). If we ignore the whole State wrapping business, then return is just (,) :: a -> b -> (a, b)
+Now recall the definition of bind:
+(>>=) :: (Monad m) => m a -> (a -> m b) -> m b
+Which in our case is:
+(>>=) :: State s a        ->
+         (a -> State s b) ->
+         State s b
+And which is just a silly abstraction for the super special function composition that’s going on, which looks like:
+(>>=) :: (s -> (a,s))      ->
+         (a -> s -> (b,s)) ->
+         (s -> (b,s))
+So on the left hand side of (>>=) is a function that takes some initial state and produces a (value,new_state). On the right hand side is a function that takes that value and that new_state and generates it’s own (new_value, newer_state). The job of bind is simply to combine those two functions into one bigger function from the initial state to (new_value,newer_state), just like the simple function composition operator (.) :: (b -> c) -> (a -> b) -> a -> c
+At this point, we can show you bind’s definition:
+m >>= k = State $ \s -> let (a, s') = runState m s
+                         in runState (k a) s'
+You can work through that on your own, keeping in mind that we’re doing function composition here. The main thing to remember is that the s at the top, right after State, won’t actually be bound to a value until we unwrap the function with runState and pass it the initial state value, at which point we can evaluate the entire chain.
+A Final Note About The State Monad with do Notation
+
+State is often used like this:
+stateFunction :: State [a] ()
+stateFunction = do x <- pop
+                   pop
+                   push x
+Remember that the functions above are desugaring to m >>= \a-> f...or if there is no left arrow on the previous line: m >>= \_-> f... That a in there is an intermediate value, the fstin the tuple. The push function might look like:
+push :: State [a] ()
+push a = State $ \as -> (() , a:as)
+The function doesn’t return any meaningful a value, so we don’t bind it by using the <-. For more work with do notation and some fine pictures, see Bonus’s post on something awful.
+Getting more general: StateT and MonadState
+
+added by request 2/16/2012
+So now you’re an expert on the State monad. Unfortunately (actually it’s a good thing) the State type I describe above isn’t in any of the standard libraries. Instead State is defined in terms of the StateT monad transformer here.
+type State s = StateT s Identity
+If you haven’t seen Monad transformers before, see if you can figure out how StateT s Identity is equivalent to State s as I defined it above. Just follow the links on hackage.
+You might also have noticed a typeclass called MonadState, also in the mtl package, and be wondering how that fits in. Here’s what it looks like; I’ll explain the odd-looking bits in a moment:
+class Monad m => MonadState s m | m -> s where
+    get :: m s
+    put :: s -> m ()
+Whereas above we were discussing State, a concrete data type, MonadState is a new typeclassfor types that are monads and for which we can define get and put operations.
+The class allows for a variety of Monad Transformer “stacks” that use state-passing to share a common interface for the basic state operations.
+Small aside: since I neglected doing this above, this is how we would define get and put as regular functions (not methods of MonadState) on our State type:
+-- return the state value being passed around:
+get :: State s s
+get = State $ \s -> (s,s)
+
+-- replace the current state value with 's':
+put :: s -> State s ()
+put s = State $ \_ -> (s,())
+Quite useful. See if you can understand how those work now that you’ve got a better grasp of State. Excercise: define modify :: (s->s) -> State s ().
+Back to MonadState: If this class and its instances look confusing to you, you need to know about two extensions to haskell-98 (both of which are very common and sticking around): Multi-Parameter Type Classes, and Functional Dependencies.
+In GHC you can enable both these extensions in your source by putting this at the top:
+{-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies #-}
+Multi-parameter Type Classes
+Ignoring the functional dependencies (a.k.a “fundeps”) in MonadState you get:
+class Monad m => MonadState s m where
+In which…
+MonadState is the name of the class
+s is the first class type variable (in this case the type of our state)
+m is the second type variable (the type of our state-like monad, e.g. State s)
+Multi-parameter type classes are tricky in that they define a relationship between multiple typeswith associated operations. You can read more about them in the GHC docs.
+Functional dependencies
+With multiple parameters in a single class, you can often end up with instances that are disallowed or difficult to use because they are ambiguous. Functional Dependencies help resolve ambiguity by allowing a way to specify that certain type parameters can be determined by knowledge of one or more of the other parameters.
+In the case of MonadState, the part of the class declaration that looks like:
+| m -> s
+says that the type of m (say StateT Int IO) uniquely determines the type of s (Int). Again please see the linked GHC docs for details; the Collects example used is very similar to MonadState.
+Putting it all together, the class declaration might read in english as:
+The relation of types m and s where m uniquely determines s is in the MonadState class.
+MonadState
+instance for State
+Finally here’s what the MonadState instance for the State type we’ve been discussing would look like (but again, it’s not because mtl builds around the more general StateT):
+instance MonadState s (State s) where
+    get = State $ \s -> (s,s)
+    put s = State $ \_ -> (s,())
+
+
+
+Haskell: How is <*> pronounced?
+A great answer from Stack overflow
+As you’re probably aware, Haskell borrows a few bits of terminology from various fields of abstract math, most notably Category Theory, from whence we get functors and monads. The use of these terms in Haskell diverges somewhat from the formal mathematical definitions, but they’re usually close enough to be good descriptive terms anyway.
+The Applicative type class sits somewhere between Functor and Monad, so one would expect it to have a similar mathematical basis. The documentation for the Control.Applicative module begins with:
+This module describes a structure intermediate between a functor and a monad: it provides pure expressions and sequencing, but no binding. (Technically, a strong lax monoidal functor.)
+Hmm.
+class (Functor f) => StrongLaxMonoidalFunctor f where
+    . . .
+Not quite as catchy as Monad, I think.
+What all this basically boils down to is that Applicative doesn’t correspond to any concept that’s particularly interesting mathematically, so there’s no ready-made terms lying around that capture the way it’s used in Haskell. So, set the math aside for now.
+If we want to know what to call (<*>) it might help to know what it basically means.
+So what’s up with Applicative, anyway, and why do we call it that?
+What Applicative amounts to in practice is a way to lift arbitrary functions into a Functor. Consider the combination of Maybe (arguably the simplest non-trivial Functor) and Bool (likewise the simplest non-trivial data type).
+maybeNot :: Maybe Bool -> Maybe Bool
+maybeNot = fmap not
+The function fmap lets us lift not from working on Bool to working on Maybe Bool. But what if we want to lift (&&)?
+maybeAnd' :: Maybe Bool -> Maybe (Bool -> Bool)
+maybeAnd' = fmap (&&)
+Well, that’s not what we want at all! In fact, it’s pretty much useless. We can try to be clever and sneak another Bool into Maybe through the back…
+maybeAnd'' :: Maybe Bool -> Bool -> Maybe Bool
+maybeAnd'' x y = fmap ($ y) (fmap (&&) x)
+…but that’s no good. For one thing, it’s wrong. For another thing, it’s ugly. We could keep trying, but it turns out that there’s no way to lift a function of multiple arguments to work on an arbitrary Functor. Annoying!
+On the other hand, we could do it easily if we used Maybe’s Monad instance:
+maybeAnd :: Maybe Bool -> Maybe Bool -> Maybe Bool
+maybeAnd x y = do x' <- x
+                  y' <- y
+                  return (x' && y')
+Now, that’s a lot of hassle just to translate a simple function–which is why Control.Monad provides a function to do it automatically, liftM2. The 2 in its name refers to the fact that it works on functions of exactly two arguments; similar functions exist for 3, 4, and 5 argument functions. These functions arebetter, but not perfect, and specifying the number of arguments is ugly and clumsy.
+Which brings us to the paper that introduced the Applicative type class. In it, the authors make essentially two observations:
+Lifting multi-argument functions into a Functor is a very natural thing to do
+Doing so doesn’t require the full capabilities of a Monad
+Normal function application is written by simple juxtaposition of terms, so to make “lifted application” as simple and natural as possible, the paper introduces infix operators to stand in for application, lifted into the Functor, and a type class to provide what’s needed for that.
+All of which brings us to the following point: (<*>) simply represents function application–so why pronounce it any differently than you do the whitespace “juxtaposition operator”?
+But if that’s not very satisfying, we can observe that the Control.Monad module also provides a function that does the same thing for monads:
+ap :: (Monad m) => m (a -> b) -> m a -> m b
+Where ap is, of course, short for “apply”. Since any Monad can be Applicative, and ap needs only the subset of features present in the latter, we can perhaps say that if (<*>) weren’t an operator, it should be called ap.
+We can also approach things from the other direction. The Functor lifting operation is called fmapbecause it’s a generalization of the map operation on lists. What sort of function on lists would work like (<*>)? There’s what ap does on lists, of course, but that’s not particularly useful on its own.
+In fact, there’s a perhaps more natural interpretation for lists. What comes to mind when you look at the following type signature?
+listApply :: [a -> b] -> [a] -> [b]
+There’s something just so tempting about the idea of lining the lists up in parallel, applying each function in the first to the corresponding element of the second. Unfortunately for our old friend Monad, this simple operation violates the monad laws if the lists are of different lengths. But it makes a fine Applicative, in which case (<*>) becomes a way of stringing together a generalized version ofzipWith, so perhaps we can imagine calling it fzipWith?
+This zipping idea actually brings us full circle. Recall that math stuff earlier, about monoidal functors? As the name suggests, these are a way of combining the structure of monoids and functors, both of which are familiar Haskell type classes:
+class Functor f where
+    fmap :: (a -> b) -> f a -> f b
+
+class Monoid a where
+    mempty :: a
+    mappend :: a -> a -> a
+What would these look like if you put them in a box together and shook it up a bit? From Functorwe’ll keep the idea of a structure independent of its type parameter, and from Monoid we’ll keep the overall form of the functions:
+class (Functor f) => MonoidalFunctor f where
+    mfEmpty :: f ?
+    mfAppend :: f ? -> f ? -> f ?
+We don’t want to assume that there’s a way to create an truly “empty” Functor, and we can’t conjure up a value of an arbitrary type, so we’ll fix the type of mfEmpty as f ().
+We also don’t want to force mfAppend to need a consistent type parameter, so now we have this:
+class (Functor f) => MonoidalFunctor f where
+    mfEmpty :: f ()
+    mfAppend :: f a -> f b -> f ?
+What’s the result type for mfAppend? We have two arbitrary types we know nothing about, so we don’t have many options. The most sensible thing is to just keep both:
+class (Functor f) => MonoidalFunctor f where
+    mfEmpty :: f ()
+    mfAppend :: f a -> f b -> f (a, b)
+At which point mfAppend is now clearly a generalized version of zip on lists, and we can reconstruct Applicative easily:
+mfPure x = fmap (\() -> x) mfEmpty
+mfApply f x = fmap (\(f, x) -> f x) (mfAppend f x)
+This also shows us that pure is related to the identity element of a Monoid, so other good names for it might be anything suggesting a unit value, a null operation, or such.
+That was lengthy, so to summarize:
+(<*>) is just a modified function application, so you can either read it as “ap” or “apply”, or elide it entirely the way you would normal function application.
+(<*>) also roughly generalizes zipWith on lists, so you can read it as “zip functors with”, similarly to reading fmap as “map a functor with”.
+The first is closer to the intent of the Applicative type class–as the name suggests–so that’s what I recommend.
+In fact, I encourage liberal use, and non-pronunciation, of all lifted application operators:
+(<$>), which lifts a single-argument function into a Functor
+(<*>), which chains a multi-argument function through an Applicative
+(=<<), which binds a function that enters a Monad onto an existing computation
+All three are, at heart, just regular function application, spiced up a little bit.
+
+
+
+ 
