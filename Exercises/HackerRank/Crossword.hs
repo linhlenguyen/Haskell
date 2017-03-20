@@ -1,64 +1,69 @@
 -- Enter your code here. Read input from STDIN. Print output to STDOUT
 import Control.Monad
-import Data.Vector
+import Data.List
 
-type Board = [[Char]]
+type Board = [String]
+data Direction = Horizontal | Vertical deriving (Show)
 
-solve :: Board -> [String] -> Maybe Board
-solve b = let d = findDash b in
-          case d of {
-            Nothing -> Just b
-            Just (x,y) ->
-          }
+solve :: (Board,[String]) -> [(Board,[String])]
+solve r@(board,strs) = let d = findDash board
+                        in case d of {
+                           Nothing -> [r];
+                           Just p@(x,y) -> let hs:vs:_ = getWords p board
+                                               (hl:hm:hr) = getCharLsFrom x vs
+                                               (vu:vm:vl) = getCharLsFrom y vs
+                                               hmatches = matching hm strs
+                                               vmatches = matching vm strs
+                                               hboard = map (\(s, xs) -> (fillWith Horizontal (x,y) s board, xs)) hmatches
+                                               vboard = map (\(s, xs) -> (fillWith Vertical (x,y) s board, xs)) hmatches
+                                            in (concatMap solve hboard) ++ (concatMap solve vboard);
+                          }
 
-solveAt :: (Int, Int) -> (Board,[String]) -> Maybe [(Board, [String])]
-solveAt p (b,ls) = let h:v:_ = getWords p b
-                       r = filter (\x -> x /= Nothing) $ map (tryFill ls) w
-                   in
+matching :: String -> [String] -> [(String, [String])]
+matching s xs = filter(\(x,_) -> not $ null x) $ map (\x -> if isMatch x s then (x,delete x xs) else ([],[])) xs
 
-updateBoard :: Board ->
+fillWith :: Direction -> (Int, Int) -> String -> Board -> Board
+fillWith Vertical (x,y) str b = let tuples = zip b str in
+                                 replace' tuples y
+fillWith Horizontal (x,y) str b = replace b x str
+
+replace' :: [([a],a)] -> Int -> [[a]]
+replace' ls i = map (\(xs,x) -> replace xs i x) ls
+
+replace :: [a] -> Int -> a -> [a]
+replace ls i a = (take i ls) ++ a:(drop (i+1) ls)
 
 getVertical :: Int -> Board -> String
 getVertical y b = map (\x -> x!!y) b
 
-trim :: String -> String
-trim v = beginTrim 0 v True
-   where beginTrim i v isLHS = if v!!i /= '+' && isLHS then v!!i : (beginTrim (i+1) v False) else (beginTrim (i+1) v isLHS)
-
-getWords :: (Int, Int) -> Board -> [[String]]
-getWords (x,y) b = let horizontal = trim $ b!!x
-                       vertical = trim $ getVertical y b 
+getWords :: (Int, Int) -> Board -> [String]
+getWords (x,y) b = let horizontal = b!!x
+                       vertical = getVertical y b
                    in [horizontal, vertical]
-
-wordsAt :: (Int, Int) -> Board -> [[String]]
-wordsAt (x,y) b = [vertical (x,y) b, horizontal (x,y) b]
-  where vertical (x, y) b =
-
-tryFill :: [String] -> String -> Maybe [String]
-tryFill xs s = let r = let r = concatMap (\x -> if isMatch x s then [x] else []) xs in
-                       case r of {
-                           [] -> Nothing;
-                           a -> Just a;
-                       }
 
 filterLs :: (Eq a) => [a] -> a -> [a]
 filterLs ls a = filter (\x -> x /= a) ls
 
 isMatch :: String -> String -> Bool
 isMatch [] [] = True
+isMatch [] _ = True
 isMatch _ [] = False
-isMatch [] _ = False
-isMatch l1@(x:xs) l2@(y:ys) = if (x == '_' || y == '_' || x == y) then isMatch xs ys else False
+isMatch l1@(x:xs) l2@(y:ys) = if length l1 /= length l2 then False
+                              else if (x == y || x == '-' || y == '-') then isMatch xs ys else False
+
+getCharLsFrom :: Int -> String -> [String]
+getCharLsFrom index str = let li = (lhs index str)
+                              ri = (rhs index str)
+                          in [take (li + 1) str, take (ri - li - 1) $ drop (li + 1) str, drop ri str]
+  where lhs i s = if i >= 0 && s!!i /= '+' then (lhs (i-1) s) else i
+        rhs i s = if i < (length s) && s!!i /= '+' then (rhs (i+1) s) else i
 
 findDash :: Board -> Maybe (Int, Int)
-findDash b = beginF (0,0) b
-    where beginF (x,y) b = if (b!!x)!!y == '_' then Just (x,y)
-                     else if x <= width then beginF (x + 1, y) b
-                     else if y <= height then beginF (0, y + 1) b
+findDash board = beginF (0,0) board
+    where beginF (x,y) b = if (b!!y)!!x == '-' then Just (x,y)
+                     else if (x+1) < length (b!!0) then beginF (x + 1, y) b
+                     else if (y+1) < length b then beginF (0, y + 1) b
                      else Nothing
-
-width = 9::Int
-height = 9::Int
 
 main :: IO ()
 main = do
@@ -71,3 +76,18 @@ main = do
     Control.Monad.forM_ board (\x ->
         putStrLn $ show x)
     putStrLn $ show ws
+
+toLines :: String -> String -> [String]
+toLines ls str = reverse $ map reverse $ foldl (\(a:as) x -> if any(\c -> c == x)ls then []:(a:as) else ((x:a):as)) [[]] str
+
+mainF :: IO ()
+mainF = do
+    let fin = "Crossword.in"
+    text <- readFile fin
+    let input = init $ toLines "\n" text
+    let board = take 10 $ input
+    let strs = toLines ";" $ last input
+    putStrLn $ show board
+    putStrLn $ show $ strs
+    --putStrLn $ show $ findDash board
+    putStrLn $ show $ solve (board,strs)
