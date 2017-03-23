@@ -12,17 +12,13 @@ import Data.Map
 import Data.Char
 import Data.List
 
-isCapital :: Char -> Bool
-isCapital c = let r = ord c in if r >= 65 && r <= 90 then True else False
-
---isHTTP -> is_http -> [is, HTTP] ->
-
---isIBMCool -> is_ibm_cool -> [is, IBMC, ool]
---isIBMCoolYESOrNO -> [is, IBMC, ool, YESO, r, NO]
---[isString] -> [is, S, tring]
-
 hasChange :: Char -> Char -> Bool
-hasChange c1 c2 = isLower c1 && isCapital c2 || isCapital c1 && isLower c2
+hasChange c1 c2 = isLower c1 && isCapital c2 || isUpper c1 && isLower c2
+
+--isHTTP -> [is, HTTP]
+--isIBMCool -> is_ibm_cool -> [is, IBM, Cool]
+--isIBMCoolYESOrNO -> [is, IBM, Cool, YES, Or, NO]
+--[isString] -> [is, String]
 
 splitS :: String -> [String]
 splitS (s:ss) = reverse $ Prelude.map (reverse) $
@@ -36,14 +32,6 @@ splitS (s:ss) = reverse $ Prelude.map (reverse) $
 toSnake :: String -> String
 toSnake [] = []
 toSnake ls = concatMap (Prelude.map toLower) $ intersperse "_" $ splitS $ ls
-
-
-{--
-toWords :: String -> [String]
-toWords str = foldl foldf [] str
-    where foldf :: [String] -> Char -> String
-          foldf (x:xs) c -> if
---}
 
 --state machine
 --l > l : ignore
